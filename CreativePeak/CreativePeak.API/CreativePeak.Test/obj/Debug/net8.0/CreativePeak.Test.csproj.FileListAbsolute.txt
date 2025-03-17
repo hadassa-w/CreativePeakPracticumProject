@@ -1,0 +1,5 @@
+c:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Test\obj\Debug\net8.0\CreativePeak.Test.csproj.AssemblyReference.cache
+c:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Test\obj\Debug\net8.0\CreativePeak.Test.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Test\obj\Debug\net8.0\CreativePeak.Test.AssemblyInfoInputs.cache
+c:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Test\obj\Debug\net8.0\CreativePeak.Test.AssemblyInfo.cs
+c:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Test\obj\Debug\net8.0\CreativePeak.Test.csproj.CoreCompileInputs.cache

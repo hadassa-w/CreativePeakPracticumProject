@@ -1,0 +1,6 @@
+@CreativePeak.API_HostAddress = http://localhost:5085
+
+GET {{CreativePeak.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
