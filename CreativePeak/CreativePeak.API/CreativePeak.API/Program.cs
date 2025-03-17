@@ -58,6 +58,28 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 
+
+builder.Services.AddScoped<IImageService, ImageService>();
+//builder.Services.AddScoped<IImageRepository, ImageRepository>();
+
+builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+builder.Services.AddScoped<IRepository<Image>, Repository<Image>>();
+
+
+builder.Services.AddScoped<IDesignerDetailsService, DesignerDetailsService>();
+//builder.Services.AddScoped<IDesignerDetailsRepository, DesignerDetailsRepository>();
+
+builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+builder.Services.AddScoped<IRepository<DesignerDetails>, Repository<DesignerDetails>>();
+
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+//builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+
+
 builder.Services.AddDbContext<DataContext>();
 //builder.Services.AddSingleton<DataContext>();
 

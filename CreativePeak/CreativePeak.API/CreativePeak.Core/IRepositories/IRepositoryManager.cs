@@ -10,6 +10,9 @@ namespace CreativePeak.Core.IRepositories
     public interface IRepositoryManager
     {
         IRepository<User> Users { get; }
+        IRepository<Image> Images { get; }
+        IRepository<DesignerDetails> DesignersDetails { get; }
+        IRepository<Category> Categories { get; }
         void Save();
     }
 }
