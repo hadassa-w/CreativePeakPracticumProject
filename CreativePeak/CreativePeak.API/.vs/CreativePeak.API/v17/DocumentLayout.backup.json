@@ -1,12 +1,88 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|c:\\users\\user1\\documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\creativepeakproject\\creativepeak\\creativepeak.api\\creativepeak.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|solutionrelative:creativepeak.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{60ACAB5F-2620-4C0F-8B72-59010209AA43}|CreativePeak.Core\\CreativePeak.Core.csproj|c:\\users\\user1\\documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\creativepeakproject\\creativepeak\\creativepeak.api\\creativepeak.core\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{60ACAB5F-2620-4C0F-8B72-59010209AA43}|CreativePeak.Core\\CreativePeak.Core.csproj|solutionrelative:creativepeak.core\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|c:\\users\\user1\\documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\creativepeakproject\\creativepeak\\creativepeak.api\\creativepeak.api\\postmodels\\userpostmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|solutionrelative:creativepeak.api\\postmodels\\userpostmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|c:\\users\\user1\\documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\creativepeakproject\\creativepeak\\creativepeak.api\\creativepeak.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|solutionrelative:creativepeak.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserPostModel.cs",
+              "DocumentMoniker": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\PostModels\\UserPostModel.cs",
+              "RelativeDocumentMoniker": "CreativePeak.API\\PostModels\\UserPostModel.cs",
+              "ToolTip": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\PostModels\\UserPostModel.cs",
+              "RelativeToolTip": "CreativePeak.API\\PostModels\\UserPostModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-17T17:35:19.516Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserDTO.cs",
+              "DocumentMoniker": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.Core\\DTOs\\UserDTO.cs",
+              "RelativeDocumentMoniker": "CreativePeak.Core\\DTOs\\UserDTO.cs",
+              "ToolTip": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.Core\\DTOs\\UserDTO.cs",
+              "RelativeToolTip": "CreativePeak.Core\\DTOs\\UserDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-17T17:35:07.951Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "CreativePeak.API\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\Controllers\\UserController.cs*",
+              "RelativeToolTip": "CreativePeak.API\\Controllers\\UserController.cs*",
+              "ViewState": "AgIAADoAAAAAAAAAAAAkwAwAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-17T17:29:56.343Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\Program.cs",
+              "RelativeDocumentMoniker": "CreativePeak.API\\Program.cs",
+              "ToolTip": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\Program.cs",
+              "RelativeToolTip": "CreativePeak.API\\Program.cs",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAAAHAAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-17T17:15:41.022Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

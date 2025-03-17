@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "CreativePeak.API.Controllers.UsersController",
+    "ContainingType": "CreativePeak.API.Controllers.UserController",
     "Method": "Get",
-    "RelativePath": "api/Users",
+    "RelativePath": "api/User",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -10,9 +10,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "CreativePeak.API.Controllers.UsersController",
+    "ContainingType": "CreativePeak.API.Controllers.UserController",
     "Method": "Post",
-    "RelativePath": "api/Users",
+    "RelativePath": "api/User",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -26,9 +26,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "CreativePeak.API.Controllers.UsersController",
+    "ContainingType": "CreativePeak.API.Controllers.UserController",
     "Method": "Get",
-    "RelativePath": "api/Users/{id}",
+    "RelativePath": "api/User/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -42,9 +42,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "CreativePeak.API.Controllers.UsersController",
+    "ContainingType": "CreativePeak.API.Controllers.UserController",
     "Method": "Put",
-    "RelativePath": "api/Users/{id}",
+    "RelativePath": "api/User/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -63,9 +63,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "CreativePeak.API.Controllers.UsersController",
+    "ContainingType": "CreativePeak.API.Controllers.UserController",
     "Method": "Delete",
-    "RelativePath": "api/Users/{id}",
+    "RelativePath": "api/User/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,

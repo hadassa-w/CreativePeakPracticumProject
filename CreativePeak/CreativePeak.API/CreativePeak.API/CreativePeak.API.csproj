@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.14">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,6 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CreativePeak.Core\CreativePeak.Core.csproj" />
+    <ProjectReference Include="..\CreativePeak.Data\CreativePeak.Data.csproj" />
+    <ProjectReference Include="..\CreativePeak.Service\CreativePeak.Service.csproj" />
   </ItemGroup>
 
 </Project>

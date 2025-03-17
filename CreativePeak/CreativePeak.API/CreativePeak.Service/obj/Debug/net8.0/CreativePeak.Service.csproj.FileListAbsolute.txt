@@ -1,0 +1,16 @@
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\CreativePeak.Service.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\CreativePeak.Service.AssemblyInfoInputs.cache
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\CreativePeak.Service.AssemblyInfo.cs
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\CreativePeak.Service.csproj.CoreCompileInputs.cache
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\CreativePeak.Service.sourcelink.json
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\bin\Debug\net8.0\CreativePeak.Service.deps.json
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\bin\Debug\net8.0\CreativePeak.Service.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\bin\Debug\net8.0\CreativePeak.Service.pdb
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\bin\Debug\net8.0\CreativePeak.Core.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\bin\Debug\net8.0\CreativePeak.Core.pdb
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\CreativePeak.Service.csproj.AssemblyReference.cache
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\Creative.0E5104E3.Up2Date
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\CreativePeak.Service.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\refint\CreativePeak.Service.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\CreativePeak.Service.pdb
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Service\obj\Debug\net8.0\ref\CreativePeak.Service.dll

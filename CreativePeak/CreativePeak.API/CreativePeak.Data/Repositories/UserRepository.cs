@@ -1,7 +1,7 @@
-﻿using CreativePeak.Data;
+﻿using CreativePeak.Core.IRepositories;
+using CreativePeak.Data;
 using Microsoft.EntityFrameworkCore;
-using ShowrealPro.Core.IRepositories;
-using ShowrealPro.Core.Models;
+using CreativePeak.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -5,10 +5,10 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Users": {
+    "/api/User": {
       "get": {
         "tags": [
-          "Users"
+          "User"
         ],
         "responses": {
           "200": {
@@ -18,7 +18,7 @@
       },
       "post": {
         "tags": [
-          "Users"
+          "User"
         ],
         "requestBody": {
           "content": {
@@ -46,10 +46,10 @@
         }
       }
     },
-    "/api/Users/{id}": {
+    "/api/User/{id}": {
       "get": {
         "tags": [
-          "Users"
+          "User"
         ],
         "parameters": [
           {
@@ -70,7 +70,7 @@
       },
       "put": {
         "tags": [
-          "Users"
+          "User"
         ],
         "parameters": [
           {
@@ -110,7 +110,7 @@
       },
       "delete": {
         "tags": [
-          "Users"
+          "User"
         ],
         "parameters": [
           {
