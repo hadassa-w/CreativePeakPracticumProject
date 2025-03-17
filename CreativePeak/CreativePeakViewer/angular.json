@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "CreativePeakClients": {
+    "CreativePeakViewers": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/creative-peak-clients",
+            "outputPath": "dist/creative-peak-viewers",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "CreativePeakClients:build:production"
+              "buildTarget": "CreativePeakViewers:build:production"
             },
             "development": {
-              "buildTarget": "CreativePeakClients:build:development"
+              "buildTarget": "CreativePeakViewers:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -92,5 +92,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
