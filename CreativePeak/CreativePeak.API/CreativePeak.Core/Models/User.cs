@@ -13,10 +13,11 @@ namespace CreativePeak.Core.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Full Name is required.")]
-        [StringLength(100, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+        [StringLength(50, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
         public string FullName { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
+        [StringLength(100, ErrorMessage = "Password must be at least 6 characters long.")]
         [EmailAddress(ErrorMessage = "Invalid Email Address.")]
         public string Email { get; set; }
 
