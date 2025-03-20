@@ -10,11 +10,6 @@ using CreativePeak.Core.Models;
 using CreativePeak.Data;
 using CreativePeak.API.Middlewares;
 using System.Text;
-using CreativePeak.API.Middlewares;
-using CreativePeak.Core.IRepositories;
-using CreativePeak.Core.IServices;
-using CreativePeak.Core.Models;
-using CreativePeak.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,64 +19,59 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen();
-//builder.Services.AddSwaggerGen(options =>
-//{
-//    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-//    {
-//        Scheme = "Bearer",
-//        BearerFormat = "JWT",
-//        In = ParameterLocation.Header,
-//        Name = "Authorization",
-//        Description = "Bearer Authentication with JWT Token",
-//        Type = SecuritySchemeType.Http
-//    });
-//    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-//    {
-//        {
-//            new OpenApiSecurityScheme
-//            {
-//                Reference = new OpenApiReference
-//                {
-//                    Id = "Bearer",
-//                    Type = ReferenceType.SecurityScheme
-//                }
-//            },
-//            new List<string>()
-//        }
-//    });
-//});
-
-builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Description = "Bearer Authentication with JWT Token",
+        Type = SecuritySchemeType.Http
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
+    });
+});
 
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 
 
 builder.Services.AddScoped<IImageService, ImageService>();
-//builder.Services.AddScoped<IImageRepository, ImageRepository>();
-
-builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<IRepository<Image>, Repository<Image>>();
+//builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 
 builder.Services.AddScoped<IDesignerDetailsService, DesignerDetailsService>();
-//builder.Services.AddScoped<IDesignerDetailsRepository, DesignerDetailsRepository>();
-
-builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<IRepository<DesignerDetails>, Repository<DesignerDetails>>();
+builder.Services.AddScoped<IDesignerDetailsRepository, DesignerDetailsRepository>();
 
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-//builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
-builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
-
+//builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddDbContext<DataContext>();
 //builder.Services.AddSingleton<DataContext>();
+
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 //builder.Services.AddSingleton<Mapping>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -99,24 +89,24 @@ builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
     policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 }));
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//    .AddJwtBearer(options =>
-//    {
-//        options.TokenValidationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuer = true,
-//            ValidateAudience = true,
-//            ValidateLifetime = true,
-//            ValidateIssuerSigningKey = true,
-//            ValidIssuer = builder.Configuration["JWT:Issuer"],
-//            ValidAudience = builder.Configuration["JWT:Audience"],
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
-//        };
-//    });
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidAudience = builder.Configuration["JWT:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+        };
+    });
 
 
 var app = builder.Build();
@@ -132,9 +122,9 @@ app.UseCors("MyPolicy");
 
 app.UseHttpsRedirection();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.UseMiddleware<ShabbatMiddleware>();
 

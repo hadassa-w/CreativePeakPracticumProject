@@ -87,10 +87,15 @@ namespace CreativePeak.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("YearsExperience")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("DesignersDetails");
                 });
@@ -113,7 +118,7 @@ namespace CreativePeak.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DesignerId")
+                    b.Property<int>("DesignerDetailsId")
                         .HasColumnType("int");
 
                     b.Property<string>("FileName")
@@ -121,10 +126,18 @@ namespace CreativePeak.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("LinkURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DesignerDetailsId");
 
                     b.ToTable("Images");
                 });
@@ -146,12 +159,13 @@ namespace CreativePeak.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -162,12 +176,61 @@ namespace CreativePeak.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
+                {
+                    b.HasOne("CreativePeak.Core.Models.User", "User")
+                        .WithMany("DesignersDetails")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.Image", b =>
+                {
+                    b.HasOne("CreativePeak.Core.Models.Category", "Category")
+                        .WithMany("Images")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CreativePeak.Core.Models.DesignerDetails", "DesignerDetails")
+                        .WithMany("Images")
+                        .HasForeignKey("DesignerDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("DesignerDetails");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.User", b =>
+                {
+                    b.Navigation("DesignersDetails");
                 });
 #pragma warning restore 612, 618
         }

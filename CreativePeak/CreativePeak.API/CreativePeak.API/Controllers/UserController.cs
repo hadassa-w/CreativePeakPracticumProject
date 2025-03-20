@@ -5,12 +5,13 @@ using CreativePeak.Core.IServices;
 using CreativePeak.Core.DTOs;
 using CreativePeak.API.PostModels;
 using CreativePeak.Core.Models;
+using CreativePeak.Service;
 
 namespace CreativePeak.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -50,24 +51,33 @@ namespace CreativePeak.API.Controllers
                 Password = user.Password,
                 Phone = user.Phone,
                 Address = user.Address,
+                Role = "Graphic designer",
+                CreatedAt = DateTime.UtcNow,
             };
             var userNew = await _userService.AddAsync(newUser);
-            return Ok(userNew);
+            var categoryDTO = _mapper.Map<UserDTO>(userNew);
+            return CreatedAtAction(nameof(Get), new { id = categoryDTO.Id }, categoryDTO);
         }
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] UserPostModel user)
         {
-            var newUser = new User
+            var existingUser = _userService.GetById(id);
+            if (existingUser == null)
             {
-                FullName = user.FullName,
-                Email = user.Email,
-                Password = user.Password,
-                Phone = user.Phone,
-                Address = user.Address,
-            };
-            return Ok(_userService.Update(id, newUser));
+                return NotFound();
+            }
+
+            existingUser.FullName = user.FullName;
+            existingUser.Email = user.Email;
+            existingUser.Password = user.Password;
+            existingUser.Phone = user.Phone;
+            existingUser.Address = user.Address;
+            existingUser.UpdatedAt = DateTime.UtcNow;
+
+            _userService.Update(id, existingUser);
+            return NoContent();
         }
 
         // DELETE api/<UserController>/5

@@ -1,5 +1,37 @@
 [
   {
+    "ContainingType": "CreativePeak.API.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginModel",
+        "Type": "CreativePeak.API.PostModels.LoginModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userPostModel",
+        "Type": "CreativePeak.API.PostModels.UserPostModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "CreativePeak.API.Controllers.CategoryController",
     "Method": "Get",
     "RelativePath": "api/Category",
@@ -185,7 +217,7 @@
   },
   {
     "ContainingType": "CreativePeak.API.Controllers.ImageController",
-    "Method": "Get",
+    "Method": "GetById",
     "RelativePath": "api/Image/{id}",
     "HttpMethod": "GET",
     "IsController": true,

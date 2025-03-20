@@ -17,6 +17,8 @@ namespace CreativePeak.Core
             CreateMap<Image, ImageDTO>().ReverseMap();
             CreateMap<DesignerDetails, DesignerDetailsDTO>().ReverseMap();
             CreateMap<Category, CategoryDTO>().ReverseMap();
+
+
         }
 
     }

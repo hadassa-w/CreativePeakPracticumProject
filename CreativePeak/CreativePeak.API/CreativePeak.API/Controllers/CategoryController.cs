@@ -3,8 +3,10 @@ using CreativePeak.API.PostModels;
 using CreativePeak.Core.DTOs;
 using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
+using CreativePeak.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CreativePeak.API.Controllers
 {
@@ -47,21 +49,29 @@ namespace CreativePeak.API.Controllers
             {
                 CategoryName = category.CategoryName,
                 Description = category.Description,
+                CreatedAt = DateTime.UtcNow,
             };
-            var CategoryNew = await _categoryService.AddAsync(newCategory);
-            return Ok(CategoryNew);
+            var categoryNew = await _categoryService.AddAsync(newCategory);
+            var categoryDTO = _mapper.Map<CategoryDTO>(categoryNew);
+            return CreatedAtAction(nameof(Get), new { id = categoryDTO.Id }, categoryDTO);
         }
 
         // PUT api/<CategoryController>/5
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] CategoryPostModel category)
         {
-            var newCategory = new Category
+            var existingCategory = _categoryService.GetById(id);
+            if (existingCategory == null)
             {
-                CategoryName = category.CategoryName,
-                Description = category.Description,
-            };
-            return Ok(_categoryService.Update(id, newCategory));
+                return NotFound();
+            }
+
+            existingCategory.CategoryName = category.CategoryName;
+            existingCategory.Description = category.Description;
+            existingCategory.UpdatedAt = DateTime.UtcNow;
+
+            _categoryService.Update(id, existingCategory);
+            return NoContent();
         }
 
         // DELETE api/<CategoryController>/5

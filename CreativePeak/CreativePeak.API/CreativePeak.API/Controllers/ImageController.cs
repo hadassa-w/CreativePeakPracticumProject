@@ -3,6 +3,7 @@ using CreativePeak.API.PostModels;
 using CreativePeak.Core.DTOs;
 using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
+using CreativePeak.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +15,15 @@ namespace CreativePeak.API.Controllers
     public class ImageController : Controller
     {
         private readonly IImageService _imageService;
+        private readonly ICategoryService _categoryService;
+        private readonly IDesignerDetailsService _designerDetailsService;
         private readonly IMapper _mapper;
-        public ImageController(IImageService imageService, IMapper mapper)
+        public ImageController(IImageService imageService, IMapper mapper, ICategoryService categoryService, IDesignerDetailsService designerDetailsService)
         {
             _imageService = imageService;
             _mapper = mapper;
+            _categoryService = categoryService;
+            _designerDetailsService = designerDetailsService;
         }
 
         // GET: api/<ImageController>
@@ -32,9 +37,13 @@ namespace CreativePeak.API.Controllers
 
         // GET api/<ImageController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public ActionResult GetById(int id)
         {
             var image = _imageService.GetById(id);
+            if (image == null)
+            {
+                return NotFound();
+            }
             var imageDTO = _mapper.Map<ImageDTO>(image);
             return Ok(imageDTO);
         }
@@ -47,25 +56,40 @@ namespace CreativePeak.API.Controllers
             {
                 FileName = image.FileName,
                 Description = image.Description,
-                DesignerId = image.DesignerId,
-                CategoryId = image.CategoryId,
+                LinkURL = image.LinkURL,
+                DesignerDetailsId=image.DesignerId,
+                DesignerDetails = _designerDetailsService.GetById(image.DesignerId),
+                CategoryId=image.CategoryId,
+                Category = _categoryService.GetById(image.CategoryId),
+                CreatedAt = DateTime.UtcNow,
             };
+
             var imageNew = await _imageService.AddAsync(newImage);
-            return Ok(imageNew);
+            var imageDTO = _mapper.Map<ImageDTO>(imageNew);
+            return CreatedAtAction(nameof(Get), new { id = imageDTO.Id }, imageDTO);
         }
 
         // PUT api/<ImageController>/5
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] ImagePostModel image)
         {
-            var newImage = new Image
+            var existingImage =  _imageService.GetById(id);
+            if (existingImage == null)
             {
-                FileName = image.FileName,
-                Description = image.Description,
-                DesignerId = image.DesignerId,
-                CategoryId = image.CategoryId,
-            };
-            return Ok(_imageService.Update(id, newImage));
+                return NotFound();
+            }
+
+            existingImage.FileName = image.FileName;
+            existingImage.Description = image.Description;
+            existingImage.LinkURL = image.LinkURL;
+            existingImage.DesignerDetailsId = image.DesignerId;
+            existingImage.CategoryId = image.CategoryId;
+            existingImage.Category = _categoryService.GetById(image.CategoryId);
+            existingImage.DesignerDetails = _designerDetailsService.GetById(image.DesignerId);
+            existingImage.UpdatedAt = DateTime.UtcNow;
+
+            _imageService.Update(id,existingImage);
+            return NoContent();
         }
 
         // DELETE api/<ImageController>/5

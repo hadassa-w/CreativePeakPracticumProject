@@ -50,8 +50,8 @@ namespace CreativePeak.Service
             }
             dbImage.FileName = image.FileName;
             dbImage.Description = image.Description;
-            dbImage.DesignerId = image.DesignerId;
-            dbImage.CategoryId = image.CategoryId;
+            //dbImage.DesignerDetails = image.DesignerDetails;
+            //dbImage.Category = image.Category;
             dbImage.CreatedAt = image.CreatedAt;
             dbImage.UpdatedAt = image.UpdatedAt;
 

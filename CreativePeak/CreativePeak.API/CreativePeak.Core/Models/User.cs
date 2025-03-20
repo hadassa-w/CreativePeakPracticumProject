@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CreativePeak.Core.Models
 {
@@ -13,11 +10,11 @@ namespace CreativePeak.Core.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Full Name is required.")]
-        [StringLength(50, ErrorMessage = "Full Name cannot be longer than 100 characters.")]
+        [StringLength(50, ErrorMessage = "Full Name cannot be longer than 50 characters.")]
         public string FullName { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
-        [StringLength(100, ErrorMessage = "Password must be at least 6 characters long.")]
+        [StringLength(100, ErrorMessage = "Email cannot be longer than 100 characters.")]
         [EmailAddress(ErrorMessage = "Invalid Email Address.")]
         public string Email { get; set; }
 
@@ -29,8 +26,10 @@ namespace CreativePeak.Core.Models
         public string Phone { get; set; }
 
         public string Address { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public string Role { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
+        public List<DesignerDetails> DesignersDetails { get; set; }
     }
 }
-

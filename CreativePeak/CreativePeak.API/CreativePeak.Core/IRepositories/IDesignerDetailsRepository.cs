@@ -9,6 +9,7 @@ namespace CreativePeak.Core.IRepositories
 {
     public interface IDesignerDetailsRepository
     {
+        Task<bool> UserExists(int userId);
         IEnumerable<DesignerDetails> GetAll();
         DesignerDetails? GetById(int id);
         DesignerDetails Add(DesignerDetails designerDetails);

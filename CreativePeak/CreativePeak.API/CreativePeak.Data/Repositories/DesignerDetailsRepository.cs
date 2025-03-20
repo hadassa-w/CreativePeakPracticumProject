@@ -20,6 +20,10 @@ namespace CreativePeak.Data.Repositories
             _context = dataContext;
             _dbSet = _context.Set<DesignerDetails>();
         }
+        public async Task<bool> UserExists(int userId)
+        {
+            return await _context.Users.AnyAsync(u => u.Id == userId);
+        }
         public DesignerDetails Add(DesignerDetails designerDetails)
         {
             _dbSet.Add(designerDetails);

@@ -18,12 +18,20 @@ namespace CreativePeak.Core.Models
 
         [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; }
+        //public string URLLink { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
+        public string LinkURL { get; set; }
+
 
         [Required(ErrorMessage = "Choosing designer is required.")]
-        public int DesignerId { get; set; }
+        public int DesignerDetailsId { get; set; }
+        public DesignerDetails DesignerDetails { get; set; }
 
+        [Required(ErrorMessage = "Choosing category is required.")]
         public int CategoryId { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public Category Category { get; set; }
     }
 }

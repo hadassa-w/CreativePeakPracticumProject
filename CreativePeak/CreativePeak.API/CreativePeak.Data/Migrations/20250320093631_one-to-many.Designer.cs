@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CreativePeak.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250317222253_CreateDesignerDetailsDB")]
-    partial class CreateDesignerDetailsDB
+    [Migration("20250320093631_one-to-many")]
+    partial class onetomany
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,34 @@ namespace CreativePeak.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
 
             modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
                 {
@@ -62,10 +90,15 @@ namespace CreativePeak.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("YearsExperience")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("DesignersDetails");
                 });
@@ -88,7 +121,7 @@ namespace CreativePeak.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DesignerId")
+                    b.Property<int>("DesignerDetailsId")
                         .HasColumnType("int");
 
                     b.Property<string>("FileName")
@@ -100,6 +133,10 @@ namespace CreativePeak.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DesignerDetailsId");
 
                     b.ToTable("Images");
                 });
@@ -121,12 +158,13 @@ namespace CreativePeak.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -137,12 +175,61 @@ namespace CreativePeak.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
+                {
+                    b.HasOne("CreativePeak.Core.Models.User", "User")
+                        .WithMany("DesignersDetails")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.Image", b =>
+                {
+                    b.HasOne("CreativePeak.Core.Models.Category", "Category")
+                        .WithMany("Images")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CreativePeak.Core.Models.DesignerDetails", "DesignerDetails")
+                        .WithMany("Images")
+                        .HasForeignKey("DesignerDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("DesignerDetails");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
+                {
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("CreativePeak.Core.Models.User", b =>
+                {
+                    b.Navigation("DesignersDetails");
                 });
 #pragma warning restore 612, 618
         }

@@ -36,7 +36,13 @@ namespace CreativePeak.Core.Models
         [Range(0, int.MaxValue, ErrorMessage = "Price range max must be greater than Price range min.")]
         public int PriceRangeMax { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
+        public int UserId { get; set; }
+        public User User { get; set; }
+
+        //public List<Category> Categories { get; set; }
+        public List<Image> Images { get; set; }
     }
 }

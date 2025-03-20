@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CreativePeak.Core.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace CreativePeak.API.PostModels
 {
@@ -6,6 +7,8 @@ namespace CreativePeak.API.PostModels
     {
         public string FileName { get; set; }
         public string Description { get; set; }
+        public string LinkURL { get; set; }
+
         public int DesignerId { get; set; }
         public int CategoryId { get; set; }
 
