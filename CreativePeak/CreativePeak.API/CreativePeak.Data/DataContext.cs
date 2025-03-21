@@ -15,6 +15,7 @@ namespace CreativePeak.Data
         public DbSet<Image> Images { get; set; }
         public DbSet<DesignerDetails> DesignersDetails { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<View> Views { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CreativePeak");

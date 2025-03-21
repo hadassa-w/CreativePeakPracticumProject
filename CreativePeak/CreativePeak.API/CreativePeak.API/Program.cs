@@ -68,6 +68,10 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
+builder.Services.AddScoped<IViewService, ViewService>();
+builder.Services.AddScoped<IRepository<View>, Repository<View>>();
+//builder.Services.AddScoped<IViewRepository, ViewRepository>();
+
 builder.Services.AddDbContext<DataContext>();
 //builder.Services.AddSingleton<DataContext>();
 

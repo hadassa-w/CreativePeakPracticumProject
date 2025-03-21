@@ -23,7 +23,11 @@ namespace CreativePeak.Core
         }
         public Category MappingCategoryDTO(Category category)
         {
-            return new Category { Id = category.Id, CategoryName = category.CategoryName,Description = category.Description, CreatedAt = category.CreatedAt, UpdatedAt = category.UpdatedAt };
+            return new Category { Id = category.Id, CategoryName = category.CategoryName, Description = category.Description, CreatedAt = category.CreatedAt, UpdatedAt = category.UpdatedAt };
+        }
+        public View MappingViewDTO(View view)
+        {
+            return new View { Id = view.Id, Image = view.Image, ImageId = view.ImageId, User = view.User, UserId = view.UserId, Date = view.Date };
         }
     }
 }

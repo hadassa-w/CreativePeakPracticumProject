@@ -18,8 +18,6 @@ namespace CreativePeak.Core.Models
 
         [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; }
-        //public string URLLink { get; set; }
-
         public string LinkURL { get; set; }
 
         public DateTime CreatedAt { get; set; }
@@ -33,5 +31,7 @@ namespace CreativePeak.Core.Models
         [Required(ErrorMessage = "Choosing category is required.")]
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+
+        public List<View> Views { get; set; }
     }
 }

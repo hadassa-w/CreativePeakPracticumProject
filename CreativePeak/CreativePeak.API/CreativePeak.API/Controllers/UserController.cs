@@ -55,8 +55,8 @@ namespace CreativePeak.API.Controllers
                 CreatedAt = DateTime.UtcNow,
             };
             var userNew = await _userService.AddAsync(newUser);
-            var categoryDTO = _mapper.Map<UserDTO>(userNew);
-            return CreatedAtAction(nameof(Get), new { id = categoryDTO.Id }, categoryDTO);
+            var userDTO = _mapper.Map<UserDTO>(userNew);
+            return CreatedAtAction(nameof(Get), new { id = userDTO.Id }, userDTO);
         }
 
         // PUT api/<UserController>/5

@@ -16,10 +16,12 @@ namespace CreativePeak.API.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
+        private readonly IDesignerDetailsService _designerDetailsService;
         private readonly IMapper _mapper;
-        public CategoryController(ICategoryService categoryService, IMapper mapper)
+        public CategoryController(ICategoryService categoryService, IDesignerDetailsService designerDetailsService, IMapper mapper)
         {
             _categoryService = categoryService;
+            _designerDetailsService = designerDetailsService;
             _mapper = mapper;
         }
 
@@ -49,6 +51,7 @@ namespace CreativePeak.API.Controllers
             {
                 CategoryName = category.CategoryName,
                 Description = category.Description,
+                DesignerDetails = _designerDetailsService.GetById(category.DesignerDetailsId),
                 CreatedAt = DateTime.UtcNow,
             };
             var categoryNew = await _categoryService.AddAsync(newCategory);
@@ -68,6 +71,7 @@ namespace CreativePeak.API.Controllers
 
             existingCategory.CategoryName = category.CategoryName;
             existingCategory.Description = category.Description;
+            existingCategory.DesignerDetails = _designerDetailsService.GetById(category.DesignerDetailsId);
             existingCategory.UpdatedAt = DateTime.UtcNow;
 
             _categoryService.Update(id, existingCategory);

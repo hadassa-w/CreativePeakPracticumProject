@@ -194,6 +194,32 @@ namespace CreativePeak.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("CreativePeak.Core.Models.View", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Views");
+                });
+
             modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
                 {
                     b.HasOne("CreativePeak.Core.Models.DesignerDetails", "DesignerDetails")
@@ -235,6 +261,25 @@ namespace CreativePeak.Data.Migrations
                     b.Navigation("DesignerDetails");
                 });
 
+            modelBuilder.Entity("CreativePeak.Core.Models.View", b =>
+                {
+                    b.HasOne("CreativePeak.Core.Models.Image", "Image")
+                        .WithMany("Views")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CreativePeak.Core.Models.User", "User")
+                        .WithMany("Views")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
                 {
                     b.Navigation("Images");
@@ -247,10 +292,17 @@ namespace CreativePeak.Data.Migrations
                     b.Navigation("Images");
                 });
 
+            modelBuilder.Entity("CreativePeak.Core.Models.Image", b =>
+                {
+                    b.Navigation("Views");
+                });
+
             modelBuilder.Entity("CreativePeak.Core.Models.User", b =>
                 {
                     b.Navigation("DesignersDetails")
                         .IsRequired();
+
+                    b.Navigation("Views");
                 });
 #pragma warning restore 612, 618
         }

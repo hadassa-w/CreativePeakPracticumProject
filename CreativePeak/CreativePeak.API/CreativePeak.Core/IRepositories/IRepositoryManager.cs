@@ -13,6 +13,7 @@ namespace CreativePeak.Core.IRepositories
         IRepository<Image> Images { get; }
         IRepository<DesignerDetails> DesignersDetails { get; }
         IRepository<Category> Categories { get; }
+        IRepository<View> Views { get; }
         void Save();
     }
 }
