@@ -42,10 +42,15 @@ namespace CreativePeak.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("DesignerDetailsId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DesignerDetailsId");
 
                     b.ToTable("Categories");
                 });
@@ -95,7 +100,8 @@ namespace CreativePeak.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("DesignersDetails");
                 });
@@ -188,11 +194,22 @@ namespace CreativePeak.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
+                {
+                    b.HasOne("CreativePeak.Core.Models.DesignerDetails", "DesignerDetails")
+                        .WithMany("Categories")
+                        .HasForeignKey("DesignerDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DesignerDetails");
+                });
+
             modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
                 {
                     b.HasOne("CreativePeak.Core.Models.User", "User")
-                        .WithMany("DesignersDetails")
-                        .HasForeignKey("UserId")
+                        .WithOne("DesignersDetails")
+                        .HasForeignKey("CreativePeak.Core.Models.DesignerDetails", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -225,12 +242,15 @@ namespace CreativePeak.Data.Migrations
 
             modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("Images");
                 });
 
             modelBuilder.Entity("CreativePeak.Core.Models.User", b =>
                 {
-                    b.Navigation("DesignersDetails");
+                    b.Navigation("DesignersDetails")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

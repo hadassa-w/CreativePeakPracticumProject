@@ -20,10 +20,10 @@ namespace CreativePeak.Core.Models
         public string Description { get; set; }
         //public string URLLink { get; set; }
 
+        public string LinkURL { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-
-        public string LinkURL { get; set; }
 
 
         [Required(ErrorMessage = "Choosing designer is required.")]

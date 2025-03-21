@@ -30,6 +30,6 @@ namespace CreativePeak.Core.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public List<DesignerDetails> DesignersDetails { get; set; }
+        public DesignerDetails DesignersDetails { get; set; }
     }
 }
