@@ -19,6 +19,7 @@ COPY ["CreativePeak.Core/CreativePeak.Core.csproj", "CreativePeak.Core/"]
 COPY ["CreativePeak.Data/CreativePeak.Data.csproj", "CreativePeak.Data/"]
 COPY ["CreativePeak.Service/CreativePeak.Service.csproj", "CreativePeak.Service/"]
 
+RUN adduser -D ContainerUser
 USER ContainerUser
 
 RUN dotnet restore "./CreativePeak.API/CreativePeak.API.csproj"
