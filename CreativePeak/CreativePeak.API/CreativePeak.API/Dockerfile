@@ -19,8 +19,7 @@ COPY ["CreativePeak.Core/CreativePeak.Core.csproj", "CreativePeak.Core/"]
 COPY ["CreativePeak.Data/CreativePeak.Data.csproj", "CreativePeak.Data/"]
 COPY ["CreativePeak.Service/CreativePeak.Service.csproj", "CreativePeak.Service/"]
 
-# הוסף את השורה הזו
-USER root
+# USER root
 
 RUN dotnet restore "./CreativePeak.API/CreativePeak.API.csproj"
 COPY . .
