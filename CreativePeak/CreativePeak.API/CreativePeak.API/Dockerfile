@@ -33,6 +33,9 @@
 #WORKDIR /app
 #COPY --from=publish /app/publish .
 #ENTRYPOINT ["dotnet", "CreativePeak.API.dll"]
+#
+#
+
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809 AS base
@@ -52,6 +55,7 @@ COPY ["CreativePeak.Data/CreativePeak.Data.csproj", "CreativePeak.Data/"]
 COPY ["CreativePeak.Service/CreativePeak.Service.csproj", "CreativePeak.Service/"]
 
 # הפעלת dotnet restore
+USER root
 RUN dotnet restore "./CreativePeak.API/CreativePeak.API.csproj"
 
 # העתקת שאר הקבצים
