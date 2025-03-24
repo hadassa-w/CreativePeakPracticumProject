@@ -19,7 +19,7 @@ COPY ["CreativePeak.API/CreativePeak.API.csproj", "CreativePeak.API/"]
 COPY ["CreativePeak.Core/CreativePeak.Core.csproj", "CreativePeak.Core/"]
 COPY ["CreativePeak.Data/CreativePeak.Data.csproj", "CreativePeak.Data/"]
 COPY ["CreativePeak.Service/CreativePeak.Service.csproj", "CreativePeak.Service/"]
-RUN dotnet restore "./CreativePeak.API/CreativePeak.API.csproj"
+RUN powershell dotnet restore "./CreativePeak.API/CreativePeak.API.csproj"
 COPY . .
 WORKDIR "/src/CreativePeak.API"
 RUN dotnet build "./CreativePeak.API.csproj" -c %BUILD_CONFIGURATION% -o /app/build
