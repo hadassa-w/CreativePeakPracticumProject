@@ -71,19 +71,9 @@ function Register({ setIsLoggedIn }: RegisterProps) {
             } else {
                 setError("Registration failed. Please check your details.");
             }
-        } catch (error: any) {
-            console.error("❌ Error during registration:", error);
-
-            if (error.response) {
-                console.error("⚠ Server Error:", error.response.status, error.response.data);
-                setError(error.response.data.message || "Server error. Please try again.");
-            } else if (error.request) {
-                console.error("⚠ No response received:", error.request);
-                setError("Server is not responding. Please try again later.");
-            } else {
-                console.error("⚠ Request Error:", error.message);
-                setError("An unexpected error occurred.");
-            }
+        } catch (error) {
+            console.error("Error logging in:", error);
+            setError("The username or password is incorrect. Try again.");
         }
     };
 
@@ -98,7 +88,6 @@ function Register({ setIsLoggedIn }: RegisterProps) {
                     Fill in your details to get started.
                 </Typography>
 
-                {/* שדות הקלט */}
                 {[
                     { label: "Full Name", name: "fullname", icon: <AccountCircle /> },
                     { label: "Email", name: "email", icon: <Email /> },
@@ -168,7 +157,6 @@ function Register({ setIsLoggedIn }: RegisterProps) {
                 {/* Error Message */}
                 {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
 
-                {/* Buttons */}
                 <StyledButton variant="contained" color="secondary" fullWidth sx={{ mt: 3 }} onClick={handleRegister}>
                     Register
                 </StyledButton>

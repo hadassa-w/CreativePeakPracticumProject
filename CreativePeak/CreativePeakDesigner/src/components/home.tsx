@@ -47,7 +47,7 @@ function Home() {
                     variant="contained"
                     color="secondary"
                     startIcon={<LoginIcon />}
-                    onClick={() => navigate("/logIn")} // ✅ ניווט לדף ההתחברות
+                    onClick={() => navigate("/logIn")}
                 >
                     Log In
                 </StyledButton>
@@ -56,7 +56,7 @@ function Home() {
                     variant="outlined"
                     color="secondary"
                     startIcon={<PersonAddIcon />}
-                    onClick={() => navigate("/register")} // ✅ ניווט לדף ההרשמה
+                    onClick={() => navigate("/register")}
                 >
                     New? Register
                 </StyledButton>

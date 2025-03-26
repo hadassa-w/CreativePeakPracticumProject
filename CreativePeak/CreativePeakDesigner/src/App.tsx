@@ -23,16 +23,10 @@ function App() {
       <Header setIsLoggedIn={setIsLoggedIn} /> {/* הצגת הקומפוננטה המתאימה */}
       <Box component="main" sx={{ p: 3 }}>
         <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/welcome' element={<Welcome />} />
-          <Route path="/logIn" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} /> 
+          <Route path='/' element={<Home />} />
+          <Route path='/welcome' element={<Welcome />} />
+          <Route path="/logIn" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn} />} />
-        {/* 
-          <Route path="/myRecipes" element={<MyRecipes />} />
-          <Route path="/recipes" element={<Recipes />} />
-          <Route path="/addRecipes" element={<AddRecipes />} />
-          <Route path="/" element={<Page />} /> 
-          */}
         </Routes>
       </Box>
     </Router>
