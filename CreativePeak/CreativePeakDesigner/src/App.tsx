@@ -8,7 +8,7 @@ import Welcome from './components/welcome';
 import LogIn from './components/logIn';
 import Register from './components/register';
 import AddImage from './components/AddImage';
-import AllImages from './components/allImage';
+import AllImages from './components/allImages';
 import Profile from './components/profile';
 
 function App() {
