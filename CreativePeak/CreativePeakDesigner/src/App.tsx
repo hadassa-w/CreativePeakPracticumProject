@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Header from './components/header';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Home from './components/home';
 import Welcome from './components/welcome';
 import LogIn from './components/logIn';
 import Register from './components/register';
-import AddImage from './components/AddImage';
+import AddImage from './components/addNewImage';
 import AllImages from './components/allImages';
 import Profile from './components/profile';
 
