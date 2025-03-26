@@ -36,17 +36,17 @@ const StyledButton = styled(Button)({
 
 function LogIn({ setIsLoggedIn }: LoginProps) {
     const navigate = useNavigate();
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState("");
+    const [username, setUsername] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
     const handleLogin = async () => {
         const requestData = { UserName: username, Password: password };
 
         try {
             console.log("Sending login request with:", { username, password });
-            const response = await axios.post("http://localhost:8080/api/user/login", requestData);
+            const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Login", requestData);
 
             console.log("Received response:", response);
             if (response.status === 200) {
@@ -55,7 +55,8 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
                 setIsLoggedIn(true);
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("userId", user.id);
-                navigate("/home");
+
+                navigate("/welcome");
             } else {
                 console.log("Login failed with status:", response.status);
                 setError("Login failed. Please check your credentials.");
@@ -87,7 +88,6 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
                     Please enter your credentials to log in.
                 </Typography>
 
-                {/* Username Field */}
                 <TextField
                     label="User name"
                     required

@@ -2,14 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { Button, TextField, Box, Typography, IconButton, InputAdornment, Container } from "@mui/material";
 import { useState } from "react";
 import { styled } from "@mui/system";
-import { AccountCircle, Lock, Person, Phone, Email, Badge, Visibility, VisibilityOff } from "@mui/icons-material";
+import { AccountCircle, Lock, Phone, Email, Home, Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
 
 interface RegisterProps {
     setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
-// עיצוב מרכזי של התיבה
+// עיצוב התיבה המרכזית
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.85)",
     borderRadius: "12px",
@@ -33,16 +33,15 @@ const StyledButton = styled(Button)({
 
 function Register({ setIsLoggedIn }: RegisterProps) {
     const navigate = useNavigate();
-    const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
     const [formData, setFormData] = useState({
-        username: "",
-        password: "",
-        name: "",
-        phone: "",
+        fullname: "",
         email: "",
-        tz: "",
+        password: "",
+        phone: "",
+        address: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,21 +50,40 @@ function Register({ setIsLoggedIn }: RegisterProps) {
 
     const handleRegister = async () => {
         try {
-            console.log("Sending registration request with:", formData);
-            const response = await axios.post("http://localhost:8080/api/user/sighin", formData);
-            console.log("Received response:", response);
+            console.log("📤 Sending registration request with:", formData);
 
-            if (response.status === 200) {
-                console.log("Registration successful:", response.data);
+            const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/register", formData);
+
+            console.log("✅ Received response:", response);
+
+            if (response.status === 200 && response.data.token) {
+                console.log("🎉 Registration successful:", response.data);
+
+                // שמירת סטטוס התחברות
                 setIsLoggedIn(true);
                 localStorage.setItem("isLoggedIn", "true");
+
+                // שמירת טוקן מהשרת
+                localStorage.setItem("token", response.data.token);
                 localStorage.setItem("userId", response.data.id);
-                navigate("/home");
+
+                navigate("/welcome");
             } else {
                 setError("Registration failed. Please check your details.");
             }
-        } catch (error) {
-            setError("The username or password is incorrect. Try again.");
+        } catch (error: any) {
+            console.error("❌ Error during registration:", error);
+
+            if (error.response) {
+                console.error("⚠ Server Error:", error.response.status, error.response.data);
+                setError(error.response.data.message || "Server error. Please try again.");
+            } else if (error.request) {
+                console.error("⚠ No response received:", error.request);
+                setError("Server is not responding. Please try again later.");
+            } else {
+                console.error("⚠ Request Error:", error.message);
+                setError("An unexpected error occurred.");
+            }
         }
     };
 
@@ -82,17 +100,15 @@ function Register({ setIsLoggedIn }: RegisterProps) {
 
                 {/* שדות הקלט */}
                 {[
-                    { label: "User Name", name: "username", icon: <AccountCircle /> },
-                    { label: "Full Name", name: "name", icon: <Person /> },
-                    { label: "Phone", name: "phone", icon: <Phone /> },
+                    { label: "Full Name", name: "fullname", icon: <AccountCircle /> },
                     { label: "Email", name: "email", icon: <Email /> },
-                    { label: "ID Number", name: "tz", icon: <Badge /> },
+                    { label: "Phone", name: "phone", icon: <Phone /> },
                 ].map(({ label, name, icon }) => (
                     <TextField
                         key={name}
                         label={label}
-                        required
                         fullWidth
+                        required
                         name={name}
                         value={formData[name as keyof typeof formData]}
                         onChange={handleChange}
@@ -107,12 +123,28 @@ function Register({ setIsLoggedIn }: RegisterProps) {
                     />
                 ))}
 
-                {/* Password Field */}
+                <TextField
+                    label="Address"
+                    fullWidth
+                    name={"address"}
+                    value={formData.address}
+                    onChange={handleChange}
+                    sx={{ mb: 2 }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <Home />
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+
+
                 <TextField
                     label="Password"
                     type={showPassword ? "text" : "password"}
-                    required
                     fullWidth
+                    required
                     name="password"
                     value={formData.password}
                     onChange={handleChange}

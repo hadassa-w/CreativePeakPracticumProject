@@ -54,7 +54,7 @@ namespace CreativePeak.API.Controllers
             return Unauthorized();
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] UserPostModel userPostModel)
         {
             if (!ModelState.IsValid)
