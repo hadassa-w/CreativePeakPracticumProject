@@ -29,23 +29,19 @@ function Welcome() {
     return (
         // <BackgroundWrapper>
             <ContentBox>
-                {/* Main Title */}
                 <Typography variant="h3" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
                     🎨 Welcome!
                 </Typography>
 
-                {/* Introduction Text */}
                 <Typography variant="h5" sx={{ color: "#444", mb: 3,fontSize:25 }}>
                     Create your own portfolio and showcase your designs!
                 </Typography>
 
-                {/* Short Description */}
                 <Typography variant="body1" sx={{ color: "#555", mb: 4,fontSize:18}}>
                 A professional portfolio helps youattract clients, and share your creativity.  
                     Upload your best work, describe your design process, and let see your unique talent!
                 </Typography>
 
-                {/* Action Buttons */}
                 <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
                     <StyledButton variant="contained" color="secondary" startIcon={<AddPhotoAlternateIcon />} onClick={() => alert("Create a new project")}>
                         Add Project

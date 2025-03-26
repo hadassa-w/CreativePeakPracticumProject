@@ -156,3 +156,10 @@ C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויק
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\CreativePeak.Service.pdb
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\MySqlConnector.dll
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.Extensions.WebEncoders.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\System.Security.Cryptography.Xml.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll

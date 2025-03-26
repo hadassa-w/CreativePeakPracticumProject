@@ -76,6 +76,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 //builder.Services.AddSingleton<Mapping>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+builder.Services.AddSingleton<PasswordService>();
 
 // לצורך קשרי הגומלין ל DB
 builder.Services.AddControllers()
