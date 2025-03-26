@@ -7,8 +7,8 @@ import Home from './components/home';
 import Welcome from './components/welcome';
 import LogIn from './components/logIn';
 import Register from './components/register';
-import AddImage from './components/addNewImage';
-import AllImages from './components/allImages';
+import AddProject from './components/addProject';
+import AllProjects from './components/allProjects';
 import Profile from './components/profile';
 
 function App() {
@@ -31,8 +31,8 @@ function App() {
           <Route path="/logIn" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn} />} />
           <Route path='/welcome' element={<Welcome />} />
-          <Route path='/addImage' element={<AddImage />} />
-          <Route path='/allImages' element={<AllImages />} />
+          <Route path='/addProject' element={<AddProject />} />
+          <Route path='/allProjects' element={<AllProjects />} />
           <Route path='/profile' element={<Profile />} />
         </Routes>
       </Box>

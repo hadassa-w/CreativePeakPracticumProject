@@ -42,8 +42,8 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
    // תפריט למשתמש מחובר
    const loggedInNavItems: NavItem[] = [
       { name: "Profile", path: "/profile", icon: <PersonIcon /> }, // כפתור פרופיל
-      { name: "All images", path: "/allImages", icon: <FolderOpenIcon /> },
-      { name: "Add image", path: "/addImage", icon: <AddPhotoAlternateIcon /> },
+      { name: "All projects", path: "/allProjects", icon: <FolderOpenIcon /> },
+      { name: "Add project", path: "/addProject", icon: <AddPhotoAlternateIcon /> },
       { name: "Log Out", path: "/", icon: <ExitToAppIcon />, action: handleLogOut },
    ];
 

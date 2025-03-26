@@ -49,18 +49,18 @@ function Welcome() {
                     variant="contained"
                     color="secondary"
                     startIcon={<AddPhotoAlternateIcon />}
-                    onClick={() => navigate("/addImage")} // 👈 ניווט לעמוד "Add Project"
+                    onClick={() => navigate("/addProject")} // 👈 ניווט לעמוד "Add Project"
                 >
-                    Add Project
+                    Add project
                 </StyledButton>
 
                 <StyledButton
                     variant="outlined"
                     color="secondary"
                     startIcon={<FolderOpenIcon />}
-                    onClick={() => navigate("/allImages")} // 👈 ניווט לעמוד "View Portfolio"
+                    onClick={() => navigate("/allProjects")} // 👈 ניווט לעמוד "View Portfolio"
                 >
-                    View Portfolio
+                    All projects
                 </StyledButton>
             </Box>
         </ContentBox>

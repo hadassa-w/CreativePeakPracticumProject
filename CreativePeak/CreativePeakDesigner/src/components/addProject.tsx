@@ -1,8 +1,8 @@
 import "../css/home.css";
 
-function AllImages() {
+function AddProject() {
     return <>
     </>
 }
 
-export default AllImages;
+export default AddProject;
