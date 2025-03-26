@@ -53,6 +53,7 @@ namespace CreativePeak.API.Controllers
                 Address = user.Address,
                 Role = "Graphic designer",
                 CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
             };
             var userNew = await _userService.AddAsync(newUser);
             var userDTO = _mapper.Map<UserDTO>(userNew);

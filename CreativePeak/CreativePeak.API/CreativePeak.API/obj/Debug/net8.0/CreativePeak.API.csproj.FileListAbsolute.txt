@@ -154,3 +154,5 @@ C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויק
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\CreativePeak.Service.dll
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\CreativePeak.Data.pdb
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\CreativePeak.Service.pdb
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\MySqlConnector.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll

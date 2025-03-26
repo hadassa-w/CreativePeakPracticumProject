@@ -22,15 +22,17 @@ namespace CreativePeak.Core.Models
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long.")]
         public string Password { get; set; }
 
-        [Phone(ErrorMessage = "Invalid Phone Number.")]
+        [MaxLength(20, ErrorMessage = "Phone number cannot be longer than 20 characters.")]
         public string Phone { get; set; }
 
+        [MaxLength(255, ErrorMessage = "Address cannot be longer than 255 characters.")]
         public string Address { get; set; }
+
+        [MaxLength(50, ErrorMessage = "Role cannot be longer than 50 characters.")]
         public string Role { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
         public DesignerDetails DesignersDetails { get; set; }
-        public List<View> Views { get; set; }
     }
 }

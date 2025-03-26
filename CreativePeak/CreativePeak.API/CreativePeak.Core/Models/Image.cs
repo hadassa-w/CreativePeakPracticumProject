@@ -24,14 +24,12 @@ namespace CreativePeak.Core.Models
         public DateTime UpdatedAt { get; set; }
 
 
-        [Required(ErrorMessage = "Choosing designer is required.")]
-        public int DesignerDetailsId { get; set; }
-        public DesignerDetails DesignerDetails { get; set; }
+        //[Required(ErrorMessage = "Choosing designer is required.")]
+        //public int DesignerDetailsId { get; set; }
+        //public DesignerDetails DesignerDetails { get; set; }
 
         [Required(ErrorMessage = "Choosing category is required.")]
         public int CategoryId { get; set; }
         public Category Category { get; set; }
-
-        public List<View> Views { get; set; }
     }
 }

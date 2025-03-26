@@ -53,6 +53,7 @@ namespace CreativePeak.API.Controllers
                 Description = category.Description,
                 DesignerDetails = _designerDetailsService.GetById(category.DesignerDetailsId),
                 CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
             var categoryNew = await _categoryService.AddAsync(newCategory);
             var categoryDTO = _mapper.Map<CategoryDTO>(categoryNew);

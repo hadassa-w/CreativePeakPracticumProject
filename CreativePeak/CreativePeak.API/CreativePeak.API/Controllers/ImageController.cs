@@ -57,11 +57,12 @@ namespace CreativePeak.API.Controllers
                 FileName = image.FileName,
                 Description = image.Description,
                 LinkURL = image.LinkURL,
-                DesignerDetailsId=image.DesignerId,
-                DesignerDetails = _designerDetailsService.GetById(image.DesignerId),
+                //DesignerDetailsId=image.DesignerId,
+                //DesignerDetails = _designerDetailsService.GetById(image.DesignerId),
                 CategoryId=image.CategoryId,
                 Category = _categoryService.GetById(image.CategoryId),
                 CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
             };
 
             var imageNew = await _imageService.AddAsync(newImage);
@@ -82,10 +83,10 @@ namespace CreativePeak.API.Controllers
             existingImage.FileName = image.FileName;
             existingImage.Description = image.Description;
             existingImage.LinkURL = image.LinkURL;
-            existingImage.DesignerDetailsId = image.DesignerId;
+            //existingImage.DesignerDetailsId = image.DesignerId;
             existingImage.CategoryId = image.CategoryId;
             existingImage.Category = _categoryService.GetById(image.CategoryId);
-            existingImage.DesignerDetails = _designerDetailsService.GetById(image.DesignerId);
+            //existingImage.DesignerDetails = _designerDetailsService.GetById(image.DesignerId);
             existingImage.UpdatedAt = DateTime.UtcNow;
 
             _imageService.Update(id,existingImage);

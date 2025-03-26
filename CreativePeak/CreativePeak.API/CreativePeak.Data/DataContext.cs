@@ -15,12 +15,21 @@ namespace CreativePeak.Data
         public DbSet<Image> Images { get; set; }
         public DbSet<DesignerDetails> DesignersDetails { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<View> Views { get; set; }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CreativePeak");
+        //    optionsBuilder.LogTo(message => Debug.WriteLine(message));
+        //}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CreativePeak");
-            optionsBuilder.LogTo(message => Debug.WriteLine(message));
+            optionsBuilder.UseMySql(
+                  @"Server=bvby4mfwdafihsjtbziq-mysql.services.clever-cloud.com;
+             Port=3306;
+             Database=bvby4mfwdafihsjtbziq;
+             User=ujan10sw5dwrp8nh;
+             Password=IhXEc6xGBkz5Qy5znuDV",
+                new MySqlServerVersion(new Version(9, 0, 0))
+            );
         }
-
     }
 }

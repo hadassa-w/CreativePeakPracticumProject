@@ -57,6 +57,7 @@ namespace CreativePeak.API.Controllers
                 PriceRangeMin = designerDetails.PriceRangeMin,
                 PriceRangeMax = designerDetails.PriceRangeMax,
                 CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 UserId = designerDetails.UserId // הוסף את ה-UserId כאן
             };
 
