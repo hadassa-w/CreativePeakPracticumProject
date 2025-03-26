@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import LoginIcon from "@mui/icons-material/Login"; // אייקון כניסה
 import PersonAddIcon from "@mui/icons-material/PersonAdd"; // אייקון הרשמה
 import { useNavigate } from "react-router-dom";
+import "../css/home.css";
 
 // עיצוב כפתור
 const StyledButton = styled(Button)({
@@ -25,7 +26,7 @@ const ContentBox = styled(Container)({
 });
 
 function Home() {
-    const navigate = useNavigate(); // ✅ יצירת פונקציה לניווט
+    const navigate = useNavigate();
 
     return (
         <ContentBox>
