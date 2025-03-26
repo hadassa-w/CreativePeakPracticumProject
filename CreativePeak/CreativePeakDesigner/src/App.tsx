@@ -27,7 +27,7 @@ function App() {
 <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />    
   <Box component="main" sx={{ p: 3 }}>
         <Routes>
-          <Route path='/' element={<Home />} />
+          <Route path='/*' element={<Home />} />
           <Route path="/logIn" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn} />} />
           <Route path='/welcome' element={<Welcome />} />
