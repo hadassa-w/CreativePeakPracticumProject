@@ -7,6 +7,9 @@ import Home from './components/home';
 import Welcome from './components/welcome';
 import LogIn from './components/logIn';
 import Register from './components/register';
+import AddImage from './components/AddImage';
+import AllImages from './components/allImage';
+import Profile from './components/profile';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -20,13 +23,17 @@ function App() {
 
   return (
     <Router>
-      <Header setIsLoggedIn={setIsLoggedIn} /> {/* הצגת הקומפוננטה המתאימה */}
-      <Box component="main" sx={{ p: 3 }}>
+
+<Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />    
+  <Box component="main" sx={{ p: 3 }}>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/welcome' element={<Welcome />} />
           <Route path="/logIn" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path='/welcome' element={<Welcome />} />
+          <Route path='/addImage' element={<AddImage />} />
+          <Route path='/allImages' element={<AllImages />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
       </Box>
     </Router>

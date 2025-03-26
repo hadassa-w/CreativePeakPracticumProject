@@ -50,11 +50,7 @@ function Register({ setIsLoggedIn }: RegisterProps) {
 
     const handleRegister = async () => {
         try {
-            console.log("📤 Sending registration request with:", formData);
-
             const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Register", formData);
-
-            console.log("✅ Received response:", response);
 
             if (response.status === 200 && response.data.token) {
                 console.log("🎉 Registration successful:", response.data);

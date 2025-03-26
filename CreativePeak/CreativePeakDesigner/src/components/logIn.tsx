@@ -58,7 +58,6 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
 
                 navigate("/welcome");
             } else {
-                console.log("Login failed with status:", response.status);
                 setError("Login failed. Please check your credentials.");
             }
         } catch (error) {
