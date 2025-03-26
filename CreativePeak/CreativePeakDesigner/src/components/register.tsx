@@ -52,7 +52,7 @@ function Register({ setIsLoggedIn }: RegisterProps) {
         try {
             console.log("📤 Sending registration request with:", formData);
 
-            const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/register", formData);
+            const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Register", formData);
 
             console.log("✅ Received response:", response);
 
