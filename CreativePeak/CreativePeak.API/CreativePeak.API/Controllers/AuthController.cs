@@ -29,7 +29,7 @@ namespace CreativePeak.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
             // חפש את המשתמש בבסיס הנתונים
-            var user = await _authRepository.GetByCondition(u => u.FullName == loginModel.UserName && u.Password == loginModel.Password);
+            var user = await _authRepository.GetByCondition(u => u.Email == loginModel.UserName && u.Password == loginModel.Password);
 
             if (user != null)
             {

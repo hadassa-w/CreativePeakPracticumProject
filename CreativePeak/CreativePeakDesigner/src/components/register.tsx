@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, TextField, Box, Typography, IconButton, InputAdornment, Container } from "@mui/material";
+import { Button, TextField, Box, Typography, IconButton, InputAdornment, Container, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { styled } from "@mui/system";
 import { AccountCircle, Lock, Phone, Email, Home, Visibility, VisibilityOff } from "@mui/icons-material";
@@ -35,20 +35,73 @@ function Register({ setIsLoggedIn }: RegisterProps) {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [formData, setFormData] = useState({
         fullname: "",
         email: "",
         password: "",
         phone: "",
-        address: "",
+        address: "", // לא חובה
     });
 
+    const [fieldErrors, setFieldErrors] = useState<{ fullname?: string; email?: string; password?: string; phone?: string }>({});
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+
+        // בדיקה אם ניתן להסיר את השגיאה
+        if (fieldErrors[name as keyof typeof fieldErrors]) {
+            if (name === "password" && value.length < 6) return;
+            if (name === "phone" && value.length < 9) return;
+            if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) return; // אם האימייל לא בפורמט תקין, נשאיר שגיאה
+            setFieldErrors((prev) => ({ ...prev, [name]: undefined }));
+        }
     };
 
     const handleRegister = async () => {
+        setLoading(true);
+        setError("");
+        setFieldErrors({});
+
+        let newFieldErrors: { fullname?: string; email?: string; password?: string; phone?: string } = {};
+        let hasError = false;
+
+        // ולידציה  
+        if (!formData.fullname.trim()) {
+            newFieldErrors.fullname = "Full name is required";
+            hasError = true;
+        }
+        if (!formData.email.trim()) {
+            newFieldErrors.email = "Email is required";
+            hasError = true;
+        } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+            newFieldErrors.email = "Invalid email format";
+            hasError = true;
+        }
+        if (!formData.password.trim()) {
+            newFieldErrors.password = "Password is required";
+            hasError = true;
+        } else if (formData.password.length < 6) {
+            newFieldErrors.password = "Password must be at least 6 characters";
+            hasError = true;
+        }
+        if (!formData.phone.trim()) {
+            newFieldErrors.phone = "Phone number is required";
+            hasError = true;
+        } else if (!/^\d{9,}$/.test(formData.phone)) {
+            newFieldErrors.phone = "Phone number must be at least 9 digits";
+            hasError = true;
+        }
+
+        if (hasError) {
+            setFieldErrors(newFieldErrors);
+            setLoading(false);
+            return;
+        }
+
+        // ניסיון הרשמה  
         try {
             const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Register", formData);
 
@@ -68,13 +121,14 @@ function Register({ setIsLoggedIn }: RegisterProps) {
                 setError("Registration failed. Please check your details.");
             }
         } catch (error) {
-            console.error("Error logging in:", error);
-            setError("The username or password is incorrect. Try again.");
+            console.error("Error registering:", error);
+            setError("Registration failed. Try again.");
         }
+        setLoading(false);
     };
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "450px", height: "100%", overflow: "hidden", marginTop: "50px" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "500px", height: "100%", overflow: "hidden", minHeight: "100vh", padding: "20px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
                     🎉 Create Your Account
@@ -98,6 +152,8 @@ function Register({ setIsLoggedIn }: RegisterProps) {
                         value={formData[name as keyof typeof formData]}
                         onChange={handleChange}
                         sx={{ mb: 2 }}
+                        error={!!fieldErrors[name as keyof typeof fieldErrors]}
+                        helperText={fieldErrors[name as keyof typeof fieldErrors]}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -124,7 +180,6 @@ function Register({ setIsLoggedIn }: RegisterProps) {
                     }}
                 />
 
-
                 <TextField
                     label="Password"
                     type={showPassword ? "text" : "password"}
@@ -134,6 +189,8 @@ function Register({ setIsLoggedIn }: RegisterProps) {
                     value={formData.password}
                     onChange={handleChange}
                     sx={{ mb: 2 }}
+                    error={!!fieldErrors.password}
+                    helperText={fieldErrors.password}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -150,11 +207,16 @@ function Register({ setIsLoggedIn }: RegisterProps) {
                     }}
                 />
 
-                {/* Error Message */}
                 {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
 
-                <StyledButton variant="contained" color="secondary" fullWidth sx={{ mt: 3 }} onClick={handleRegister}>
-                    Register
+                <StyledButton variant="contained" color="secondary" fullWidth sx={{ mt: 3 }} onClick={handleRegister} disabled={loading}>
+                    {loading ? (
+                        <>
+                            <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Registering...
+                        </>
+                    ) : (
+                        "Register"
+                    )}
                 </StyledButton>
 
                 <StyledButton variant="outlined" color="secondary" fullWidth sx={{ mt: 2 }} onClick={() => navigate("/logIn")}>

@@ -1,25 +1,25 @@
-import { Button, TextField, Box, Typography, IconButton, InputAdornment, Container } from "@mui/material";
+import { Button, TextField, Box, Typography, IconButton, InputAdornment, Container, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { styled } from "@mui/system";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // אייקון משתמש
-import LockIcon from "@mui/icons-material/Lock"; // אייקון סיסמה
-import Visibility from "@mui/icons-material/Visibility"; // אייקון הצגת סיסמה
-import VisibilityOff from "@mui/icons-material/VisibilityOff"; // אייקון הסתרת סיסמה
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LockIcon from "@mui/icons-material/Lock";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 interface LoginProps {
     setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
-// עיצוב תיבה מרכזית עם רקע שקוף
+// עיצוב
 const ContentBox = styled(Container)({
-    backgroundColor: "rgba(255, 255, 255, 0.85)", // רקע חצי שקוף
+    backgroundColor: "rgba(255, 255, 255, 0.85)",
     borderRadius: "12px",
     padding: "40px",
     maxWidth: "400px",
     textAlign: "center",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // הוספת צל לעיצוב מקצועי
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
 });
 
 const StyledButton = styled(Button)({
@@ -39,45 +39,68 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [error, setError] = useState<string>("");
+
+    // 🔴 שגיאות פרטניות לפי שדה
+    const [fieldErrors, setFieldErrors] = useState<{ username?: string; password?: string }>({});
+    // 🔴 שגיאה כללית ללוגין כושל
+    const [generalError, setGeneralError] = useState<string>("");
+    // 🔄 מצב טעינה לכפתור
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleLogin = async () => {
-        const requestData = { UserName: username, Password: password };
+        let newFieldErrors: { username?: string; password?: string } = {};
+        let hasError = false;
 
+        // 🔹 ולידציה לשדות ריקים
+        if (!username.trim()) {
+            newFieldErrors.username = "Username is required";
+            hasError = true;
+        }
+        if (!password.trim()) {
+            newFieldErrors.password = "Password is required";
+            hasError = true;
+        }
+
+        // אם יש שגיאות בסיסיות – נציג אותן ולא נשלח את הבקשה
+        if (hasError) {
+            setFieldErrors(newFieldErrors);
+            setGeneralError(""); // נמחק שגיאה כללית במקרה כזה
+            return;
+        }
+
+        // 🔄 הפעלת מצב טעינה
+        setLoading(true);
+
+        // 🔹 ניסיון התחברות
         try {
-            console.log("Sending login request with:", { username, password });
-            const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Login", requestData);
+            console.log("Sending login request:", { username, password });
+            const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Login", {
+                UserName: username,
+                Password: password,
+            });
 
-            console.log("Received response:", response);
-            if (response.status === 200) {
-                const user = response.data;
-                console.log("Login successful:", user);
-                setIsLoggedIn(true);
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("userId", user.id);
+            console.log("Login successful:", response.data);
+            setIsLoggedIn(true);
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userId", response.data.id);
 
-                navigate("/welcome");
-            } else {
-                setError("Login failed. Please check your credentials.");
-            }
+            // 🔹 איפוס שגיאות כי ההתחברות הצליחה
+            setFieldErrors({});
+            setGeneralError("");
+            navigate("/welcome");
         } catch (error) {
-            console.error("Error logging in:", error);
-            setError("The username or password is incorrect. Try again.");
+            console.error("Login error:", error);
+
+            // 🔴 מציגים שגיאה כללית במקרה של לוגין כושל
+            setGeneralError("The username or password is incorrect.");
+        } finally {
+            // 🔄 כיבוי מצב טעינה
+            setLoading(false);
         }
     };
 
-    const handleRegister = () => {
-        navigate("/register");
-    };
-
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
     return (
-        <Box sx={{
-            display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "450px", height: "100%", overflow: "hidden",
-        }}>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "500px", height: "100%", overflow: "hidden", padding: "30px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
                     🔐 Welcome Back!
@@ -87,13 +110,15 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
                     Please enter your credentials to log in.
                 </Typography>
 
+                {/* 🔹 שדה שם משתמש עם שגיאה פרטנית */}
                 <TextField
-                    label="User name"
-                    required
+                    label="User name - Email"
                     fullWidth
                     margin="normal"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    error={!!fieldErrors.username}
+                    helperText={fieldErrors.username}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -103,15 +128,16 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
                     }}
                 />
 
-                {/* Password Field */}
+                {/* 🔹 שדה סיסמה עם שגיאה פרטנית */}
                 <TextField
                     label="Password"
                     type={showPassword ? "text" : "password"}
-                    required
                     fullWidth
                     margin="normal"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    error={!!fieldErrors.password}
+                    helperText={fieldErrors.password}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -120,7 +146,7 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
                         ),
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton onClick={handleClickShowPassword} edge="end">
+                                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                             </InputAdornment>
@@ -128,28 +154,33 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
                     }}
                 />
 
-                {/* Error Message */}
-                {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
+                {/* 🔴 הודעת שגיאה כללית במקרה של לוגין כושל */}
+                {generalError && (
+                    <Typography color="error" sx={{ mt: 2 }}>
+                        {generalError}
+                    </Typography>
+                )}
 
-                {/* Sign In Button */}
+                {/* 🔹 כפתור התחברות עם טעינה */}
                 <StyledButton
                     variant="contained"
                     color="secondary"
                     fullWidth
                     sx={{ mt: 3 }}
                     onClick={handleLogin}
+                    disabled={loading} // נטרול כפתור בזמן הטעינה
                 >
-                    Sign In
+                    {loading ? (
+                        <>
+                            <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Connecting...
+                        </>
+                    ) : (
+                        "Sign In"
+                    )}
                 </StyledButton>
 
-                {/* Register Button */}
-                <StyledButton
-                    variant="outlined"
-                    color="secondary"
-                    fullWidth
-                    sx={{ mt: 2 }}
-                    onClick={handleRegister}
-                >
+                {/* 🔹 מעבר לעמוד הרשמה */}
+                <StyledButton variant="outlined" color="secondary" fullWidth sx={{ mt: 2 }} onClick={() => navigate("/register")} disabled={loading}>
                     Not registered? Click here to sign up.
                 </StyledButton>
             </ContentBox>
