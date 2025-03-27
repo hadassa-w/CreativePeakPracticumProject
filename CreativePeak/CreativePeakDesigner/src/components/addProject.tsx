@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import {
-    Button, TextField, Box, Typography, Container, CircularProgress,
-    MenuItem, Select, InputLabel, FormControl, FormHelperText
-} from "@mui/material";
+import { Button, TextField, Box, Typography, Container, CircularProgress, MenuItem, Select, InputLabel, FormControl, FormHelperText } from "@mui/material";
 import { styled } from "@mui/system";
 
 const ContentBox = styled(Container)({
@@ -53,25 +50,26 @@ interface FormData {
     fileName: string;
     description: string;
     linkURL: string;
-    createdAt: string;
-    updatedAt: string;
+    designerId: number;
     categoryId: number;
-    image: FileList;
 }
 
 interface Category {
     id: number;
-    name: string;
+    categoryName: string;
+    DesignerDetailsId: number;
 }
 
 export default function AddImageForm() {
-    const { register, handleSubmit, reset, formState: { errors }, setValue, watch } = useForm<FormData>();
+    const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm<FormData>();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [fileName, setFileName] = useState<string>("No file chosen");
     const [categories, setCategories] = useState<Category[]>([]);
 
+
     useEffect(() => {
+        // Fetch categories from the server
         axios.get("https://creativepeak-api.onrender.com/api/Category")
             .then(response => {
                 setCategories(response.data);
@@ -87,15 +85,11 @@ export default function AddImageForm() {
         formData.append("fileName", data.fileName);
         formData.append("description", data.description);
         formData.append("linkURL", data.linkURL);
-        formData.append("createdAt", data.createdAt);
-        formData.append("updatedAt", data.updatedAt);
         formData.append("categoryId", data.categoryId.toString());
-        formData.append("image", data.image[0]);
+        // formData.append("designerId",user.de );
 
         try {
-            await axios.post("https://creativepeak-api.onrender.com/api/Image", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+            await axios.post("https://creativepeak-api.onrender.com/api/Image", formData);
             alert("🎉 Image added successfully!");
             reset();
             setImagePreview(null);
@@ -140,14 +134,18 @@ export default function AddImageForm() {
                     <FormControl fullWidth error={!!errors.categoryId}>
                         <InputLabel>Category</InputLabel>
                         <Select
-                            value={watch("categoryId") || ""}
+                            {...register("categoryId", { required: "Category is required" })}
                             onChange={(e) => setValue("categoryId", Number(e.target.value))}
+                            defaultValue=""
                         >
                             <MenuItem value="" disabled>Select a category</MenuItem>
+
                             {categories.map((category) => (
-                                <MenuItem key={category.id} value={category.id}>
-                                    {category.name}
-                                </MenuItem>
+                                // category.DesignerDetailsId === localStorage.getItem("userId") ?
+                                    <MenuItem key={category.id} value={category.id}>
+                                        {category.categoryName}
+                                    </MenuItem>
+                                    // : null
                             ))}
                         </Select>
                         <FormHelperText>{errors.categoryId?.message?.toString()}</FormHelperText>
@@ -159,13 +157,12 @@ export default function AddImageForm() {
                         <HiddenFileInput
                             type="file"
                             accept="image/*"
-                            {...register("image", { required: "Image is required" })}
+                            {...register("linkURL", { required: "Image is required" })}
                             onChange={(e) => {
-                                const files = e.target.files;
-                                if (files && files.length > 0) {
-                                    setFileName(files[0].name);
-                                    setImagePreview(URL.createObjectURL(files[0]));
-                                    setValue("image", files); // עדכון ב- react-hook-form
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                    setFileName(file.name);
+                                    setImagePreview(URL.createObjectURL(file));
                                 }
                             }}
                         />
@@ -173,15 +170,22 @@ export default function AddImageForm() {
                     <Typography variant="body2" sx={{ mt: 1, color: "#555" }}>
                         {fileName}
                     </Typography>
-                    {imagePreview && <img src={imagePreview} alt="Preview" style={{ width: "100%", marginTop: "10px", borderRadius: "8px" }} />}
-                    {errors.image && <Typography color="error">{errors.image.message?.toString()}</Typography>}
+                    {imagePreview && <img src={imagePreview} alt="Preview" style={{ width: "100%",maxHeight:"200px", marginTop: "10px", borderRadius: "8px" }} />}
+                    {errors.linkURL && <Typography color="error">{errors.linkURL.message?.toString()}</Typography>}
 
                     {/* Submit Button */}
-                    <StyledButton type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
-                        {loading ? <CircularProgress size={24} color="inherit" /> : "Upload"}
+                    <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading}>
+                        {loading ? (
+                            <>
+                                <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Uploading...
+                            </>
+                        ) : (
+                            "Upload"
+                        )}
                     </StyledButton>
                 </form>
             </ContentBox>
         </Box>
     );
 }
+

@@ -108,13 +108,13 @@ function Register({ setIsLoggedIn }: RegisterProps) {
             if (response.status === 200 && response.data.token) {
                 console.log("🎉 Registration successful:", response.data);
 
-                // שמירת סטטוס התחברות
                 setIsLoggedIn(true);
                 localStorage.setItem("isLoggedIn", "true");
-
-                // שמירת טוקן מהשרת
                 localStorage.setItem("token", response.data.token);
-                localStorage.setItem("userId", response.data.id);
+                localStorage.setItem("userId", response.data.user.id);
+                localStorage.setItem("userName", response.data.user.fullName);
+
+                console.log(response.data.user);
 
                 navigate("/welcome");
             } else {
@@ -128,7 +128,7 @@ function Register({ setIsLoggedIn }: RegisterProps) {
     };
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "500px", height: "100%", overflow: "hidden", minHeight: "100vh", padding: "20px" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "500px", height: "100%", overflow: "hidden", minHeight: "100vh", padding: "50px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
                     🎉 Create Your Account

@@ -47,20 +47,9 @@ namespace CreativePeak.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] CategoryPostModel category)
         {
-            var newCategory = new Category
-            {
-                CategoryName = category.CategoryName,
-                Description = category.Description,
-                DesignerDetailsId = category.DesignerDetailsId,
-                DesignerDetails = await _designerDetailsService.GetByIdAsync(category.DesignerDetailsId),
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-            };
-
-
-            var categoryNew = await _categoryService.AddAsync(newCategory);
-            var categoryDTO = _mapper.Map<CategoryDTO>(categoryNew);
-            return CreatedAtAction(nameof(Get), new { id = categoryDTO.Id }, categoryDTO);
+            var categoryDTO = _mapper.Map<Category>(category);
+            var categoryNew = await _categoryService.AddAsync(categoryDTO);
+            return Ok(categoryDTO);
         }
 
         // PUT api/<CategoryController>/5

@@ -52,22 +52,9 @@ namespace CreativePeak.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] ImagePostModel image)
         {
-            var newImage = new Image
-            {
-                FileName = image.FileName,
-                Description = image.Description,
-                LinkURL = image.LinkURL,
-                //DesignerDetailsId=image.DesignerId,
-                //DesignerDetails = _designerDetailsService.GetById(image.DesignerId),
-                CategoryId = image.CategoryId,
-                Category = await _categoryService.GetByIdAsync(image.CategoryId),
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-            };
-
-            var imageNew = await _imageService.AddAsync(newImage);
-            var imageDTO = _mapper.Map<ImageDTO>(imageNew);
-            return CreatedAtAction(nameof(Get), new { id = imageDTO.Id }, imageDTO);
+            var imageDTO = _mapper.Map<Image>(image);
+            var userNew = await _imageService.AddAsync(imageDTO);
+            return Ok(imageDTO);
         }
 
         // PUT api/<ImageController>/5

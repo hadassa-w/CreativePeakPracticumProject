@@ -44,20 +44,9 @@ namespace CreativePeak.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] UserPostModel user)
         {
-            var newUser = new User
-            {
-                FullName = user.FullName,
-                Email = user.Email,
-                Password = user.Password,
-                Phone = user.Phone,
-                Address = user.Address,
-                Role = "Graphic designer",
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-            };
-            var userNew = await _userService.AddAsync(newUser);
-            var userDTO = _mapper.Map<UserDTO>(userNew);
-            return CreatedAtAction(nameof(Get), new { id = userDTO.Id }, userDTO);
+            var userDTO = _mapper.Map<User>(user);
+            var userNew = await _userService.AddAsync(userDTO);
+            return Ok(userDTO);
         }
 
         // PUT api/<UserController>/5

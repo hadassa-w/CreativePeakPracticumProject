@@ -1,4 +1,6 @@
-﻿using CreativePeak.API.PostModels;
+﻿using AutoMapper;
+using CreativePeak.API.PostModels;
+using CreativePeak.Core;
 using CreativePeak.Core.IRepositories;
 using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
@@ -18,11 +20,13 @@ namespace CreativePeak.API.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IAuthRepository _authRepository;
+        private readonly IMapper _mapper;
 
-        public AuthController(IConfiguration configuration, IAuthRepository authRepository)
+        public AuthController(IConfiguration configuration, IAuthRepository authRepository, IMapper mapper)
         {
             _configuration = configuration;
             _authRepository = authRepository;
+            _mapper = mapper;
         }
 
         [HttpPost("Login")]
@@ -49,7 +53,7 @@ namespace CreativePeak.API.Controllers
                     signingCredentials: signinCredentials
                 );
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-                return Ok(new { Token = tokenString });
+                return Ok(new { Token = tokenString, User = user });
             }
             return Unauthorized();
         }
@@ -62,17 +66,7 @@ namespace CreativePeak.API.Controllers
 
             try
             {
-                // יצירת המשתמש בבסיס הנתונים
-                var user = new User
-                {
-                    FullName = userPostModel.FullName,
-                    Email = userPostModel.Email,
-                    Password = userPostModel.Password,
-                    Phone = userPostModel.Phone,
-                    Address = userPostModel.Address,
-                    Role = "Graphic designer",
-                    CreatedAt = DateTime.UtcNow,
-                };
+                var user = _mapper.Map<User>(userPostModel);
 
                 // הוסף את המשתמש לבסיס הנתונים
                 await _authRepository.CreateUserAsync(user);
@@ -95,7 +89,7 @@ namespace CreativePeak.API.Controllers
                 );
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                return Ok(new { Token = tokenString });
+                return Ok(new { Token = tokenString, User = user });
             }
             catch (Exception ex)
             {

@@ -29,6 +29,8 @@ interface NavItem {
 }
 
 function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
+   const name = localStorage.getItem("userName") || "?";
+
    const [mobileOpen, setMobileOpen] = React.useState(false);
    const navigate = useNavigate();
 
@@ -36,6 +38,8 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
    const handleLogOut = () => {
       setIsLoggedIn(false);
       localStorage.removeItem("isLoggedIn"); // אופציונלי: הסרת נתוני ההתחברות
+      localStorage.removeItem("userName"); // אופציונלי: הסרת נתוני ההתחברות
+      localStorage.removeItem("token"); // אופציונלי: הסרת נתוני ההתחברות
       navigate("/");
    };
 
@@ -151,6 +155,29 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
                         {icon} <Typography sx={{ ml: 1 }}>{name}</Typography>
                      </Button>
                   ))}
+               </Box>
+               <Box
+                  sx={{
+                     fontFamily: "cursive",
+                     fontSize: "25px",
+                     borderRadius: "50%",
+                     backgroundColor: "rgb(255, 255, 255)",
+                     width: "45px",
+                     height: "45px",
+                     position:"",
+                     display: "flex",
+                     justifyContent: "center",
+                     alignItems: "center",
+                     border: "solid 3px #673AB7",
+                     minWidth: "45px", // לא קטן מזה
+                     minHeight: "45px",
+                     maxWidth: "45px", // לא גדול מזה
+                     maxHeight: "45px",
+                  }}
+               >
+                  <p style={{ color: "black" }}>
+                     {name?.charAt(0)}
+                  </p>
                </Box>
             </Toolbar>
          </AppBar>

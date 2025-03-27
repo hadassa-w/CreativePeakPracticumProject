@@ -80,9 +80,11 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
             });
 
             console.log("Login successful:", response.data);
-            setIsLoggedIn(true);
             localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("userId", response.data.id);
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userId", response.data.user.id);
+            localStorage.setItem("userName", response.data.user.fullName);
+            setIsLoggedIn(true);
 
             // 🔹 איפוס שגיאות כי ההתחברות הצליחה
             setFieldErrors({});
@@ -100,7 +102,7 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
     };
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "500px", height: "100%", overflow: "hidden", padding: "30px" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "500px", height: "100%", overflow: "hidden", padding: "50px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
                     🔐 Welcome Back!
