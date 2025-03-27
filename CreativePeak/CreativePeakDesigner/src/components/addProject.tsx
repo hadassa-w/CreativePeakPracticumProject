@@ -106,7 +106,7 @@ export default function AddImageForm() {
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
-                    🖼️ Add New Image
+                    🖼️ Project
                 </Typography>
 
                 <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
