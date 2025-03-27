@@ -139,4 +139,6 @@ app.UseMiddleware<ShabbatMiddleware>();
 
 app.MapControllers();
 
+app.MapFallbackToFile("index.html");  // הגדרת התמיכה ב-React Router
+
 app.Run();
