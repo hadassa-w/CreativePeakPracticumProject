@@ -10,9 +10,9 @@ namespace CreativePeak.Core.IServices
     public interface IDesignerDetailsService
     {
         Task<IEnumerable<DesignerDetails>> GetAllAsync();
-        DesignerDetails? GetById(int id);
+        Task<DesignerDetails?> GetByIdAsync(int id);
         Task<DesignerDetails> AddAsync(DesignerDetails designerDetails);
-        DesignerDetails? Update(int id, DesignerDetails designerDetails);
+        Task<DesignerDetails?> UpdateAsync(int id, DesignerDetails designerDetails);
         void Delete(DesignerDetails designerDetails);
 
     }

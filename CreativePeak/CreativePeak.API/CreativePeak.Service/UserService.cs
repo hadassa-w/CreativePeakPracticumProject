@@ -36,14 +36,14 @@ namespace CreativePeak.Service
             return await _repositoryManager.Users.GetAllAsync();
         }
 
-        public User? GetById(int id)
+        public async Task<User?> GetByIdAsync(int id)
         {
-            return _repositoryManager.Users.GetById(id);
+            return await _repositoryManager.Users.GetByIdAsync(id);
         }
 
-        public User? Update(int id, User user)
+        public async Task<User?> UpdateAsync(int id, User user)
         {
-            var dbUser = GetById(id);
+            var dbUser = await GetByIdAsync(id);
             if (dbUser == null)
             {
                 return null;
@@ -56,7 +56,7 @@ namespace CreativePeak.Service
             dbUser.CreatedAt = user.CreatedAt;
             dbUser.UpdatedAt = user.UpdatedAt;
 
-            _repositoryManager.Users.Update(dbUser);
+            await _repositoryManager.Users.UpdateAsync(dbUser);
             _repositoryManager.Save();
             return dbUser;
         }

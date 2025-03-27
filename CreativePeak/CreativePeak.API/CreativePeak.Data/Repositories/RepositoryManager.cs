@@ -17,7 +17,7 @@ namespace CreativePeak.Data.Repositories
         private readonly IRepository<DesignerDetails> _designerDetails;
         private readonly IRepository<Category> _categories;
 
-        public RepositoryManager(DataContext context, IRepository<User> userRepository, IRepository<Image> imageRepository,IRepository<DesignerDetails> designerDetailsRepository, IRepository<Category> categoriesRepository)
+        public RepositoryManager(DataContext context, IRepository<User> userRepository, IRepository<Image> imageRepository, IRepository<DesignerDetails> designerDetailsRepository, IRepository<Category> categoriesRepository)
         {
             _context = context;
             _users = userRepository;

@@ -217,7 +217,7 @@
   },
   {
     "ContainingType": "CreativePeak.API.Controllers.ImageController",
-    "Method": "GetById",
+    "Method": "GetByIdAsync",
     "RelativePath": "api/Image/{id}",
     "HttpMethod": "GET",
     "IsController": true,

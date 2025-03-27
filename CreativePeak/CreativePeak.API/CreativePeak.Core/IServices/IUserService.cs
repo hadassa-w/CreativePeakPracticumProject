@@ -10,9 +10,9 @@ namespace CreativePeak.Core.IServices
     public interface IUserService
     {
         Task<IEnumerable<User>> GetAllAsync();
-        User? GetById(int id);
+        Task<User?> GetByIdAsync(int id);
         Task<User> AddAsync(User user);
-        User? Update(int id, User user);
+        Task<User?> UpdateAsync(int id, User user);
         void Delete(User user);
 
     }

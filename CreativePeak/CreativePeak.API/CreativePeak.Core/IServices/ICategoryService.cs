@@ -10,9 +10,9 @@ namespace CreativePeak.Core.IServices
     public interface ICategoryService
     {
         Task<IEnumerable<Category>> GetAllAsync();
-        Category? GetById(int id);
+        Task<Category?> GetByIdAsync(int id);
         Task<Category> AddAsync(Category category);
-        Category? Update(int id, Category category);
+        Task<Category?> UpdateAsync(int id, Category category);
         void Delete(Category category);
 
     }

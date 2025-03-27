@@ -10,9 +10,9 @@ namespace CreativePeak.Core.IServices
     public interface IImageService
     {
         Task<IEnumerable<Image>> GetAllAsync();
-        Image? GetById(int id);
+        Task<Image?> GetByIdAsync(int id);
         Task<Image> AddAsync(Image image);
-        Image? Update(int id, Image image);
+        Task<Image?> UpdateAsync(int id, Image image);
         void Delete(Image image);
 
     }

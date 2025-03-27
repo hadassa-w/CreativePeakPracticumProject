@@ -36,14 +36,14 @@ namespace CreativePeak.Service
             return await _repositoryManager.Images.GetAllAsync();
         }
 
-        public Image? GetById(int id)
+        public async Task<Image?> GetByIdAsync(int id)
         {
-            return _repositoryManager.Images.GetById(id);
+            return await _repositoryManager.Images.GetByIdAsync(id);
         }
 
-        public Image? Update(int id, Image image)
+        public async Task<Image?> UpdateAsync(int id, Image image)
         {
-            var dbImage = GetById(id);
+            var dbImage = await GetByIdAsync(id);
             if (dbImage == null)
             {
                 return null;
@@ -55,7 +55,7 @@ namespace CreativePeak.Service
             dbImage.CreatedAt = image.CreatedAt;
             dbImage.UpdatedAt = image.UpdatedAt;
 
-            _repositoryManager.Images.Update(dbImage);
+            await _repositoryManager.Images.UpdateAsync(dbImage);
             _repositoryManager.Save();
             return dbImage;
         }

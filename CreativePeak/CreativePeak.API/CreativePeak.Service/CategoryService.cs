@@ -36,14 +36,14 @@ namespace CreativePeak.Service
             return await _repositoryManager.Categories.GetAllAsync();
         }
 
-        public Category? GetById(int id)
+        public async Task<Category?> GetByIdAsync(int id)
         {
-            return _repositoryManager.Categories.GetById(id);
+            return await _repositoryManager.Categories.GetByIdAsync(id);
         }
 
-        public Category? Update(int id, Category category)
+        public async Task<Category?> UpdateAsync(int id, Category category)
         {
-            var dbCategory = GetById(id);
+            var dbCategory = await GetByIdAsync(id);
             if (dbCategory == null)
             {
                 return null;
@@ -53,7 +53,7 @@ namespace CreativePeak.Service
             dbCategory.CreatedAt = category.CreatedAt;
             dbCategory.UpdatedAt = category.UpdatedAt;
 
-            _repositoryManager.Categories.Update(dbCategory);
+            await _repositoryManager.Categories.UpdateAsync(dbCategory);
             _repositoryManager.Save();
             return dbCategory;
         }

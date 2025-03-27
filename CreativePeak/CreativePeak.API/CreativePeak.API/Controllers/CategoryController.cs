@@ -38,7 +38,7 @@ namespace CreativePeak.API.Controllers
         [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
-            var category = _categoryService.GetById(id);
+            var category = _categoryService.GetByIdAsync(id);
             var categoryDTO = _mapper.Map<CategoryDTO>(category);
             return Ok(categoryDTO);
         }
@@ -52,7 +52,7 @@ namespace CreativePeak.API.Controllers
                 CategoryName = category.CategoryName,
                 Description = category.Description,
                 DesignerDetailsId = category.DesignerDetailsId,
-                DesignerDetails = _designerDetailsService.GetById(category.DesignerDetailsId),
+                DesignerDetails = await _designerDetailsService.GetByIdAsync(category.DesignerDetailsId),
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
             };
@@ -65,9 +65,9 @@ namespace CreativePeak.API.Controllers
 
         // PUT api/<CategoryController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] CategoryPostModel category)
+        public async Task<ActionResult> Put(int id, [FromBody] CategoryPostModel category)
         {
-            var existingCategory = _categoryService.GetById(id);
+            var existingCategory = await _categoryService.GetByIdAsync(id);
             if (existingCategory == null)
             {
                 return NotFound();
@@ -75,18 +75,18 @@ namespace CreativePeak.API.Controllers
 
             existingCategory.CategoryName = category.CategoryName;
             existingCategory.Description = category.Description;
-            existingCategory.DesignerDetails = _designerDetailsService.GetById(category.DesignerDetailsId);
+            existingCategory.DesignerDetails = await _designerDetailsService.GetByIdAsync(category.DesignerDetailsId);
             existingCategory.UpdatedAt = DateTime.UtcNow;
 
-            _categoryService.Update(id, existingCategory);
+            await _categoryService.UpdateAsync(id, existingCategory);
             return NoContent();
         }
 
         // DELETE api/<CategoryController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var category = _categoryService.GetById(id);
+            var category = await _categoryService.GetByIdAsync(id);
             if (category is null)
             {
                 return NotFound();

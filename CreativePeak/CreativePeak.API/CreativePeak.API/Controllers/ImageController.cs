@@ -37,9 +37,9 @@ namespace CreativePeak.API.Controllers
 
         // GET api/<ImageController>/5
         [HttpGet("{id}")]
-        public ActionResult GetById(int id)
+        public async Task<ActionResult> GetByIdAsync(int id)
         {
-            var image = _imageService.GetById(id);
+            var image =await _imageService.GetByIdAsync(id);
             if (image == null)
             {
                 return NotFound();
@@ -59,8 +59,8 @@ namespace CreativePeak.API.Controllers
                 LinkURL = image.LinkURL,
                 //DesignerDetailsId=image.DesignerId,
                 //DesignerDetails = _designerDetailsService.GetById(image.DesignerId),
-                CategoryId=image.CategoryId,
-                Category = _categoryService.GetById(image.CategoryId),
+                CategoryId = image.CategoryId,
+                Category = await _categoryService.GetByIdAsync(image.CategoryId),
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
             };
@@ -72,9 +72,9 @@ namespace CreativePeak.API.Controllers
 
         // PUT api/<ImageController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] ImagePostModel image)
+        public async Task<ActionResult> Put(int id, [FromBody] ImagePostModel image)
         {
-            var existingImage =  _imageService.GetById(id);
+            var existingImage = await _imageService.GetByIdAsync(id);
             if (existingImage == null)
             {
                 return NotFound();
@@ -85,19 +85,19 @@ namespace CreativePeak.API.Controllers
             existingImage.LinkURL = image.LinkURL;
             //existingImage.DesignerDetailsId = image.DesignerId;
             existingImage.CategoryId = image.CategoryId;
-            existingImage.Category = _categoryService.GetById(image.CategoryId);
+            existingImage.Category = await _categoryService.GetByIdAsync(image.CategoryId);
             //existingImage.DesignerDetails = _designerDetailsService.GetById(image.DesignerId);
             existingImage.UpdatedAt = DateTime.UtcNow;
 
-            _imageService.Update(id,existingImage);
+            await _imageService.UpdateAsync(id, existingImage);
             return NoContent();
         }
 
         // DELETE api/<ImageController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var image = _imageService.GetById(id);
+            var image = await _imageService.GetByIdAsync(id);
             if (image is null)
             {
                 return NotFound();

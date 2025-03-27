@@ -36,9 +36,9 @@ namespace CreativePeak.API.Controllers
 
         // GET api/<DesignerDetailsController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            var designerDetails = _designerDetailsService.GetById(id);
+            var designerDetails = await _designerDetailsService.GetByIdAsync(id);
             var designerDetailsDTO = _mapper.Map<DesignerDetailsDTO>(designerDetails);
             return Ok(designerDetailsDTO);
         }
@@ -75,9 +75,9 @@ namespace CreativePeak.API.Controllers
 
         // PUT api/<DesignerDetailsController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] DesignerDetailsPostModel designerDetails)
+        public async Task<ActionResult> Put(int id, [FromBody] DesignerDetailsPostModel designerDetails)
         {
-            var existingDesignerDetails = _designerDetailsService.GetById(id);
+            var existingDesignerDetails = await _designerDetailsService.GetByIdAsync(id);
             if (existingDesignerDetails == null)
             {
                 return NotFound();
@@ -92,15 +92,15 @@ namespace CreativePeak.API.Controllers
             existingDesignerDetails.PriceRangeMax = designerDetails.PriceRangeMax;
             existingDesignerDetails.UpdatedAt = DateTime.UtcNow;
 
-            _designerDetailsService.Update(id, existingDesignerDetails);
+            await _designerDetailsService.UpdateAsync(id, existingDesignerDetails);
             return NoContent();
         }
 
         // DELETE api/<DesignerDetailsController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var designerDetails = _designerDetailsService.GetById(id);
+            var designerDetails = await _designerDetailsService.GetByIdAsync(id);
             if (designerDetails is null)
             {
                 return NotFound();

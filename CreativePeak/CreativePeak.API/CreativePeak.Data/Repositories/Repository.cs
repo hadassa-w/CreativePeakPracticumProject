@@ -42,21 +42,21 @@ namespace CreativePeak.Data.Repositories
             return await _dbSet.ToListAsync();
         }
 
-        public T? GetById(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
-            _context.DesignersDetails.Include(b => b.Images).ToListAsync();
-            _context.Categories.Include(b => b.Images).ToListAsync();
-            _context.Users.Include(b => b.DesignersDetails).ToListAsync();
-            return _dbSet.Find(id);
+            await _context.DesignersDetails.Include(b => b.Images).ToListAsync();
+            await _context.Categories.Include(b => b.Images).ToListAsync();
+            await _context.Users.Include(b => b.DesignersDetails).ToListAsync();
+            return await _dbSet.FindAsync(id);
         }
 
-        public T Update(T entity)
+        public async Task<T> UpdateAsync(T entity)
         {
-            _context.DesignersDetails.Include(b => b.Images).ToListAsync();
-            _context.Categories.Include(b => b.Images).ToListAsync();
-            _context.Users.Include(b => b.DesignersDetails).ToListAsync();
+            await _context.DesignersDetails.Include(b => b.Images).ToListAsync();
+            await _context.Categories.Include(b => b.Images).ToListAsync();
+            await _context.Users.Include(b => b.DesignersDetails).ToListAsync();
             _dbSet.Update(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return entity;
         }
     }

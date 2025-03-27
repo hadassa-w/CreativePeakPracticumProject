@@ -33,9 +33,9 @@ namespace CreativePeak.API.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            var user = _userService.GetById(id);
+            var user = await _userService.GetByIdAsync(id);
             var userDTO = _mapper.Map<UserDTO>(user);
             return Ok(userDTO);
         }
@@ -62,9 +62,9 @@ namespace CreativePeak.API.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] UserPostModel user)
+        public async Task<ActionResult> Put(int id, [FromBody] UserPostModel user)
         {
-            var existingUser = _userService.GetById(id);
+            var existingUser = await _userService.GetByIdAsync(id);
             if (existingUser == null)
             {
                 return NotFound();
@@ -77,15 +77,15 @@ namespace CreativePeak.API.Controllers
             existingUser.Address = user.Address;
             existingUser.UpdatedAt = DateTime.UtcNow;
 
-            _userService.Update(id, existingUser);
+            await _userService.UpdateAsync(id, existingUser);
             return NoContent();
         }
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var user = _userService.GetById(id);
+            var user = await _userService.GetByIdAsync(id);
             if (user is null)
             {
                 return NotFound();
