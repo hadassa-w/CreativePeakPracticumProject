@@ -35,7 +35,7 @@ namespace CreativePeak.Test
             int id = 1;
 
             //Act
-            var result = _userService.GetById(id);
+            var result = _userService.GetByIdAsync(id);
 
             //Assert
             Assert.IsType<User>(result);
