@@ -66,6 +66,10 @@ namespace CreativePeak.API.Controllers
 
             try
             {
+                //var user = new User
+                //{
+
+                //}
                 var user = _mapper.Map<User>(userPostModel);
 
                 // הוסף את המשתמש לבסיס הנתונים
