@@ -10,10 +10,30 @@ using CreativePeak.Core.Models;
 using CreativePeak.Data;
 using CreativePeak.API.Middlewares;
 using System.Text;
+using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ×œ×˜×¢×™× ×ª ×§×•×‘×¥ .env
+Env.Load();
+builder.Configuration["JWT:Issuer"] = Environment.GetEnvironmentVariable("JWT_ISSUER");
+builder.Configuration["JWT:Audience"] = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+builder.Configuration["JWT:Key"] = Environment.GetEnvironmentVariable("JWT_KEY");
+builder.Configuration["AWS:AccessKey"] = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+builder.Configuration["AWS:SecretKey"] = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+builder.Configuration["AWS:Region"] = Environment.GetEnvironmentVariable("AWS_REGION");
+builder.Configuration["AWS:BucketName"] = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME");
+builder.Configuration["ConnectionStrings:MyDatabase"] = Environment.GetEnvironmentVariable("ConnectionStrings_CreativePeak");
 // Add services to the container.
+
+// ×—×™×‘×•×¨ ×œ DB
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("MyDatabase"),
+        new MySqlServerVersion(new Version(8, 0, 0))
+    ));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -68,7 +88,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-builder.Services.AddDbContext<DataContext>();
+//builder.Services.AddDbContext<DataContext>();
 //builder.Services.AddSingleton<DataContext>();
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -78,11 +98,11 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddSingleton<PasswordService>();
 
-// ìöåøê ÷ùøé äâåîìéï ì DB
+// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ DB
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; // àå ReferenceHandler.Preserve
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; // ï¿½ï¿½ ReferenceHandler.Preserve
     });
 
 builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
@@ -115,16 +135,16 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-//app.UseSwaggerUI();
-//app.UseSwagger();
+app.UseSwaggerUI();
+app.UseSwagger();
 //}
 
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    c.RoutePrefix = string.Empty; // âåøí ìèòéðú Swagger ëáøéøú îçãì
-});
+//app.UseSwagger();
+//app.UseSwaggerUI(c =>
+//{
+//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+//    c.RoutePrefix = string.Empty; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Swagger ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//});
 
 app.UseCors("MyPolicy");
 

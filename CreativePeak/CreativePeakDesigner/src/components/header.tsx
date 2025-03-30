@@ -38,8 +38,6 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
    const handleLogOut = () => {
       setIsLoggedIn(false);
       localStorage.removeItem("isLoggedIn"); // אופציונלי: הסרת נתוני ההתחברות
-      localStorage.removeItem("userName"); // אופציונלי: הסרת נתוני ההתחברות
-      localStorage.removeItem("token"); // אופציונלי: הסרת נתוני ההתחברות
       navigate("/");
    };
 

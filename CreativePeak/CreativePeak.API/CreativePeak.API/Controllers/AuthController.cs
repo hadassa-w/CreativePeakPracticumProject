@@ -43,16 +43,16 @@ namespace CreativePeak.API.Controllers
                     new Claim(ClaimTypes.Role, user.Role) // נניח שיש למודל User תכונה Role
                 };
 
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWT:Key")));
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));  // גישה ישירה עם key
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                var tokeOptions = new JwtSecurityToken(
-                    issuer: _configuration.GetValue<string>("JWT:Issuer"),
-                    audience: _configuration.GetValue<string>("JWT:Audience"),
+                var tokenOptions = new JwtSecurityToken(
+                    issuer: _configuration["JWT:Issuer"],
+                    audience: _configuration["JWT:Audience"],
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(6),
+                    expires: DateTime.UtcNow.AddMinutes(6),  // השתמש ב-UTC כדי לשמור על התאמה בכל אזורי הזמן
                     signingCredentials: signinCredentials
                 );
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
                 return Ok(new { Token = tokenString, User = user });
             }
             return Unauthorized();
@@ -66,10 +66,6 @@ namespace CreativePeak.API.Controllers
 
             try
             {
-                //var user = new User
-                //{
-
-                //}
                 var user = _mapper.Map<User>(userPostModel);
 
                 // הוסף את המשתמש לבסיס הנתונים
@@ -82,13 +78,13 @@ namespace CreativePeak.API.Controllers
                     new Claim(ClaimTypes.Role, user.Role)
                 };
 
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWT:Key")));
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));  // גישה ישירה עם key
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                 var tokenOptions = new JwtSecurityToken(
-                    issuer: _configuration.GetValue<string>("JWT:Issuer"),
-                    audience: _configuration.GetValue<string>("JWT:Audience"),
+                    issuer: _configuration["JWT:Issuer"],
+                    audience: _configuration["JWT:Audience"],
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(6),
+                    expires: DateTime.UtcNow.AddMinutes(6),  // השתמש ב-UTC כדי לשמור על התאמה בכל אזורי הזמן
                     signingCredentials: signinCredentials
                 );
 
@@ -100,6 +96,5 @@ namespace CreativePeak.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
     }
 }

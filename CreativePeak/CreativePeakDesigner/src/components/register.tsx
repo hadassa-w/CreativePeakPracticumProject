@@ -116,7 +116,7 @@ function Register({ setIsLoggedIn }: RegisterProps) {
 
                 console.log(response.data.user);
 
-                navigate("/welcome");
+                navigate("/profile");
             } else {
                 setError("Registration failed. Please check your details.");
             }
