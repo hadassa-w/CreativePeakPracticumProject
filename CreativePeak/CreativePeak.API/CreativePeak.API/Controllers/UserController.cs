@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CreativePeak.Core.IServices;
 using CreativePeak.Core.DTOs;
-using CreativePeak.API.PostModels;
 using CreativePeak.Core.Models;
 using CreativePeak.Service;
+using CreativePeak.Core.PostModels;
 
 namespace CreativePeak.API.Controllers
 {
@@ -44,9 +44,24 @@ namespace CreativePeak.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] UserPostModel user)
         {
-            var userDTO = _mapper.Map<User>(user);
-            var userNew = await _userService.AddAsync(userDTO);
-            return Ok(userDTO);
+            var newUser = new User
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+                Password = user.Password,
+                Phone = user.Phone,
+                Address = user.Address,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                Role = "Graphic designer"
+            };
+            var userNew = await _userService.AddAsync(newUser);
+            var userDTO = _mapper.Map<CategoryDTO>(userNew);
+            return CreatedAtAction(nameof(Get), new { id = userDTO.Id }, userDTO);
+
+            //var userDTO = _mapper.Map<User>(user);
+            //var userNew = await _userService.AddAsync(userDTO);
+            //return Ok(userDTO);
         }
 
         // PUT api/<UserController>/5

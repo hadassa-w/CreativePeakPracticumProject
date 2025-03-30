@@ -167,3 +167,5 @@ C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויק
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\AWSSDK.S3.dll
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\DotNetEnv.dll
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Sprache.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\libman.json
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\AWSSDK.Extensions.NETCore.Setup.dll

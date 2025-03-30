@@ -29,7 +29,7 @@ interface NavItem {
 }
 
 function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
-   const name = localStorage.getItem("userName") || "?";
+   let name = localStorage.getItem("userName") || "?"; // אם אין שם, נשתמש ב"?" כברירת מחדל
 
    const [mobileOpen, setMobileOpen] = React.useState(false);
    const navigate = useNavigate();
@@ -119,6 +119,9 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
                      onClick={() => {
                         setIsLoggedIn(false); // התנתקות המשתמש
                         localStorage.removeItem("isLoggedIn"); // אופציונלי: ניקוי נתוני התחברות
+                        localStorage.removeItem("userName"); // אופציונלי: ניקוי נתוני התחברות
+                        localStorage.removeItem("userId"); // אופציונלי: ניקוי נתוני התחברות
+                        localStorage.removeItem("token"); // אופציונלי: ניקוי נתוני התחברות
                         navigate("/"); // ניווט לדף הבית
                      }}
                   />
@@ -156,13 +159,13 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
                </Box>
                <Box
                   sx={{
-                     fontFamily: "cursive",
+                     fontFamily: "revert",
                      fontSize: "25px",
                      borderRadius: "50%",
                      backgroundColor: "rgb(255, 255, 255)",
                      width: "45px",
                      height: "45px",
-                     position:"",
+                     position: "",
                      display: "flex",
                      justifyContent: "center",
                      alignItems: "center",

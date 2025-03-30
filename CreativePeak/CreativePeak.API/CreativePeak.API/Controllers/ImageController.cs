@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using CreativePeak.API.PostModels;
 using CreativePeak.Core.DTOs;
 using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
+using CreativePeak.Core.PostModels;
 using CreativePeak.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -52,9 +52,26 @@ namespace CreativePeak.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] ImagePostModel image)
         {
-            var imageDTO = _mapper.Map<Image>(image);
-            var userNew = await _imageService.AddAsync(imageDTO);
-            return Ok(imageDTO);
+            var newImage = new Image
+            {
+                FileName = image.FileName,
+                Description = image.Description,
+                FileType = image.FileName.Substring(image.FileName.LastIndexOf('.') + 1),
+                LinkURL = image.LinkURL,
+                IsDeleted=false,
+                DesignerDetailsId = image.DesignerId,
+                DesignerDetails = await _designerDetailsService.GetByIdAsync(image.DesignerId),
+                CategoryId = image.CategoryId,
+                Category = await _categoryService.GetByIdAsync(image.CategoryId),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+            };
+            var imageNew = await _imageService.AddAsync(newImage);
+            var imageDTO = _mapper.Map<ImageDTO>(imageNew);
+            return CreatedAtAction(nameof(Get), new { id = imageDTO.Id }, imageDTO);
+            //var imageDTO = _mapper.Map<Image>(image);
+            //var userNew = await _imageService.AddAsync(imageDTO);
+            //return Ok(imageDTO);
         }
 
         // PUT api/<ImageController>/5
@@ -70,10 +87,10 @@ namespace CreativePeak.API.Controllers
             existingImage.FileName = image.FileName;
             existingImage.Description = image.Description;
             existingImage.LinkURL = image.LinkURL;
-            //existingImage.DesignerDetailsId = image.DesignerId;
+            existingImage.DesignerDetailsId = image.DesignerId;
+            existingImage.DesignerDetails = await _designerDetailsService.GetByIdAsync(image.DesignerId);
             existingImage.CategoryId = image.CategoryId;
             existingImage.Category = await _categoryService.GetByIdAsync(image.CategoryId);
-            //existingImage.DesignerDetails = _designerDetailsService.GetById(image.DesignerId);
             existingImage.UpdatedAt = DateTime.UtcNow;
 
             await _imageService.UpdateAsync(id, existingImage);
@@ -89,6 +106,7 @@ namespace CreativePeak.API.Controllers
             {
                 return NotFound();
             }
+            image.IsDeleted = true;
             _imageService.Delete(image);
             return NoContent();
         }

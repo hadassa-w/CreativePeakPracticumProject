@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Amazon.S3.Model;
+using Amazon.S3;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +10,38 @@ namespace CreativePeak.API.Controllers
     [ApiController]
     public class S3ImagesController : ControllerBase
     {
-        // GET: api/<S3ImagesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IAmazonS3 _s3Client;
+
+        public S3ImagesController(IAmazonS3 s3Client)
         {
-            return new string[] { "value1", "value2" };
+            _s3Client = s3Client;
         }
 
-        // GET api/<S3ImagesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("image-url")]
+        public async Task<IActionResult> GetPresignedUrl([FromQuery] string fileName)
         {
-            return "value";
-        }
+            string contentType = "image/jpeg"; // ברירת מחדל
 
-        // POST api/<S3ImagesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+            if (fileName.EndsWith(".png"))
+            {
+                contentType = "image/png";
+            }
+            else if (fileName.EndsWith(".pdf"))
+            {
+                contentType = "application/pdf";
+            }
 
-        // PUT api/<S3ImagesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            var request = new GetPreSignedUrlRequest
+            {
+                BucketName = Environment.GetEnvironmentVariable("AWS:BucketName"),
+                Key = fileName,
+                Verb = HttpVerb.PUT,
+                Expires = DateTime.UtcNow.AddMinutes(5),
+                ContentType = contentType
+            };
 
-        // DELETE api/<S3ImagesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            string url = _s3Client.GetPreSignedURL(request);
+            return Ok(new { url });
         }
     }
 }

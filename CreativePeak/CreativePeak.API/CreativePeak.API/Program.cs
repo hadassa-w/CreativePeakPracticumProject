@@ -12,6 +12,8 @@ using CreativePeak.API.Middlewares;
 using System.Text;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using Amazon.S3;
+using Microsoft.Extensions.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,7 +40,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
 
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(options =>
@@ -95,11 +99,11 @@ builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 //builder.Services.AddSingleton<Mapping>();
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+//builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddSingleton<PasswordService>();
 
-// ����� ���� ������� � DB
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -136,16 +140,16 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-//app.UseSwaggerUI();
-//app.UseSwagger();
+    app.UseSwaggerUI();
+app.UseSwagger();
 //}
 
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    c.RoutePrefix = string.Empty; // ���� ������ Swagger ������ ����
-});
+//app.UseSwagger();
+//app.UseSwaggerUI(c =>
+//{
+//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+//    c.RoutePrefix = string.Empty;
+//});
 
 app.UseCors("MyPolicy");
 

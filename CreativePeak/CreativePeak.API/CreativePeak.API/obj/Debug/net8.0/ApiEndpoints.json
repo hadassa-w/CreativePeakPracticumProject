@@ -9,7 +9,7 @@
     "Parameters": [
       {
         "Name": "loginModel",
-        "Type": "CreativePeak.API.PostModels.LoginModel",
+        "Type": "CreativePeak.Core.PostModels.LoginModel",
         "IsRequired": true
       }
     ],
@@ -25,7 +25,7 @@
     "Parameters": [
       {
         "Name": "userPostModel",
-        "Type": "CreativePeak.API.PostModels.UserPostModel",
+        "Type": "CreativePeak.Core.PostModels.UserPostModel",
         "IsRequired": true
       }
     ],
@@ -51,7 +51,7 @@
     "Parameters": [
       {
         "Name": "category",
-        "Type": "CreativePeak.API.PostModels.CategoryPostModel",
+        "Type": "CreativePeak.Core.PostModels.CategoryPostModel",
         "IsRequired": true
       }
     ],
@@ -88,7 +88,7 @@
       },
       {
         "Name": "category",
-        "Type": "CreativePeak.API.PostModels.CategoryPostModel",
+        "Type": "CreativePeak.Core.PostModels.CategoryPostModel",
         "IsRequired": true
       }
     ],
@@ -130,7 +130,7 @@
     "Parameters": [
       {
         "Name": "designerDetails",
-        "Type": "CreativePeak.API.PostModels.DesignerDetailsPostModel",
+        "Type": "CreativePeak.Core.PostModels.DesignerDetailsPostModel",
         "IsRequired": true
       }
     ],
@@ -167,7 +167,7 @@
       },
       {
         "Name": "designerDetails",
-        "Type": "CreativePeak.API.PostModels.DesignerDetailsPostModel",
+        "Type": "CreativePeak.Core.PostModels.DesignerDetailsPostModel",
         "IsRequired": true
       }
     ],
@@ -209,7 +209,7 @@
     "Parameters": [
       {
         "Name": "image",
-        "Type": "CreativePeak.API.PostModels.ImagePostModel",
+        "Type": "CreativePeak.Core.PostModels.ImagePostModel",
         "IsRequired": true
       }
     ],
@@ -246,7 +246,7 @@
       },
       {
         "Name": "image",
-        "Type": "CreativePeak.API.PostModels.ImagePostModel",
+        "Type": "CreativePeak.Core.PostModels.ImagePostModel",
         "IsRequired": true
       }
     ],
@@ -270,120 +270,19 @@
   },
   {
     "ContainingType": "CreativePeak.API.Controllers.S3ImagesController",
-    "Method": "Get",
-    "RelativePath": "api/S3Images",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CreativePeak.API.Controllers.S3ImagesController",
-    "Method": "Post",
-    "RelativePath": "api/S3Images",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "value",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CreativePeak.API.Controllers.S3ImagesController",
-    "Method": "Get",
-    "RelativePath": "api/S3Images/{id}",
+    "Method": "GetPresignedUrl",
+    "RelativePath": "api/S3Images/image-url",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
+        "Name": "fileName",
         "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CreativePeak.API.Controllers.S3ImagesController",
-    "Method": "Put",
-    "RelativePath": "api/S3Images/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "value",
-        "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "CreativePeak.API.Controllers.S3ImagesController",
-    "Method": "Delete",
-    "RelativePath": "api/S3Images/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "CreativePeak.API.Controllers.UserController",
@@ -405,7 +304,7 @@
     "Parameters": [
       {
         "Name": "user",
-        "Type": "CreativePeak.API.PostModels.UserPostModel",
+        "Type": "CreativePeak.Core.PostModels.UserPostModel",
         "IsRequired": true
       }
     ],
@@ -442,7 +341,7 @@
       },
       {
         "Name": "user",
-        "Type": "CreativePeak.API.PostModels.UserPostModel",
+        "Type": "CreativePeak.Core.PostModels.UserPostModel",
         "IsRequired": true
       }
     ],

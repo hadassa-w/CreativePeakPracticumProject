@@ -1,4 +1,4 @@
-﻿namespace CreativePeak.API.PostModels
+﻿namespace CreativePeak.Core.PostModels
 {
     public class UserPostModel
     {

@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "CreativePeak.API/1.0.0": {
         "dependencies": {
+          "AWSSDK.Extensions.NETCore.Setup": "4.0.0-preview.11",
           "AWSSDK.S3": "4.0.0-preview.11",
           "CreativePeak.Core": "1.0.0",
           "CreativePeak.Data": "1.0.0",
@@ -36,6 +37,20 @@
       "AWSSDK.Core/4.0.0-preview.11": {
         "runtime": {
           "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "AWSSDK.Extensions.NETCore.Setup/4.0.0-preview.11": {
+        "dependencies": {
+          "AWSSDK.Core": "4.0.0-preview.11",
+          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.2"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.Extensions.NETCore.Setup.dll": {
             "assemblyVersion": "4.0.0.0",
             "fileVersion": "4.0.0.0"
           }
@@ -1918,6 +1933,13 @@
       "sha512": "sha512-5y+Y89QmBbBq0II7L8ymKHJueA+EiXpzIpXX66CassOqmdNXnTV8ywKzNtI6CzgekouYxow9eJsd7Km2k994pQ==",
       "path": "awssdk.core/4.0.0-preview.11",
       "hashPath": "awssdk.core.4.0.0-preview.11.nupkg.sha512"
+    },
+    "AWSSDK.Extensions.NETCore.Setup/4.0.0-preview.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-D6a7ALmw4G+hR6gmFBGdT5p6m3DMYCqptZsMApnLp3/M7etZB515eYu68jVm+y3xmCgtrnQnVSBr/17m6i/lfw==",
+      "path": "awssdk.extensions.netcore.setup/4.0.0-preview.11",
+      "hashPath": "awssdk.extensions.netcore.setup.4.0.0-preview.11.nupkg.sha512"
     },
     "AWSSDK.S3/4.0.0-preview.11": {
       "type": "package",

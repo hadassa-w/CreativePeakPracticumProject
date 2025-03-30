@@ -15,7 +15,9 @@ namespace CreativePeak.Core.DTOs
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public string FileType { get; set; }
         public string LinkURL { get; set; }
+        public bool IsDeleted { get; set; }
 
         public DesignerDetailsDTO DesignerDetails { get; set; }
         public CategoryDTO Category { get; set; }

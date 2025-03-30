@@ -1,7 +1,7 @@
 ﻿using CreativePeak.Core.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace CreativePeak.API.PostModels
+namespace CreativePeak.Core.PostModels
 {
     public class ImagePostModel
     {

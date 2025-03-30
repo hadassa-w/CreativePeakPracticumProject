@@ -24,9 +24,32 @@ namespace CreativePeak.Data.Repositories
         }
         public async Task<User> CreateUserAsync(User user)
         {
+            // אתחול שדות חובה
+            user.CreatedAt = DateTime.UtcNow;
+            user.UpdatedAt = DateTime.UtcNow;
+            user.Role = "Graphic designer"; // או כל ערך ברירת מחדל אחר שתרצה
+
             await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user; // החזר את המשתמש שנוצר
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // לוג מפורט של השגיאה
+                var innerMessage = ex.InnerException?.Message ?? "No inner exception";
+                throw new Exception($"Failed to save user: {ex.Message}. Inner exception: {innerMessage}");
+            }
+
+            return user;
         }
+
+        // public async Task<User> CreateUserAsync(User user)
+        // {
+        //     await _context.Users.AddAsync(user);
+        //     await _context.SaveChangesAsync();
+        //     return user; // החזר את המשתמש שנוצר
+        // }
     }
 }

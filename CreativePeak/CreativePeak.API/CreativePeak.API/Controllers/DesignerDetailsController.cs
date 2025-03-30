@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using CreativePeak.API.PostModels;
 using CreativePeak.Core.DTOs;
 using CreativePeak.Core.IRepositories;
 using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
+using CreativePeak.Core.PostModels;
 using CreativePeak.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
