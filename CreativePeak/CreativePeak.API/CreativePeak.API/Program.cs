@@ -26,6 +26,7 @@ builder.Configuration["AWS:SecretKey"] = Environment.GetEnvironmentVariable("AWS
 builder.Configuration["AWS:Region"] = Environment.GetEnvironmentVariable("AWS_REGION");
 builder.Configuration["AWS:BucketName"] = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME");
 builder.Configuration["ConnectionStrings:MyDatabase"] = Environment.GetEnvironmentVariable("ConnectionStrings_CreativePeak");
+
 // Add services to the container.
 
 // חיבור ל DB

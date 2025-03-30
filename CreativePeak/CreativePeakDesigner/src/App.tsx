@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header";
 import { Box } from "@mui/material";
@@ -18,6 +18,10 @@ function App() {
 
   return (
     <Router>
+      <nav>
+        <Link to="/">Home</Link> | <Link to="/logIn">Log in</Link> | <Link to="/register">Register</Link>
+      </nav>
+
       <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Box component="main" sx={{ p: 3 }}>
         <Routes>
