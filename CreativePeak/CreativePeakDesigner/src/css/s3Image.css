@@ -1,0 +1,44 @@
+.file-input-label {
+    display: block;
+    background-color: #fea3c1;
+    color: white;
+    text-align: center;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.file-input-label:hover {
+    background-color: #ff86af;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.upload-button {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: #ff86af 2px solid;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: transform 0.3s ease;
+}
+
+.upload-button:hover {
+    transform: scale(1.05);
+}
+
+.progress-bar {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #333;
+}

@@ -174,7 +174,7 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
                      maxHeight: "45px",
                      transition: "box-shadow 0.2s ease", // תנועה רכה לשינוי הצל
                      "&:hover": {
-                        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.35)"
+                        boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.35)"
                     },
                   }}
                >
