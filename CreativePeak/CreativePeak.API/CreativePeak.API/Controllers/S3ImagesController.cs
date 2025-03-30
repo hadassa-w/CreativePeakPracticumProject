@@ -26,10 +26,6 @@ namespace CreativePeak.API.Controllers
             {
                 contentType = "image/png";
             }
-            else if (fileName.EndsWith(".pdf"))
-            {
-                contentType = "application/pdf";
-            }
 
             var request = new GetPreSignedUrlRequest
             {

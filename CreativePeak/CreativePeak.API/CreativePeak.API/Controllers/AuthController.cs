@@ -66,6 +66,13 @@ namespace CreativePeak.API.Controllers
 
             try
             {
+                // בדיקה אם האימייל כבר קיים
+                var existingUser = await _authRepository.GetByCondition(u => u.Email == userPostModel.Email);
+                if (existingUser != null)
+                {
+                    return BadRequest(new { message = "Email is already in use" });
+                }
+
                 var user = _mapper.Map<User>(userPostModel);
 
                 // הוסף את המשתמש לבסיס הנתונים
@@ -78,13 +85,13 @@ namespace CreativePeak.API.Controllers
                     new Claim(ClaimTypes.Role, user.Role)
                 };
 
-                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));  // גישה ישירה עם key
+                var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                 var tokenOptions = new JwtSecurityToken(
                     issuer: _configuration["JWT:Issuer"],
                     audience: _configuration["JWT:Audience"],
                     claims: claims,
-                    expires: DateTime.UtcNow.AddMinutes(6),  // השתמש ב-UTC כדי לשמור על התאמה בכל אזורי הזמן
+                    expires: DateTime.UtcNow.AddMinutes(6),
                     signingCredentials: signinCredentials
                 );
 

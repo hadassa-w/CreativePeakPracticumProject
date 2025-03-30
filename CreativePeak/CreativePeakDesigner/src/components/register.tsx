@@ -120,11 +120,28 @@ function Register({ setIsLoggedIn }: RegisterProps) {
             } else {
                 setError("Registration failed. Please check your details.");
             }
-        } catch (error) {
-            console.error("Error registering:", error);
-            setError("Registration failed. Try again.");
+        } catch (error: any) {
+            if (error.response?.status === 400) {
+                console.error("Error:", error.response.data.message);
+                setFieldErrors((prev) => ({ ...prev, email: error.response.data.message }));
+            } else {
+                setError("Registration failed. Try again.");
+            }
         }
         setLoading(false);
+    };
+
+    const isFormValid = () => {
+        // בודק אם כל השדות החובה מולאו כראוי
+        return (
+            formData.fullname.trim() !== "" &&
+            formData.email.trim() !== "" &&
+            /^\S+@\S+\.\S+$/.test(formData.email) &&
+            formData.password.trim() !== "" &&
+            formData.password.length >= 6 &&
+            formData.phone.trim() !== "" &&
+            /^\d{9,}$/.test(formData.phone)
+        );
     };
 
     return (
@@ -209,7 +226,7 @@ function Register({ setIsLoggedIn }: RegisterProps) {
 
                 {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
 
-                <StyledButton variant="contained" color="secondary" fullWidth sx={{ mt: 3 }} onClick={handleRegister} disabled={loading}>
+                <StyledButton variant="contained" color="secondary" fullWidth sx={{ mt: 3 }} onClick={handleRegister} disabled={loading || !isFormValid()}>
                     {loading ? (
                         <>
                             <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Registering...

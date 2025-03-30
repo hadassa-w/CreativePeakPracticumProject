@@ -101,6 +101,11 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
         }
     };
 
+    const isFormValid = () => {
+        // בודק אם כל השדות מולאו כראוי
+        return username.trim() !== "" && password.trim() !== "";
+    };
+
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "500px", height: "100%", overflow: "hidden", padding: "50px" }}>
             <ContentBox>
@@ -170,7 +175,7 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
                     fullWidth
                     sx={{ mt: 3 }}
                     onClick={handleLogin}
-                    disabled={loading} // נטרול כפתור בזמן הטעינה
+                    disabled={loading || !isFormValid()} // נטרול כפתור בזמן הטעינה
                 >
                     {loading ? (
                         <>
