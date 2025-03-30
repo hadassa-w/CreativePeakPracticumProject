@@ -20,6 +20,8 @@ const FileUploader = () => {
       const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
         params: { fileName: file.name }
       });
+      console.log(response.data.url);
+      
 
       const presignedUrl = response.data.url;
 

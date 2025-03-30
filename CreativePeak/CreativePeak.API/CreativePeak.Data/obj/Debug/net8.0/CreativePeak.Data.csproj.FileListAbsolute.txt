@@ -16,3 +16,5 @@ C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויק
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Data\obj\Debug\net8.0\CreativePeak.Data.pdb
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Data\obj\Debug\net8.0\CreativePeak.Data.genruntimeconfig.cache
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Data\obj\Debug\net8.0\ref\CreativePeak.Data.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Data\bin\Debug\net8.0\CreativePeak.Service.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.Data\bin\Debug\net8.0\CreativePeak.Service.pdb

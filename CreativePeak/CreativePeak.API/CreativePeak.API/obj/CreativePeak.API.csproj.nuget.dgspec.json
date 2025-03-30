@@ -255,6 +255,9 @@
             "projectReferences": {
               "C:\\Users\\user1\\Documents\\תכנות\\שיעורים\\שנה ב תשפה\\פרויקטים\\פרקטיקום\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.Core\\CreativePeak.Core.csproj": {
                 "projectPath": "C:\\Users\\user1\\Documents\\תכנות\\שיעורים\\שנה ב תשפה\\פרויקטים\\פרקטיקום\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.Core\\CreativePeak.Core.csproj"
+              },
+              "C:\\Users\\user1\\Documents\\תכנות\\שיעורים\\שנה ב תשפה\\פרויקטים\\פרקטיקום\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.Service\\CreativePeak.Service.csproj": {
+                "projectPath": "C:\\Users\\user1\\Documents\\תכנות\\שיעורים\\שנה ב תשפה\\פרויקטים\\פרקטיקום\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.Service\\CreativePeak.Service.csproj"
               }
             }
           }

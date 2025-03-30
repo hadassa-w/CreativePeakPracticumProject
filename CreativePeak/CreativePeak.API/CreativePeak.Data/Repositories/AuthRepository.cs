@@ -1,5 +1,6 @@
 ﻿using CreativePeak.Core.IRepositories;
 using CreativePeak.Core.Models;
+using CreativePeak.Service;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace CreativePeak.Data.Repositories
     public class AuthRepository : IAuthRepository
     {
         private readonly DataContext _context;
+        private PasswordService PasswordService=new PasswordService();
 
         public AuthRepository(DataContext context)
         {
@@ -25,6 +27,7 @@ namespace CreativePeak.Data.Repositories
         public async Task<User> CreateUserAsync(User user)
         {
             // אתחול שדות חובה
+            user.Password = PasswordService.HashPassword(user.Password);
             user.CreatedAt = DateTime.UtcNow;
             user.UpdatedAt = DateTime.UtcNow;
             user.Role = "Graphic designer"; // או כל ערך ברירת מחדל אחר שתרצה

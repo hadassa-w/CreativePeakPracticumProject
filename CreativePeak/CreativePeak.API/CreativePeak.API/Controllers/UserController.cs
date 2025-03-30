@@ -16,6 +16,7 @@ namespace CreativePeak.API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private PasswordService passwordService = new PasswordService();
         public UserController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
@@ -48,7 +49,7 @@ namespace CreativePeak.API.Controllers
             {
                 FullName = user.FullName,
                 Email = user.Email,
-                Password = user.Password,
+                Password = passwordService.HashPassword(user.Password),
                 Phone = user.Phone,
                 Address = user.Address,
                 CreatedAt = DateTime.UtcNow,
@@ -56,7 +57,7 @@ namespace CreativePeak.API.Controllers
                 Role = "Graphic designer"
             };
             var userNew = await _userService.AddAsync(newUser);
-            var userDTO = _mapper.Map<CategoryDTO>(userNew);
+            var userDTO = _mapper.Map<UserDTO>(userNew);
             return CreatedAtAction(nameof(Get), new { id = userDTO.Id }, userDTO);
 
             //var userDTO = _mapper.Map<User>(user);
@@ -76,7 +77,7 @@ namespace CreativePeak.API.Controllers
 
             existingUser.FullName = user.FullName;
             existingUser.Email = user.Email;
-            existingUser.Password = user.Password;
+            existingUser.Password = passwordService.HashPassword(user.Password);
             existingUser.Phone = user.Phone;
             existingUser.Address = user.Address;
             existingUser.UpdatedAt = DateTime.UtcNow;

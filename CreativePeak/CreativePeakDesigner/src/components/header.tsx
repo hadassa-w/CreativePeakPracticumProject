@@ -120,12 +120,7 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
                      alt="logo"
                      sx={{ height: 70, maxHeight: "100%", cursor: "pointer" }}
                      onClick={() => {
-                        setIsLoggedIn(false); // התנתקות המשתמש
-                        localStorage.removeItem("isLoggedIn"); // אופציונלי: ניקוי נתוני התחברות
-                        localStorage.removeItem("userName"); // אופציונלי: ניקוי נתוני התחברות
-                        localStorage.removeItem("userId"); // אופציונלי: ניקוי נתוני התחברות
-                        localStorage.removeItem("token"); // אופציונלי: ניקוי נתוני התחברות
-                        navigate("/"); // ניווט לדף הבית
+                        handleLogOut();
                      }}
                   />
                </Box>
@@ -177,6 +172,10 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
                      minHeight: "45px",
                      maxWidth: "45px", // לא גדול מזה
                      maxHeight: "45px",
+                     transition: "box-shadow 0.2s ease", // תנועה רכה לשינוי הצל
+                     "&:hover": {
+                        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.35)"
+                    },
                   }}
                >
                   <p style={{ color: "black" }}>

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CreativePeak.Core\CreativePeak.Core.csproj" />
+    <ProjectReference Include="..\CreativePeak.Service\CreativePeak.Service.csproj" />
   </ItemGroup>
 
 </Project>

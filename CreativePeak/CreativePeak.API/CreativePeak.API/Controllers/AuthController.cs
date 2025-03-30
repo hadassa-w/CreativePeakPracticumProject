@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using CreativePeak.Core;
+using CreativePeak.Core.DTOs;
 using CreativePeak.Core.IRepositories;
 using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
 using CreativePeak.Core.PostModels;
+using CreativePeak.Data;
 using CreativePeak.Data.Repositories;
+using CreativePeak.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -20,20 +24,39 @@ namespace CreativePeak.API.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IAuthRepository _authRepository;
+        private readonly DataContext _context;
+        private PasswordService passwordService=new PasswordService();
         private readonly IMapper _mapper;
 
-        public AuthController(IConfiguration configuration, IAuthRepository authRepository, IMapper mapper)
+        public AuthController(IConfiguration configuration, IAuthRepository authRepository, IMapper mapper,DataContext dataContext)
         {
             _configuration = configuration;
             _authRepository = authRepository;
             _mapper = mapper;
+            _context = dataContext;
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
             // חפש את המשתמש בבסיס הנתונים
-            var user = await _authRepository.GetByCondition(u => u.Email == loginModel.UserName && u.Password == loginModel.Password);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginModel.UserName);
+
+            if (user == null)
+            {
+                return Unauthorized("משתמש לא נמצא");
+            }
+
+            // כעת, אחרי שהמשתמש נמצא, ניתן לבדוק את הסיסמה
+            bool isPasswordValid = passwordService.VerifyPassword(user.Password, loginModel.Password);
+
+            if (!isPasswordValid)
+            {
+                return Unauthorized("סיסמה לא נכונה");
+            }
+
+            // אם הגענו לכאן, הסיסמה נכונה
+            //return Ok(user);
 
             if (user != null)
             {
@@ -42,6 +65,8 @@ namespace CreativePeak.API.Controllers
                     new Claim(ClaimTypes.Name, user.FullName),
                     new Claim(ClaimTypes.Role, user.Role) // נניח שיש למודל User תכונה Role
                 };
+
+                var userNew = _mapper.Map<UserDTO>(user);
 
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));  // גישה ישירה עם key
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -53,7 +78,7 @@ namespace CreativePeak.API.Controllers
                     signingCredentials: signinCredentials
                 );
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                return Ok(new { Token = tokenString, User = user });
+                return Ok(new { Token = tokenString, User = userNew });
             }
             return Unauthorized();
         }
@@ -85,6 +110,8 @@ namespace CreativePeak.API.Controllers
                     new Claim(ClaimTypes.Role, user.Role)
                 };
 
+                var userNew = _mapper.Map<UserDTO>(user);
+
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                 var tokenOptions = new JwtSecurityToken(
@@ -96,7 +123,7 @@ namespace CreativePeak.API.Controllers
                 );
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-                return Ok(new { Token = tokenString, User = user });
+                return Ok(new { Token = tokenString, User = userNew });
             }
             catch (Exception ex)
             {

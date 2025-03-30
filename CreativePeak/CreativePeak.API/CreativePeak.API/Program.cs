@@ -18,6 +18,9 @@ using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
+
 // לטעינת קובץ .env
 Env.Load();
 builder.Configuration["JWT:Issuer"] = Environment.GetEnvironmentVariable("JWT_ISSUER");
@@ -41,8 +44,6 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 //builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
-builder.Services.AddAWSService<IAmazonS3>();
 
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(options =>
@@ -110,10 +111,21 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; // �� ReferenceHandler.Preserve
     });
 
-builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
+builder.Services.AddCors(options =>
 {
-    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-}));
+    options.AddPolicy("MyPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+//app.UseCors("MyPolicy");
+//builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
+//{
+//    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+//}));
 
 builder.Services.AddAuthentication(options =>
 {
@@ -141,7 +153,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerUI();
-app.UseSwagger();
+    app.UseSwagger();
 }
 
 app.UseSwagger();
@@ -151,9 +163,14 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
-app.UseCors("MyPolicy");
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 
 app.UseHttpsRedirection();
+
+app.UseCors("MyPolicy");
 
 app.UseAuthentication();
 
@@ -164,3 +181,4 @@ app.UseMiddleware<ShabbatMiddleware>();
 app.MapControllers();
 
 app.Run();
+
