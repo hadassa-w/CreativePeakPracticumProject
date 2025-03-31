@@ -37,11 +37,7 @@ const ImagePreview = styled('img')({
   borderRadius: '8px',
 });
 
-interface FileUploaderProps {
-  onUploadComplete: (imageUrl: string) => void; // Callback to pass the image URL
-}
-
-const FileUploader = ({ onUploadComplete }: FileUploaderProps) => {
+const FileUploader = () => {
   const [file, setFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
@@ -81,7 +77,7 @@ const FileUploader = ({ onUploadComplete }: FileUploaderProps) => {
       });
 
       // Notify parent component with the image URL
-      onUploadComplete(presignedUrl); // Pass the URL to parent
+      localStorage.setItem("linkURL", presignedUrl); // Pass the URL to parent
 
       alert('File upload successful!');
     } catch (error) {
@@ -101,7 +97,7 @@ const FileUploader = ({ onUploadComplete }: FileUploaderProps) => {
           component="span"
           fullWidth
         >
-          Choose a file <span style={{fontSize:"10px"}}> in .png format only</span>
+          Choose a file <span style={{ fontSize: "10px" }}> in .png format only</span>
         </StyledButton>
       </label>
 

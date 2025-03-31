@@ -23,6 +23,8 @@ namespace CreativePeak.Core
             CreateMap<Image, ImagePostModel>().ReverseMap();
             CreateMap<Category, CategoryPostModel>().ReverseMap();
             CreateMap<DesignerDetails, DesignerDetailsPostModel>().ReverseMap();
+
+            CreateMap<Category, NewCategoryDTO>().ReverseMap();
         }
 
     }

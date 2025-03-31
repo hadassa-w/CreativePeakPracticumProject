@@ -55,50 +55,46 @@ interface Category {
 
 const AddImageForm = () => {
   const { register, handleSubmit, reset, formState: { errors }, setValue, getValues } = useForm<FormData>();
-  // const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  // const [fileName, setFileName] = useState<string>("No file chosen");
   const [categories, setCategories] = useState<Category[]>([]);
-  const userId = parseInt(localStorage.getItem("userId") || "");
+  const userId = localStorage.getItem("userId");
 
+  // Fetch categories inside useEffect
   useEffect(() => {
-    axios.get(`https://creativepeak-api.onrender.com/api/Category`)
+    axios.get(`http://localhost:5085/api/Category`)
       .then(response => {
-        setCategories(response.data.filter((category: Category) => category.userId === Number(userId)));
-        console.log(response.data);
-        console.log(categories);
+        setCategories(response.data.filter((category: Category) => category.userId === userId));
       })
-
       .catch(error => {
         console.error("Error fetching categories:", error);
       });
   }, [userId]);
 
-  const handleImageUpload = async (file: any) => {
-    try {
-      const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
-        params: { fileName: file.name }
-      });
+  // const handleImageUpload = async (file: any) => {
+  //   try {
+  //     const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
+  //       params: { fileName: file.name }
+  //     });
 
-      const presignedUrl = response.data.url;
+  //     const presignedUrl = response.data.url;
 
-      await axios.put(presignedUrl, file, {
-        headers: {
-          'Content-Type': file.type,
-        },
-      });
+  //     await axios.put(presignedUrl, file, {
+  //       headers: {
+  //         'Content-Type': file.type,
+  //       },
+  //     });
 
-      return presignedUrl;
-    } catch (error) {
-      console.error("❌ Error uploading image:", error);
-      throw new Error("Error uploading image.");
-    }
-  };
+  //     return presignedUrl;
+  //   } catch (error) {
+  //     console.error("❌ Error uploading image:", error);
+  //     throw new Error("Error uploading image.");
+  //   }
+  // };
 
   const isFormValid = () => {
     const formValues = getValues();
     return (
-      formValues.fileName?.trim() !== "" &&
+      formValues.fileName !== "" &&
       formValues.description?.trim() !== "" &&
       formValues.categoryId !== undefined
     );
@@ -108,26 +104,20 @@ const AddImageForm = () => {
     setLoading(true);
 
     try {
-      if (data.linkURL) {
-        const file = data.linkURL[0];
-        const imageUrl = await handleImageUpload(file);
 
-        const dataToSubmit = {
-          ...data,
-          linkURL: imageUrl,
-          userId: userId,
-        };
+      const dataToSubmit = {
+        ...data,
+        linkURL: localStorage.getItem("linkURL"),  // עדכון הקישור ל-URL של התמונה
+        userId: userId,
+      };
 
-        console.log(dataToSubmit);
-        await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
-        alert("🎉 Image added successfully!");
-        reset();
-        // setImagePreview(null);
-        // setFileName("No file chosen");
-      }
+      console.log(dataToSubmit);
+      await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
+      alert("🎉 Image added successfully!");
+      reset();
     } catch (error) {
       console.error("❌ Upload failed", error);
-      alert("Error uploading image.");
+      alert("Error uploading image. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -176,7 +166,7 @@ const AddImageForm = () => {
             <FormHelperText>{errors.categoryId?.message?.toString()}</FormHelperText>
           </FormControl>
 
-          <FileUploader onUploadComplete={(url) => setValue("linkURL", url)} />
+          <FileUploader />
           <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading || !isFormValid()}>
             {loading ? (
               <>

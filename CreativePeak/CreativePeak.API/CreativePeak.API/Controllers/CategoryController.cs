@@ -30,7 +30,7 @@ namespace CreativePeak.API.Controllers
         public async Task<ActionResult> Get()
         {
             var list = await _categoryService.GetAllAsync();
-            var listDTO = _mapper.Map<IEnumerable<CategoryPostModel>>(list);
+            var listDTO = _mapper.Map<IEnumerable<NewCategoryDTO>>(list);
             return Ok(listDTO);
         }
 
@@ -38,7 +38,7 @@ namespace CreativePeak.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var category =await _categoryService.GetByIdAsync(id);
+            var category = await _categoryService.GetByIdAsync(id);
             //var categoryDTO = _mapper.Map<CategoryDTO>(category);
             var categoryDTO = _mapper.Map<CategoryDTO>(category);
             return Ok(categoryDTO);
@@ -78,7 +78,7 @@ namespace CreativePeak.API.Controllers
 
             existingCategory.CategoryName = category.CategoryName;
             existingCategory.Description = category.Description;
-            existingCategory.UserId =category.UserId;
+            existingCategory.UserId = category.UserId;
             existingCategory.User = await _userService.GetByIdAsync(category.UserId);
             existingCategory.UpdatedAt = DateTime.UtcNow;
 
