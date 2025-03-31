@@ -57,13 +57,13 @@ const AddImageForm = () => {
   const { register, handleSubmit, reset, formState: { errors }, setValue, getValues } = useForm<FormData>();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const userId = localStorage.getItem("userId");
+  const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
 
   // Fetch categories inside useEffect
   useEffect(() => {
     axios.get(`https://creativepeak-api.onrender.com/api/Category`)
       .then(response => {
-        setCategories(response.data.filter((category: Category) => category.userId === userId));
+        setCategories(response.data.filter((category: Category) => category.userId == userId));
       })
       .catch(error => {
         console.error("Error fetching categories:", error);
