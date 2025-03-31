@@ -10,7 +10,6 @@ import Register from "./components/register";
 import AddProject from "./components/addProject";
 import DesignerDetailsForm from "./components/profile";
 import ImageGallery from "./components/allProjects";
-import FileUploader from "./AWS/s3Image";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -29,7 +28,6 @@ function App() {
           <Route path="/addProject" element={<AddProject />} />
           <Route path="/allProjects" element={<ImageGallery />} />
           <Route path="/profile" element={<DesignerDetailsForm />} />
-          <Route path="/upload" element={<FileUploader />} />
         </Routes>
       </Box>
     </Router>
