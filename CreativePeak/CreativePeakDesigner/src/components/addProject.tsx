@@ -41,8 +41,8 @@ const StyledButton = styled(Button)({
 interface FormData {
   fileName: string;
   description: string;
-  linkURL: string;  // Change this to string to store URL
-  designerId: number;
+  linkURL: string;
+  userId: number;
   categoryId: number;
 }
 
@@ -53,33 +53,76 @@ interface Category {
 }
 
 const AddImageForm = () => {
-  const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm<FormData>();
+  const { register, handleSubmit, reset, formState: { errors }, setValue, getValues } = useForm<FormData>();
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [fileName, setFileName] = useState<string>("No file chosen");
   const [categories, setCategories] = useState<Category[]>([]);
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const userId = parseInt(localStorage.getItem("userId") || "");
 
   useEffect(() => {
-    axios.get("https://creativepeak-api.onrender.com/api/Category")
+    axios.get(`https://creativepeak-api.onrender.com/api/Category?userId=${userId}`)
       .then(response => {
         setCategories(response.data);
+        console.log(response.data);
       })
+
       .catch(error => {
         console.error("Error fetching categories:", error);
       });
-  }, []);
+  }, [userId]);
+
+  const handleImageUpload = async (file: any) => {
+    try {
+      const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
+        params: { fileName: file.name }
+      });
+
+      const presignedUrl = response.data.url;
+
+      await axios.put(presignedUrl, file, {
+        headers: {
+          'Content-Type': file.type,
+        },
+      });
+
+      return presignedUrl;
+    } catch (error) {
+      console.error("❌ Error uploading image:", error);
+      throw new Error("Error uploading image.");
+    }
+  };
+
+  const isFormValid = () => {
+    const formValues = getValues();
+    return (
+      formValues.fileName?.trim() !== "" &&
+      formValues.description?.trim() !== "" &&
+      formValues.categoryId !== undefined
+    );
+  };
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
 
     try {
-      const dataToSubmit = {
-        ...data,
-        linkURL: imageUrl, // Submit the URL to the server
-      };
+      if (data.linkURL) {
+        const file = data.linkURL[0];
+        const imageUrl = await handleImageUpload(file);
 
-      await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
-      alert("🎉 Image added successfully!");
-      reset();
+        const dataToSubmit = {
+          ...data,
+          linkURL: imageUrl,
+          userId,
+        };
+
+        console.log(dataToSubmit);
+        await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
+        alert("🎉 Image added successfully!");
+        reset();
+        setImagePreview(null);
+        setFileName("No file chosen");
+      }
     } catch (error) {
       console.error("❌ Upload failed", error);
       alert("Error uploading image.");
@@ -96,7 +139,6 @@ const AddImageForm = () => {
         </Typography>
 
         <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {/* File Name */}
           <TextField
             label="File Name"
             {...register("fileName", { required: "File Name is required" })}
@@ -105,7 +147,6 @@ const AddImageForm = () => {
             helperText={errors.fileName?.message?.toString()}
           />
 
-          {/* Description */}
           <TextField
             label="Description"
             {...register("description", { required: "Description is required" })}
@@ -116,12 +157,11 @@ const AddImageForm = () => {
             helperText={errors.description?.message?.toString()}
           />
 
-          {/* Category Select */}
           <FormControl fullWidth error={!!errors.categoryId}>
             <InputLabel>Category</InputLabel>
             <Select
               {...register("categoryId", { required: "Category is required" })}
-              onChange={(e) => setValue("categoryId", Number(e.target.value))} // Set categoryId as the selected category's ID
+              onChange={(e) => setValue("categoryId", Number(e.target.value))}
               defaultValue=""
             >
               <MenuItem value="" disabled>Select a category</MenuItem>
@@ -134,11 +174,8 @@ const AddImageForm = () => {
             <FormHelperText>{errors.categoryId?.message?.toString()}</FormHelperText>
           </FormControl>
 
-          {/* Image Upload */}
-          <FileUploader onUploadComplete={(url) => setImageUrl(url)} />
-
-          {/* Submit Button */}
-          <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading || !imageUrl}>
+          <FileUploader onUploadComplete={(url) => setValue("linkURL", url)} />
+          <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading || !isFormValid()}>
             {loading ? (
               <>
                 <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Uploading...

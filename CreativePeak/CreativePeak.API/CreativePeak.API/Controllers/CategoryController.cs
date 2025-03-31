@@ -36,9 +36,10 @@ namespace CreativePeak.API.Controllers
 
         // GET api/<CategoryController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            var category = _categoryService.GetByIdAsync(id);
+            var category =await _categoryService.GetByIdAsync(id);
+            //var categoryDTO = _mapper.Map<CategoryDTO>(category);
             var categoryDTO = _mapper.Map<CategoryDTO>(category);
             return Ok(categoryDTO);
         }
