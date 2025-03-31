@@ -61,7 +61,7 @@ const AddImageForm = () => {
 
   // Fetch categories inside useEffect
   useEffect(() => {
-    axios.get(`http://localhost:5085/api/Category`)
+    axios.get(`https://creativepeak-api.onrender.com/api/Category`)
       .then(response => {
         setCategories(response.data.filter((category: Category) => category.userId === userId));
       })
