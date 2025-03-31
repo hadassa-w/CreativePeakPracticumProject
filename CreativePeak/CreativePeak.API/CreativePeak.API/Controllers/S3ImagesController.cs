@@ -20,21 +20,27 @@ namespace CreativePeak.API.Controllers
         [HttpGet("image-url")]
         public async Task<IActionResult> GetPresignedUrl([FromQuery] string fileName)
         {
-            string contentType = "image/jpg"; // ברירת מחדל
+            string contentType = ""; // = "image/jpg"; // ברירת מחדל
 
-            if (fileName.EndsWith(".png"))
+            if (fileName.EndsWith(".jpg"))
             {
-                contentType = "image/png";
+                contentType = "image/jpg";
             }
 
-            if (fileName.EndsWith(".jpeg"))
+            else if (fileName.EndsWith(".jpeg"))
             {
                 contentType = "image/jpeg";
             }
 
+            else if (fileName.EndsWith(".png"))
+            {
+                contentType = "image/png";
+            }
+
             var request = new GetPreSignedUrlRequest
             {
-                BucketName = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME"),
+                BucketName = "creativepeakproject.aws-testpnoren",
+                //BucketName = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME"),
                 Key = fileName,
                 Verb = HttpVerb.PUT,
                 Expires = DateTime.UtcNow.AddMinutes(5),
