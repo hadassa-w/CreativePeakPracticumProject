@@ -10,6 +10,8 @@ import Register from "./components/register";
 import AddProject from "./components/addProject";
 import DesignerDetailsForm from "./components/profile";
 import ImageGallery from "./components/allProjects";
+import AddCategoryForm from "./components/addCategory";
+import CategoriesList from "./components/allCategories";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -28,6 +30,8 @@ function App() {
           <Route path="/addProject" element={<AddProject />} />
           <Route path="/allProjects" element={<ImageGallery />} />
           <Route path="/profile" element={<DesignerDetailsForm />} />
+          <Route path="/addCategory" element={<AddCategoryForm />} />
+          <Route path="/allCategories" element={<CategoriesList />} />
         </Routes>
       </Box>
     </Router>

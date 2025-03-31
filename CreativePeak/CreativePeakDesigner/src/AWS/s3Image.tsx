@@ -97,7 +97,7 @@ const FileUploader = () => {
           component="span"
           fullWidth
         >
-          Choose a file <span style={{ fontSize: "10px" }}> in .png format only</span>
+          Choose a file in .png format only
         </StyledButton>
       </label>
 

@@ -8,7 +8,6 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp"; // אייקון יצ�
 import { Link, useNavigate } from "react-router-dom";
 import Cartoon_logo from "../images/Cartoon_logoE.png";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import LoginIcon from "@mui/icons-material/Login"; // אייקון כניסה
 import PersonAddIcon from "@mui/icons-material/PersonAdd"; // אייקון הרשמה
 import PersonIcon from "@mui/icons-material/Person"; // אייקון לפרופיל
@@ -48,7 +47,7 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
    const loggedInNavItems: NavItem[] = [
       { name: "Profile", path: "/profile", icon: <PersonIcon /> }, // כפתור פרופיל
       { name: "All projects", path: "/allProjects", icon: <FolderOpenIcon /> },
-      { name: "Add project", path: "/addProject", icon: <AddPhotoAlternateIcon /> },
+      { name: "All categories", path: "/allCategories", icon: <FolderOpenIcon /> },
       { name: "Log Out", path: "/", icon: <ExitToAppIcon />, action: handleLogOut },
    ];
 

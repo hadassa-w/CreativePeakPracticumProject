@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import {
-    Button, TextField, Box, Typography, Container, CircularProgress
+    Button, TextField, Box, Typography, Container, CircularProgress,
+    Paper
 } from "@mui/material";
 import { styled } from "@mui/system";
 
-// עיצוב הקומפוננטה
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: "12px",
@@ -28,7 +28,41 @@ const StyledButton = styled(Button)({
     },
 });
 
-// ממשק לפרטי המעצב
+const ProfileContainer = styled(Paper)({
+    padding: "30px",
+    borderRadius: "12px",
+    backgroundColor: "rgba(255, 255, 255, 0.97)",
+    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
+    maxWidth: "500px",
+    margin: "auto",
+    textAlign: "center",
+});
+
+const Label = styled(Typography)({
+    fontSize: "25px",
+    fontWeight: "600",
+    color: "#673AB7",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+});
+
+const Value = styled(Typography)({
+    fontSize: "20px",
+    fontWeight: "500",
+    color: "#333",
+});
+
+const InfoText = styled(Typography)({
+    fontSize: "18px",
+    fontWeight: "500",
+    color: "#444",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
+    marginBottom: "12px",
+});
 interface DesignerDetails {
     fullName: string;
     addressSite: string;
@@ -42,27 +76,31 @@ interface DesignerDetails {
 
 export default function DesignerDetailsForm() {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<DesignerDetails>();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [designerDetails, setDesignerDetails] = useState<DesignerDetails | null>(null);
+    const userId = parseInt(localStorage.getItem("userId") || "0", 10);
 
-    // שליפת נתוני המשתמש מה-localStorage
-    const user = localStorage.getItem("userId") || "";
+    useEffect(() => {
+        const token = localStorage.getItem("token"); // קבל את ה-Token מהאחסון המקומי
+        axios.get(`https://creativepeak-api.onrender.com/api/DesignerDetails`, {
+            headers: {
+                Authorization: `Bearer ${token}` // הוסף את ה-Token ל-Header
+            }
+        })
+        axios.get("https://creativepeak-api.onrender.com/api/DesignerDetails")
+            .then(response => {
+                const filteredData = response.data.filter((d: DesignerDetails) => d.userId == userId);
+                // console.log("Filtered Data:", filteredData[0]); // בדוק שהסינון עובד כמו שצריך
+
+                setDesignerDetails(filteredData[0]);
+            })
+            .catch(error => console.error("Error fetching designer details", error))
+            .finally(() => setLoading(false));
+    }, [userId]);
 
     const onSubmit = async (data: DesignerDetails) => {
         setLoading(true);
-
-        // בדיקה אם המשתמש מחובר
-        if (!user) {
-            alert("❌ User is not logged in. Please log in first.");
-            setLoading(false);
-            return;
-        }
-
-        // הוספת מזהה המשתמש לאובייקט שנשלח לשרת
-        const designerData = {
-            ...data,
-            userId: user
-        };
-
+        const designerData = { ...data, userId };
         try {
             await axios.post("https://creativepeak-api.onrender.com/api/DesignerDetails", designerData);
             alert("🎉 Designer details submitted successfully!");
@@ -82,82 +120,33 @@ export default function DesignerDetailsForm() {
                     ✏️ Designer Details
                 </Typography>
 
-                <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                    <TextField
-                        label="Full Name"
-                        {...register("fullName", { required: "Full Name is required" })}
-                        fullWidth
-                        error={!!errors.fullName}
-                        helperText={errors.fullName?.message?.toString()}
-                    />
+                {loading ? (
+                    <CircularProgress />
+                ) : designerDetails ? (
+                        <ProfileContainer elevation={3}>
+                            <InfoText> <Label>👤 Full Name:</Label><Value>{designerDetails.fullName}</Value></InfoText>
+                            {designerDetails.addressSite && <InfoText><Label>🌐 Website:</Label> <Value> {designerDetails.addressSite}</Value></InfoText>}
+                            <InfoText><Label>✉️ Email:</Label> <Value>{designerDetails.email}</Value></InfoText>
+                            <InfoText><Label>📞 Phone:</Label> <Value>{designerDetails.phone}</Value></InfoText>
+                            <InfoText><Label>🛠️ Experience:</Label> <Value>{designerDetails.yearsExperience} years</Value></InfoText>
+                            <InfoText><Label>💰 Price Range:</Label> <Value>{designerDetails.priceRangeMin} - {designerDetails.priceRangeMax}</Value></InfoText>
 
-                    <TextField
-                        label="Website Address"
-                        {...register("addressSite")}
-                        fullWidth
-                    />
-
-                    <TextField
-                        label="Email"
-                        type="email"
-                        {...register("email", {
-                            required: "Email is required",
-                            pattern: {
-                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                message: "Invalid email format"
-                            }
-                        })}
-                        fullWidth
-                        error={!!errors.email}
-                        helperText={errors.email?.message?.toString()}
-                    />
-
-                    <TextField
-                        label="Phone"
-                        type="tel"
-                        {...register("phone", { required: "Phone is required" })}
-                        fullWidth
-                        error={!!errors.phone}
-                        helperText={errors.phone?.message?.toString()}
-                    />
-
-                    <TextField
-                        label="Years of Experience"
-                        type="number"
-                        {...register("yearsExperience", { required: "Years of experience is required", min: 0 })}
-                        fullWidth
-                        error={!!errors.yearsExperience}
-                        helperText={errors.yearsExperience?.message?.toString()}
-                    />
-
-                    <TextField
-                        label="Minimum Price"
-                        type="number"
-                        {...register("priceRangeMin", { required: "Minimum price is required", min: 0 })}
-                        fullWidth
-                        error={!!errors.priceRangeMin}
-                        helperText={errors.priceRangeMin?.message?.toString()}
-                    />
-
-                    <TextField
-                        label="Maximum Price"
-                        type="number"
-                        {...register("priceRangeMax", { required: "Maximum price is required", min: 0 })}
-                        fullWidth
-                        error={!!errors.priceRangeMax}
-                        helperText={errors.priceRangeMax?.message?.toString()}
-                    />
-
-                    <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading}>
-                        {loading ? (
-                            <>
-                                <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Submitting...
-                            </>
-                        ) : (
-                            "Submit"
-                        )}
-                    </StyledButton>
-                </form>
+                            <StyledButton variant="contained" color="secondary">Edit Profile</StyledButton>
+                        </ProfileContainer>
+                ) : (
+                    <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                        <TextField label="Full Name" {...register("fullName", { required: "Full Name is required" })} fullWidth error={!!errors.fullName} helperText={errors.fullName?.message?.toString()} />
+                        <TextField label="Website Address" {...register("addressSite")} fullWidth />
+                        <TextField label="Email" type="email" {...register("email", { required: "Email is required" })} fullWidth error={!!errors.email} helperText={errors.email?.message?.toString()} />
+                        <TextField label="Phone" type="tel" {...register("phone", { required: "Phone is required" })} fullWidth error={!!errors.phone} helperText={errors.phone?.message?.toString()} />
+                        <TextField label="Years of Experience" type="number" {...register("yearsExperience", { required: "Years of experience is required", min: 0 })} fullWidth error={!!errors.yearsExperience} helperText={errors.yearsExperience?.message?.toString()} />
+                        <TextField label="Minimum Price" type="number" {...register("priceRangeMin", { required: "Minimum price is required", min: 0 })} fullWidth error={!!errors.priceRangeMin} helperText={errors.priceRangeMin?.message?.toString()} />
+                        <TextField label="Maximum Price" type="number" {...register("priceRangeMax", { required: "Maximum price is required", min: 0 })} fullWidth error={!!errors.priceRangeMax} helperText={errors.priceRangeMax?.message?.toString()} />
+                        <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading}>
+                            {loading ? <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> : "Submit"}
+                        </StyledButton>
+                    </form>
+                )}
             </ContentBox>
         </Box>
     );

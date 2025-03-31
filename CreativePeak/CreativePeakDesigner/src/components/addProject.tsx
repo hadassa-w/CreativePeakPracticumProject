@@ -83,7 +83,6 @@ const AddImageForm = () => {
     setLoading(true);
 
     try {
-
       const dataToSubmit = {
         ...data,
         linkURL: localStorage.getItem("linkURL"),  // עדכון הקישור ל-URL של התמונה
