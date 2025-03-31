@@ -54,9 +54,9 @@ interface Category {
 
 const AddImageForm = () => {
   const { register, handleSubmit, reset, formState: { errors }, setValue, getValues } = useForm<FormData>();
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  // const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [fileName, setFileName] = useState<string>("No file chosen");
+  // const [fileName, setFileName] = useState<string>("No file chosen");
   const [categories, setCategories] = useState<Category[]>([]);
   const userId = parseInt(localStorage.getItem("userId") || "");
 
@@ -120,8 +120,8 @@ const AddImageForm = () => {
         await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
         alert("🎉 Image added successfully!");
         reset();
-        setImagePreview(null);
-        setFileName("No file chosen");
+        // setImagePreview(null);
+        // setFileName("No file chosen");
       }
     } catch (error) {
       console.error("❌ Upload failed", error);
