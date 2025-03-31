@@ -12,6 +12,7 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import LoginIcon from "@mui/icons-material/Login"; // אייקון כניסה
 import PersonAddIcon from "@mui/icons-material/PersonAdd"; // אייקון הרשמה
 import PersonIcon from "@mui/icons-material/Person"; // אייקון לפרופיל
+import UploadIcon  from '@mui/icons-material/Upload'; // אייקון הורדה
 
 const drawerWidth = 240;
 
@@ -46,6 +47,7 @@ function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
 
    // תפריט למשתמש מחובר
    const loggedInNavItems: NavItem[] = [
+      { name: "Upload", path: "/upload", icon: <UploadIcon /> },
       { name: "Profile", path: "/profile", icon: <PersonIcon /> }, // כפתור פרופיל
       { name: "All projects", path: "/allProjects", icon: <FolderOpenIcon /> },
       { name: "Add project", path: "/addProject", icon: <AddPhotoAlternateIcon /> },

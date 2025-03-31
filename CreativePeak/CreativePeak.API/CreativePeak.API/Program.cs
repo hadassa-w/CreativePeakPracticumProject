@@ -26,10 +26,10 @@ builder.Services.AddAWSService<IAmazonS3>();
 builder.Configuration["JWT:Issuer"] = Environment.GetEnvironmentVariable("JWT_ISSUER");
 builder.Configuration["JWT:Audience"] = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
 builder.Configuration["JWT:Key"] = Environment.GetEnvironmentVariable("JWT_KEY");
-//builder.Configuration["AWS:AccessKey"] = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
-//builder.Configuration["AWS:SecretKey"] = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
-//builder.Configuration["AWS:Region"] = Environment.GetEnvironmentVariable("AWS_REGION");
-//builder.Configuration["AWS:BucketName"] = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME");
+builder.Configuration["AWS:AccessKey"] = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+builder.Configuration["AWS:SecretKey"] = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+builder.Configuration["AWS:Region"] = Environment.GetEnvironmentVariable("AWS_REGION");
+builder.Configuration["AWS:BucketName"] = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME");
 builder.Configuration["ConnectionStrings:MyDatabase"] = Environment.GetEnvironmentVariable("ConnectionStrings_CreativePeak");
 
 // Add services to the container.
