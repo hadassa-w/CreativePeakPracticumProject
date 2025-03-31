@@ -50,6 +50,7 @@ interface Category {
   id: number;
   categoryName: string;
   DesignerDetailsId: number;
+  userId: number;
 }
 
 const AddImageForm = () => {
@@ -61,10 +62,11 @@ const AddImageForm = () => {
   const userId = parseInt(localStorage.getItem("userId") || "");
 
   useEffect(() => {
-    axios.get(`https://creativepeak-api.onrender.com/api/Category?userId=${userId}`)
+    axios.get(`https://creativepeak-api.onrender.com/api/Category`)
       .then(response => {
-        setCategories(response.data);
+        setCategories(response.data.filter((category: Category) => category.userId === Number(userId)));
         console.log(response.data);
+        console.log(categories);
       })
 
       .catch(error => {
@@ -113,7 +115,7 @@ const AddImageForm = () => {
         const dataToSubmit = {
           ...data,
           linkURL: imageUrl,
-          userId,
+          userId: userId,
         };
 
         console.log(dataToSubmit);

@@ -30,7 +30,7 @@ namespace CreativePeak.API.Controllers
         public async Task<ActionResult> Get()
         {
             var list = await _categoryService.GetAllAsync();
-            var listDTO = _mapper.Map<IEnumerable<CategoryDTO>>(list);
+            var listDTO = _mapper.Map<IEnumerable<CategoryPostModel>>(list);
             return Ok(listDTO);
         }
 
