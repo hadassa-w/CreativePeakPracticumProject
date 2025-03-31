@@ -16,7 +16,7 @@ const FileUploader = () => {
 
     try {
       // שלב 1: קבלת Presigned URL מהשרת
-      const response = await axios.get('http://localhost:5085/api/S3Images/image-url', {
+      const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
         params: { fileName: file.name }
       });
       console.log('Presigned URL response:', response.data);
