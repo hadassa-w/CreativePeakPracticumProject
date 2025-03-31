@@ -70,27 +70,6 @@ const AddImageForm = () => {
       });
   }, [userId]);
 
-  // const handleImageUpload = async (file: any) => {
-  //   try {
-  //     const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
-  //       params: { fileName: file.name }
-  //     });
-
-  //     const presignedUrl = response.data.url;
-
-  //     await axios.put(presignedUrl, file, {
-  //       headers: {
-  //         'Content-Type': file.type,
-  //       },
-  //     });
-
-  //     return presignedUrl;
-  //   } catch (error) {
-  //     console.error("❌ Error uploading image:", error);
-  //     throw new Error("Error uploading image.");
-  //   }
-  // };
-
   const isFormValid = () => {
     const formValues = getValues();
     return (
