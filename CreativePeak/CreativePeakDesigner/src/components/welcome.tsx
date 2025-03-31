@@ -46,21 +46,20 @@ function Welcome() {
             {/* כפתורים לניווט בין עמודים */}
             <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
                 <StyledButton
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<AddPhotoAlternateIcon />}
-                    onClick={() => navigate("/addProject")} // 👈 ניווט לעמוד "Add Project"
-                >
-                    Add project
-                </StyledButton>
-
-                <StyledButton
                     variant="outlined"
                     color="secondary"
                     startIcon={<FolderOpenIcon />}
                     onClick={() => navigate("/allProjects")} // 👈 ניווט לעמוד "View Portfolio"
                 >
                     All projects
+                </StyledButton>
+                <StyledButton
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<AddPhotoAlternateIcon />}
+                    onClick={() => navigate("/allCategory")} // 👈 ניווט לעמוד "Add Project"
+                >
+                    All categories
                 </StyledButton>
             </Box>
         </ContentBox>
