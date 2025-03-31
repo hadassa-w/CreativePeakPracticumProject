@@ -31,5 +31,8 @@ namespace CreativePeak.Core.Models
         public DateTime UpdatedAt { get; set; }
 
         public DesignerDetails DesignersDetails { get; set; }
+
+        public List<Category> Categories { get; set; }
+        public List<Image> Images { get; set; }
     }
 }

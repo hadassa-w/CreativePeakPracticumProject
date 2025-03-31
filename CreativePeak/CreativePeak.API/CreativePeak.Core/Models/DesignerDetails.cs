@@ -42,8 +42,5 @@ namespace CreativePeak.Core.Models
         [Required(ErrorMessage = "Choosing user is required.")]
         public int UserId { get; set; }
         public User User { get; set; }
-
-        public List<Category> Categories { get; set; }
-        public List<Image> Images { get; set; }
     }
 }

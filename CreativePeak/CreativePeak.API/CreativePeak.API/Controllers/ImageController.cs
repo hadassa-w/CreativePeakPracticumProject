@@ -16,14 +16,14 @@ namespace CreativePeak.API.Controllers
     {
         private readonly IImageService _imageService;
         private readonly ICategoryService _categoryService;
-        private readonly IDesignerDetailsService _designerDetailsService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public ImageController(IImageService imageService, IMapper mapper, ICategoryService categoryService, IDesignerDetailsService designerDetailsService)
+        public ImageController(IImageService imageService, IMapper mapper, ICategoryService categoryService, IUserService userService)
         {
             _imageService = imageService;
             _mapper = mapper;
             _categoryService = categoryService;
-            _designerDetailsService = designerDetailsService;
+            _userService = userService;
         }
 
         // GET: api/<ImageController>
@@ -59,8 +59,8 @@ namespace CreativePeak.API.Controllers
                 FileType = image.FileName.Substring(image.FileName.LastIndexOf('.') + 1),
                 LinkURL = image.LinkURL,
                 IsDeleted=false,
-                DesignerDetailsId = image.DesignerId,
-                DesignerDetails = await _designerDetailsService.GetByIdAsync(image.DesignerId),
+                UserId = image.UserId,
+                User = await _userService.GetByIdAsync(image.UserId),
                 CategoryId = image.CategoryId,
                 Category = await _categoryService.GetByIdAsync(image.CategoryId),
                 CreatedAt = DateTime.UtcNow,
@@ -87,8 +87,8 @@ namespace CreativePeak.API.Controllers
             existingImage.FileName = image.FileName;
             existingImage.Description = image.Description;
             existingImage.LinkURL = image.LinkURL;
-            existingImage.DesignerDetailsId = image.DesignerId;
-            existingImage.DesignerDetails = await _designerDetailsService.GetByIdAsync(image.DesignerId);
+            existingImage.UserId = image.UserId;
+            existingImage.User = await _userService.GetByIdAsync(image.UserId);
             existingImage.CategoryId = image.CategoryId;
             existingImage.Category = await _categoryService.GetByIdAsync(image.CategoryId);
             existingImage.UpdatedAt = DateTime.UtcNow;

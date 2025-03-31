@@ -16,12 +16,12 @@ namespace CreativePeak.API.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-        private readonly IDesignerDetailsService _designerDetailsService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public CategoryController(ICategoryService categoryService, IDesignerDetailsService designerDetailsService, IMapper mapper)
+        public CategoryController(ICategoryService categoryService, IUserService userService, IMapper mapper)
         {
             _categoryService = categoryService;
-            _designerDetailsService = designerDetailsService;
+            _userService = userService;
             _mapper = mapper;
         }
 
@@ -51,8 +51,8 @@ namespace CreativePeak.API.Controllers
             {
                 CategoryName = category.CategoryName,
                 Description = category.Description,
-                DesignerDetailsId = category.DesignerDetailsId,
-                DesignerDetails = await _designerDetailsService.GetByIdAsync(category.DesignerDetailsId),
+                UserId = category.UserId,
+                User = await _userService.GetByIdAsync(category.UserId),
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
             };
@@ -77,7 +77,8 @@ namespace CreativePeak.API.Controllers
 
             existingCategory.CategoryName = category.CategoryName;
             existingCategory.Description = category.Description;
-            existingCategory.DesignerDetails = await _designerDetailsService.GetByIdAsync(category.DesignerDetailsId);
+            existingCategory.UserId =category.UserId;
+            existingCategory.User = await _userService.GetByIdAsync(category.UserId);
             existingCategory.UpdatedAt = DateTime.UtcNow;
 
             await _categoryService.UpdateAsync(id, existingCategory);

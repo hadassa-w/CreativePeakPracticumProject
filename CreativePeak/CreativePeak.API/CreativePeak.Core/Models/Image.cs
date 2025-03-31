@@ -29,9 +29,9 @@ namespace CreativePeak.Core.Models
         public DateTime UpdatedAt { get; set; }
 
 
-        [Required(ErrorMessage = "Choosing designer is required.")]
-        public int DesignerDetailsId { get; set; }
-        public DesignerDetails DesignerDetails { get; set; }
+        [Required(ErrorMessage = "Choosing user is required.")]
+        public int UserId { get; set; }
+        public User User { get; set; }
 
         [Required(ErrorMessage = "Choosing category is required.")]
         public int CategoryId { get; set; }

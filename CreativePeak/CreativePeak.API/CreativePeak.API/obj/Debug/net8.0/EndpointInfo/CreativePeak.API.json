@@ -602,7 +602,7 @@
             "type": "string",
             "nullable": true
           },
-          "designerDetailsId": {
+          "userId": {
             "type": "integer",
             "format": "int32"
           }
@@ -662,7 +662,7 @@
             "type": "string",
             "nullable": true
           },
-          "designerId": {
+          "userId": {
             "type": "integer",
             "format": "int32"
           },

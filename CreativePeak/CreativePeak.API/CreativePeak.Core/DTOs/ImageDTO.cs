@@ -19,7 +19,7 @@ namespace CreativePeak.Core.DTOs
         public string LinkURL { get; set; }
         public bool IsDeleted { get; set; }
 
-        public DesignerDetailsDTO DesignerDetails { get; set; }
+        public UserDTO User { get; set; }
         public CategoryDTO Category { get; set; }
     }
 }

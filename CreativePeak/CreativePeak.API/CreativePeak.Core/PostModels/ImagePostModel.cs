@@ -9,7 +9,7 @@ namespace CreativePeak.Core.PostModels
         public string Description { get; set; }
         public string LinkURL { get; set; }
 
-        public int DesignerId { get; set; }
+        public int UserId { get; set; }
         public int CategoryId { get; set; }
 
     }

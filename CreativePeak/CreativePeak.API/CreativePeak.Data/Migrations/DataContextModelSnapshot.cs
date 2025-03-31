@@ -42,15 +42,15 @@ namespace CreativePeak.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("DesignerDetailsId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DesignerDetailsId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Categories");
                 });
@@ -124,9 +124,6 @@ namespace CreativePeak.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("DesignerDetailsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -146,11 +143,14 @@ namespace CreativePeak.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("DesignerDetailsId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Images");
                 });
@@ -203,13 +203,13 @@ namespace CreativePeak.Data.Migrations
 
             modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
                 {
-                    b.HasOne("CreativePeak.Core.Models.DesignerDetails", "DesignerDetails")
+                    b.HasOne("CreativePeak.Core.Models.User", "User")
                         .WithMany("Categories")
-                        .HasForeignKey("DesignerDetailsId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DesignerDetails");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
@@ -231,15 +231,15 @@ namespace CreativePeak.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CreativePeak.Core.Models.DesignerDetails", "DesignerDetails")
+                    b.HasOne("CreativePeak.Core.Models.User", "User")
                         .WithMany("Images")
-                        .HasForeignKey("DesignerDetailsId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
 
-                    b.Navigation("DesignerDetails");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
@@ -247,17 +247,14 @@ namespace CreativePeak.Data.Migrations
                     b.Navigation("Images");
                 });
 
-            modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
+            modelBuilder.Entity("CreativePeak.Core.Models.User", b =>
                 {
                     b.Navigation("Categories");
 
-                    b.Navigation("Images");
-                });
-
-            modelBuilder.Entity("CreativePeak.Core.Models.User", b =>
-                {
                     b.Navigation("DesignersDetails")
                         .IsRequired();
+
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

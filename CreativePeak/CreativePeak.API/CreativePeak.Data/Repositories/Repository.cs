@@ -36,7 +36,8 @@ namespace CreativePeak.Data.Repositories
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            await _context.DesignersDetails.Include(b => b.Images).ToListAsync();
+            await _context.Users.Include(b => b.Categories).ToListAsync();
+            await _context.Users.Include(b => b.Images).ToListAsync();
             await _context.Categories.Include(b => b.Images).ToListAsync();
             await _context.Users.Include(b => b.DesignersDetails).ToListAsync();
             return await _dbSet.ToListAsync();
@@ -44,7 +45,8 @@ namespace CreativePeak.Data.Repositories
 
         public async Task<T?> GetByIdAsync(int id)
         {
-            await _context.DesignersDetails.Include(b => b.Images).ToListAsync();
+            await _context.Users.Include(b => b.Categories).ToListAsync();
+            await _context.Users.Include(b => b.Images).ToListAsync();
             await _context.Categories.Include(b => b.Images).ToListAsync();
             await _context.Users.Include(b => b.DesignersDetails).ToListAsync();
             return await _dbSet.FindAsync(id);
@@ -52,7 +54,8 @@ namespace CreativePeak.Data.Repositories
 
         public async Task<T> UpdateAsync(T entity)
         {
-            await _context.DesignersDetails.Include(b => b.Images).ToListAsync();
+            await _context.Users.Include(b => b.Categories).ToListAsync();
+            await _context.Users.Include(b => b.Images).ToListAsync();
             await _context.Categories.Include(b => b.Images).ToListAsync();
             await _context.Users.Include(b => b.DesignersDetails).ToListAsync();
             _dbSet.Update(entity);

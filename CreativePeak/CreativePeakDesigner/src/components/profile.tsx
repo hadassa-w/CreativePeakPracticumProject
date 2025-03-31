@@ -37,7 +37,7 @@ interface DesignerDetails {
     yearsExperience: number;
     priceRangeMin: number;
     priceRangeMax: number;
-    user: number;
+    userId: number;
 }
 
 export default function DesignerDetailsForm() {

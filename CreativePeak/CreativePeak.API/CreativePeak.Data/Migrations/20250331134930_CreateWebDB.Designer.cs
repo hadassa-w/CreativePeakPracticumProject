@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CreativePeak.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250330101229_CreateWebDB")]
+    [Migration("20250331134930_CreateWebDB")]
     partial class CreateWebDB
     {
         /// <inheritdoc />
@@ -35,7 +35,8 @@ namespace CreativePeak.Data.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
@@ -44,15 +45,15 @@ namespace CreativePeak.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("DesignerDetailsId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DesignerDetailsId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Categories");
                 });
@@ -78,7 +79,8 @@ namespace CreativePeak.Data.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -125,12 +127,10 @@ namespace CreativePeak.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("DesignerDetailsId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("FileType")
                         .IsRequired()
@@ -146,11 +146,14 @@ namespace CreativePeak.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("DesignerDetailsId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Images");
                 });
@@ -172,15 +175,18 @@ namespace CreativePeak.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -200,13 +206,13 @@ namespace CreativePeak.Data.Migrations
 
             modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
                 {
-                    b.HasOne("CreativePeak.Core.Models.DesignerDetails", "DesignerDetails")
+                    b.HasOne("CreativePeak.Core.Models.User", "User")
                         .WithMany("Categories")
-                        .HasForeignKey("DesignerDetailsId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DesignerDetails");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
@@ -228,15 +234,15 @@ namespace CreativePeak.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CreativePeak.Core.Models.DesignerDetails", "DesignerDetails")
+                    b.HasOne("CreativePeak.Core.Models.User", "User")
                         .WithMany("Images")
-                        .HasForeignKey("DesignerDetailsId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
 
-                    b.Navigation("DesignerDetails");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CreativePeak.Core.Models.Category", b =>
@@ -244,17 +250,14 @@ namespace CreativePeak.Data.Migrations
                     b.Navigation("Images");
                 });
 
-            modelBuilder.Entity("CreativePeak.Core.Models.DesignerDetails", b =>
+            modelBuilder.Entity("CreativePeak.Core.Models.User", b =>
                 {
                     b.Navigation("Categories");
 
-                    b.Navigation("Images");
-                });
-
-            modelBuilder.Entity("CreativePeak.Core.Models.User", b =>
-                {
                     b.Navigation("DesignersDetails")
                         .IsRequired();
+
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
