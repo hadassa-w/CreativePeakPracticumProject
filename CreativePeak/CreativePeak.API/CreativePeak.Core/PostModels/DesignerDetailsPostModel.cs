@@ -11,5 +11,7 @@ namespace CreativePeak.Core.PostModels
         public int YearsExperience { get; set; }
         public int PriceRangeMin { get; set; }
         public int PriceRangeMax { get; set; }
+
+        public int UserId { get; set; }
     }
 }
