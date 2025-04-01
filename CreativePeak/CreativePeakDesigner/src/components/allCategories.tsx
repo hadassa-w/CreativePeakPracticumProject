@@ -3,7 +3,7 @@ import { Button, Box, Typography, Container, IconButton, CircularProgress, List,
 import { styled } from "@mui/system";
 import { Edit, Delete, Add } from "@mui/icons-material";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -26,8 +26,29 @@ interface Category {
     userId: number;
 }
 
+interface Image {
+    id: number;
+    fileName: string;
+    description: string;
+    linkURL: string;
+    updatedAt: string;
+    createdAt: string;
+    category: Category;
+    user: User;
+}
+
+
+interface User {
+    id: number;
+    fullName: string;
+    email: string;
+    phone: string;
+    address: number;
+}
+
 const CategoriesList = () => {
     const [categories, setCategories] = useState<Category[]>([]);
+    const [images, setImages] = useState<Image[]>([]);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState<number | null>(null);
     const userId = parseInt(localStorage.getItem("userId") || "0", 10);
@@ -57,6 +78,14 @@ const CategoriesList = () => {
             await axios.delete(`https://creativepeak-api.onrender.com/api/Category/${categoryId}`);
             setCategories(categories.filter((category) => category.id !== categoryId));
             alert("Category deleted successfully");
+            await axios.get("https://creativepeak-api.onrender.com/api/Image")
+                .then((response) => {
+                    const Images = response.data.filter((image: Image) => image.user.id == userId);
+                    setImages(Images);
+                    images.map((image: Image) => {
+                        axios.delete(`https://creativepeak-api.onrender.com/api/Image/${image.id}`);
+                    })
+                })
         } catch (error) {
             console.error("Error deleting category:", error);
             alert("Error deleting category. Please try again.");
@@ -75,11 +104,13 @@ const CategoriesList = () => {
                 <Button
                     variant="contained"
                     color="secondary"
-                    sx={{ marginTop: 3, textTransform: "none", fontSize: "16px", fontWeight: "bold", borderRadius: "10px", padding: "10px 20px", transition: "0.3s",
-                    "&:hover": { transform: "scale(1.05)" }, }}
+                    sx={{
+                        marginTop: 3, textTransform: "none", fontSize: "16px", fontWeight: "bold", borderRadius: "10px", padding: "10px 20px", transition: "0.3s",
+                        "&:hover": { transform: "scale(1.05)" },
+                    }}
                     onClick={() => navigate("/addCategory")}
                 >
-                   <Add/> Add Category
+                    <Add /> Add Category
                 </Button>
 
                 <br /><br />
