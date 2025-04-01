@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Box, Typography, Container, IconButton, CircularProgress, List, ListItem, ListItemText } from "@mui/material";
 import { styled } from "@mui/system";
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, Add } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
 
@@ -79,7 +79,7 @@ const CategoriesList = () => {
                     "&:hover": { transform: "scale(1.05)" }, }}
                     onClick={() => navigate("/addCategory")}
                 >
-                    🏷️ Add Category
+                   <Add/> Add Category
                 </Button>
 
                 <br /><br />

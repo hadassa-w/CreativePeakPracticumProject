@@ -15,6 +15,7 @@ import {
   FormHelperText
 } from "@mui/material";
 import { styled } from "@mui/system";
+import { useLocation } from "react-router-dom"; // הוספת useLocation
 import FileUploader from "../AWS/s3Image";
 
 const ContentBox = styled(Container)({
@@ -58,6 +59,8 @@ const AddImageForm = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
+  const location = useLocation();
+  const { image } = location.state || {}; // גישה למידע שהתמונה שנשלחה
 
   // Fetch categories inside useEffect
   useEffect(() => {
@@ -68,7 +71,15 @@ const AddImageForm = () => {
       .catch(error => {
         console.error("Error fetching categories:", error);
       });
-  }, [userId]);
+
+    // אם מדובר בעריכת תמונה קיימת, נמלא את הנתונים בטופס
+    if (image) {
+      setValue("fileName", image.fileName);
+      setValue("description", image.description);
+      setValue("categoryId", image.category.id);
+      localStorage.setItem("linkURL", image.linkURL); // שמירת URL בתמורה
+    }
+  }, [userId, image, setValue]);
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
@@ -76,14 +87,21 @@ const AddImageForm = () => {
     try {
       const dataToSubmit = {
         ...data,
-        linkURL: localStorage.getItem("linkURL"),  // עדכון הקישור ל-URL של התמונה
+        linkURL: localStorage.getItem("linkURL"),
         userId: userId,
       };
 
-      console.log(dataToSubmit);
-      await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
-      alert("🎉 Image added successfully!");
-      reset();
+      if (image) {
+        // אם מדובר בעדכון תמונה
+        await axios.put(`https://creativepeak-api.onrender.com/api/Image/${image.id}`, dataToSubmit);
+        alert("🎉 Image updated successfully!");
+      } else {
+        // אם מדובר בהוספת תמונה חדשה
+        await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
+        alert("🎉 Image added successfully!");
+      }
+
+      reset(); // לאפס את הטופס לאחר ההגשה
     } catch (error) {
       console.error("❌ Upload failed", error);
       alert("Error uploading image. Please try again later.");
@@ -96,7 +114,7 @@ const AddImageForm = () => {
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
       <ContentBox>
         <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
-          🖼️ Project
+          {image ? "✏️ Edit Project" : "🖼️ Add Project"}
         </Typography>
 
         <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -142,7 +160,7 @@ const AddImageForm = () => {
                 <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Uploading...
               </>
             ) : (
-              "Upload"
+              "Upload project"
             )}
           </StyledButton>
         </form>

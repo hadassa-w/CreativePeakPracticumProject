@@ -3,6 +3,8 @@ import axios from "axios";
 import { Box, Typography, CircularProgress, Card, CardMedia, CardContent, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
+import { Add, Edit, Delete } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom"; 
 
 const ContentBox = styled(Box)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -19,6 +21,8 @@ interface Image {
     fileName: string;
     description: string;
     linkURL: string;
+    updatedAt: string;
+    createdAt: string;
     category: Category;
     user: User;
 }
@@ -44,6 +48,7 @@ export default function ImageGallery() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true);
@@ -59,8 +64,7 @@ export default function ImageGallery() {
                 setImages(filteredImages);
                 setCategories(filteredCategories);
 
-                // console.log("Images:", filteredImages);
-                // console.log("Categories:", filteredCategories);
+                console.log("Images:", filteredImages);
             })
             .catch(error => {
                 console.error("Error while retrieving data:", error);
@@ -68,8 +72,37 @@ export default function ImageGallery() {
             .finally(() => {
                 setLoading(false); // הפסק טעינה רק אחרי שהכל נטען
             });
-
     }, [userId]);
+
+    // פונקציה לעיבוד התאריך לפורמט של חודש/יום/שנה
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // הוספת 0 לפני חודש אם צריך
+        const day = date.getDate().toString().padStart(2, '0'); // הוספת 0 לפני יום אם צריך
+        const year = date.getFullYear();
+
+        return `${month}/${day}/${year}`; // פורמט MM/DD/YYYY
+    };
+
+    const handleEdit = (image: Image) => {
+        // העבר לכתובת של דף העריכה עם מזהה התמונה
+        navigate("/addProject", { state: { image } });
+        // window.location.href = `/editProject/${imageId}`;
+    };
+
+    const handleDelete = (imageId: number) => {
+        if (window.confirm("Are you sure you want to delete this project?")) {
+            axios.delete(`https://creativepeak-api.onrender.com/api/Image/${imageId}`)
+                .then(() => {
+                    setImages(images.filter((image) => image.id !== imageId)); // עדכון הממשק לאחר מחיקה
+                    alert("Project deleted successfully!");
+                })
+                .catch((error) => {
+                    console.error("Error deleting project:", error);
+                    alert("Error deleting project. Please try again later.");
+                });
+        }
+    };
 
     return (
         <Box
@@ -86,7 +119,7 @@ export default function ImageGallery() {
                     🖼️ Project Gallery
                 </Typography>
 
-                {/* כפתור הוספת קטגוריה */}
+                {/* כפתור הוספת פרויקט */}
                 <Link to="/addProject" style={{ textDecoration: "none" }}>
                     <Button
                         variant="contained"
@@ -104,7 +137,7 @@ export default function ImageGallery() {
                             },
                         }}
                     >
-                        🖼️ Add project
+                        <Add /> Add project
                     </Button>
                 </Link>
 
@@ -118,10 +151,10 @@ export default function ImageGallery() {
 
                         return (
                             <Box key={category.id} sx={{ mb: 4 }}>
-                                <Typography variant="h2" sx={{ fontWeight: "bold", color: "#333", mb: 2,fontSize: "30px" }}>
+                                <Typography variant="h2" sx={{ fontWeight: "bold", color: "#333", mb: 2, fontSize: "30px" }}>
                                     {category.categoryName}
                                 </Typography>
-                                <Typography variant="h6" sx={{ color: "#333", mb: 2,fontSize: "25px" }}>
+                                <Typography variant="h6" sx={{ color: "#333", mb: 2, fontSize: "25px" }}>
                                     {category.description}
                                 </Typography>
                                 {categoryImages.map((image) => (
@@ -130,6 +163,31 @@ export default function ImageGallery() {
                                         <CardContent>
                                             <Typography variant="body1" sx={{ fontWeight: "bold" }}>{image.fileName}</Typography>
                                             <Typography variant="body2" color="text.secondary">{image.description}</Typography>
+                                            <Typography variant="body2" sx={{ color: "gray", fontFamily: "monospace", mb: 2, fontSize: "12px" }}>
+                                                Create at: {formatDate(image.createdAt)}
+                                                <br />
+                                                Update at: {formatDate(image.updatedAt)}
+                                            </Typography>
+                                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="primary"
+                                                    size="small"
+                                                    sx={{ borderRadius: "10px" }}
+                                                    onClick={() => handleEdit(image)}
+                                                >
+                                                    <Edit /> Edit
+                                                </Button>
+                                                <Button
+                                                    variant="outlined"
+                                                    color="error"
+                                                    size="small"
+                                                    sx={{ borderRadius: "10px" }}
+                                                    onClick={() => handleDelete(image.id)}
+                                                >
+                                                    <Delete /> Delete
+                                                </Button>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 ))}

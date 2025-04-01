@@ -53,41 +53,40 @@ const FileUploader = () => {
 
   const handleUpload = async () => {
     if (!file) return;
-
+  
     setLoading(true);
-
+  
     try {
-      // שלב 1: קבלת Presigned URL מהשרת
+      // שלב 1: בקשת Presigned URL מהשרת
       const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
         params: { fileName: file.name }
       });
       const presignedUrl = response.data.url;
-
-      // שלב 2: העלאת הקובץ ישירות ל-S3
+  
+      // שלב 2: העלאת הקובץ ל-S3
       await axios.put(presignedUrl, file, {
-        headers: {
-          'Content-Type': file.type,
-        },
+        headers: { 'Content-Type': file.type },
         onUploadProgress: (progressEvent) => {
-          const percent = Math.round(
-            (progressEvent.loaded * 100) / (progressEvent.total || 1)
-          );
+          const percent = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 1));
           setProgress(percent);
         },
       });
-
-      // Notify parent component with the image URL
-      localStorage.setItem("linkURL", presignedUrl); // Pass the URL to parent
-
-      alert('File upload successful!');
+  
+      // 🔥 שלב 3: יצירת URL קבוע של התמונה ושמירה
+      const s3BaseUrl = "https://s3.us-east-1.amazonaws.com/creativepeakproject.aws-testpnoren/";
+      const imageUrl = `${s3BaseUrl}${encodeURIComponent(file.name)}`;
+  
+      localStorage.setItem("linkURL", imageUrl); // שמירת ה-URL הקבוע
+  
+      alert("✅ File uploaded successfully!");
     } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('File upload failed. Please try again.');
+      console.error("❌ Error uploading file:", error);
+      alert("File upload failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <UploadContainer>
       <label htmlFor="file-input">
