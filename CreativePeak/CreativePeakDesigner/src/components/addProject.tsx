@@ -54,7 +54,7 @@ interface Category {
 }
 
 const AddImageForm = () => {
-  const { register, handleSubmit, reset, formState: { errors }, setValue, getValues } = useForm<FormData>();
+  const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm<FormData>();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
@@ -69,15 +69,6 @@ const AddImageForm = () => {
         console.error("Error fetching categories:", error);
       });
   }, [userId]);
-
-  const isFormValid = () => {
-    const formValues = getValues();
-    return (
-      formValues.fileName !== "" &&
-      formValues.description?.trim() !== "" &&
-      formValues.categoryId !== undefined
-    );
-  };
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
@@ -145,7 +136,7 @@ const AddImageForm = () => {
           </FormControl>
 
           <FileUploader />
-          <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading || !isFormValid()}>
+          <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading}>
             {loading ? (
               <>
                 <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Uploading...
