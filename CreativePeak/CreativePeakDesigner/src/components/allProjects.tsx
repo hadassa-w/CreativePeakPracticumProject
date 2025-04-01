@@ -64,7 +64,8 @@ export default function ImageGallery() {
                 setImages(filteredImages);
                 setCategories(filteredCategories);
 
-                console.log("Images:", filteredImages);
+                // console.log("Images:", filteredImages);
+                // console.log("Categories:", filteredCategories);
             })
             .catch(error => {
                 console.error("Error while retrieving data:", error);
