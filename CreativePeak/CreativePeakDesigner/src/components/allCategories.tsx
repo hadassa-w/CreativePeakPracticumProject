@@ -3,7 +3,7 @@ import { Button, Box, Typography, Container, IconButton, CircularProgress, List,
 import { styled } from "@mui/system";
 import { Edit, Delete } from "@mui/icons-material";
 import axios from "axios";
-import { Link } from "react-router-dom"; // עבור הקישור
+import { useNavigate } from "react-router-dom"; 
 
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -23,21 +23,21 @@ interface Category {
     id: number;
     categoryName: string;
     description: string;
-    userId: number
+    userId: number;
 }
 
 const CategoriesList = () => {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState<number | null>(null);
     const userId = parseInt(localStorage.getItem("userId") || "0", 10);
+    const navigate = useNavigate();
 
-    // Fetch categories on load
     useEffect(() => {
-        setLoading(true);
         axios.get("https://creativepeak-api.onrender.com/api/Category")
             .then((response) => {
-                setCategories(response.data.filter((category: Category) => category.userId == userId));
+                const filteredCategories = response.data.filter((category: Category) => category.userId == userId);
+                setCategories(filteredCategories);
             })
             .catch((error) => {
                 console.error("Error fetching categories:", error);
@@ -47,9 +47,8 @@ const CategoriesList = () => {
             });
     }, []);
 
-    const handleEdit = (categoryId: number) => {
-        // כאן תוכל להוסיף את הלוגיקה לעריכה
-        alert(`Editing category with ID: ${categoryId}`);
+    const handleEdit = (category: Category) => {
+        navigate("/addCategory", { state: { category } });
     };
 
     const handleDelete = async (categoryId: number) => {
@@ -67,74 +66,44 @@ const CategoriesList = () => {
     };
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "100vh",
-                padding: "30px",
-            }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
                     🏷️ Categories
                 </Typography>
 
-                {/* כפתור הוספת קטגוריה */}
-                <Link to="/addCategory" style={{ textDecoration: "none" }}>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        sx={{
-                            marginTop: 3,
-                            textTransform: "none",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                            borderRadius: "10px",
-                            padding: "10px 20px",
-                            transition: "0.3s",
-                            "&:hover": {
-                                transform: "scale(1.05)",
-                            },
-                        }}
-                    >
-                        🏷️ Add category
-                    </Button>
-                </Link>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ marginTop: 3, textTransform: "none", fontSize: "16px", fontWeight: "bold", borderRadius: "10px", padding: "10px 20px", transition: "0.3s",
+                    "&:hover": { transform: "scale(1.05)" }, }}
+                    onClick={() => navigate("/addCategory")}
+                >
+                    🏷️ Add Category
+                </Button>
 
                 <br /><br />
                 {loading ? (
                     <CircularProgress />
+                ) : categories.length === 0 ? (
+                    <Typography>No categories found.</Typography>
                 ) : (
                     <CategoryList>
                         {categories.map((category) => (
                             <ListItem key={category.id} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <ListItemText
-                                    primary={category.categoryName}
-                                    secondary={category.description}
-                                />
+                                <ListItemText primary={category.categoryName} secondary={category.description} />
                                 <Box>
-                                    <IconButton color="default" onClick={() => handleEdit(category.id)} sx={{ marginRight: "8px" }}>
+                                    <IconButton color="default" onClick={() => handleEdit(category)} sx={{ marginRight: "8px" }}>
                                         <Edit />
                                     </IconButton>
-                                    <IconButton
-                                        color="default"
-                                        onClick={() => handleDelete(category.id)}
-                                        disabled={deleting === category.id}
-                                    >
-                                        {deleting === category.id ? (
-                                            <CircularProgress size={20} sx={{ color: "white" }} />
-                                        ) : (
-                                            <Delete />
-                                        )}
+                                    <IconButton color="default" onClick={() => handleDelete(category.id)} disabled={deleting === category.id}>
+                                        {deleting === category.id ? <CircularProgress size={20} sx={{ color: "white" }} /> : <Delete />}
                                     </IconButton>
                                 </Box>
                             </ListItem>
                         ))}
                     </CategoryList>
                 )}
-
             </ContentBox>
         </Box>
     );

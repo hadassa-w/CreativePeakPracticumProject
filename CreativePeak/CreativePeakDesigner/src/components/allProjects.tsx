@@ -19,7 +19,7 @@ interface Image {
     fileName: string;
     description: string;
     linkURL: string;
-    categoryId: number;
+    category: Category;
     user: User;
 }
 
@@ -34,6 +34,7 @@ interface User {
 interface Category {
     id: number;
     categoryName: string;
+    description: string;
     DesignerDetailsId: number;
     userId: number;
 }
@@ -82,7 +83,7 @@ export default function ImageGallery() {
         >
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
-                    🖼️ Project
+                    🖼️ Project Gallery
                 </Typography>
 
                 {/* כפתור הוספת קטגוריה */}
@@ -112,13 +113,16 @@ export default function ImageGallery() {
                     <CircularProgress />
                 ) : (
                     categories.map((category) => {
-                        const categoryImages = images.filter((img) => img.categoryId == category.id);
+                        const categoryImages = images.filter((img) => img.category.id == category.id);
                         if (categoryImages.length === 0) return null; // אם אין תמונות לקטגוריה, לא להציג אותה
 
                         return (
                             <Box key={category.id} sx={{ mb: 4 }}>
-                                <Typography variant="h5" sx={{ fontWeight: "bold", color: "#333", mb: 2 }}>
+                                <Typography variant="h2" sx={{ fontWeight: "bold", color: "#333", mb: 2,fontSize: "30px" }}>
                                     {category.categoryName}
+                                </Typography>
+                                <Typography variant="h6" sx={{ color: "#333", mb: 2,fontSize: "25px" }}>
+                                    {category.description}
                                 </Typography>
                                 {categoryImages.map((image) => (
                                     <Card key={image.id} sx={{ maxWidth: 300, margin: "auto" }}>
@@ -133,8 +137,6 @@ export default function ImageGallery() {
                         );
                     })
                 )}
-
-
             </ContentBox>
         </Box>
     );

@@ -1,6 +1,5 @@
 import { Box, Typography, Container, Button } from "@mui/material";
 import { styled } from "@mui/system";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import { useNavigate } from "react-router-dom"; // 👈 ייבוא הפונקציה לניווט
 
@@ -56,7 +55,7 @@ function Welcome() {
                 <StyledButton
                     variant="contained"
                     color="secondary"
-                    startIcon={<AddPhotoAlternateIcon />}
+                    startIcon={<FolderOpenIcon />}
                     onClick={() => navigate("/allCategory")} // 👈 ניווט לעמוד "Add Project"
                 >
                     All categories
