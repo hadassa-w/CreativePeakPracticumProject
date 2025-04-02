@@ -123,11 +123,11 @@ export default function DesignerDetailsForm() {
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>✏️ Designer Details</Typography>
+                <Typography variant="h6" sx={{ fontSize: "20px", mb: 3 }}>please enter your business information.</Typography>
                 {loading ? (
                     <CircularProgress />
                 ) : isEditing || !designerDetails ? (
                     <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                        <Typography variant="h6" sx={{ fontSize: "20px",mb: 3 }}>Hello!<br/>We recognize that you are new to the system,<br/> please enter your business information.</Typography>
                         <TextField label="Full Name" {...register("fullName", { required: "Full Name is required" })} fullWidth error={!!errors.fullName} helperText={errors.fullName?.message?.toString()} />
                         <TextField label="Website Address" {...register("addressSite")} fullWidth />
                         <TextField label="Email" type="email" {...register("email", { required: "Email is required" })} fullWidth error={!!errors.email} helperText={errors.email?.message?.toString()} />
