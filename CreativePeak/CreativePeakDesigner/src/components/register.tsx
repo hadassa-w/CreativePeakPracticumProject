@@ -136,11 +136,9 @@ function Register({ setIsLoggedIn }: RegisterProps) {
         return (
             formData.fullname.trim() !== "" &&
             formData.email.trim() !== "" &&
-            /^\S+@\S+\.\S+$/.test(formData.email) &&
             formData.password.trim() !== "" &&
             formData.password.length >= 6 &&
             formData.phone.trim() !== "" &&
-            /^\d{9,}$/.test(formData.phone)
         );
     };
 
