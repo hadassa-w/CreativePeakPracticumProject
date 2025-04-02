@@ -127,6 +127,7 @@ export default function DesignerDetailsForm() {
                     <CircularProgress />
                 ) : isEditing || !designerDetails ? (
                     <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                        <Typography variant="h6" sx={{ fontSize: "20px",mb: 3 }}>Hello!<br/>We recognize that you are new to the system,<br/> please enter your business information.</Typography>
                         <TextField label="Full Name" {...register("fullName", { required: "Full Name is required" })} fullWidth error={!!errors.fullName} helperText={errors.fullName?.message?.toString()} />
                         <TextField label="Website Address" {...register("addressSite")} fullWidth />
                         <TextField label="Email" type="email" {...register("email", { required: "Email is required" })} fullWidth error={!!errors.email} helperText={errors.email?.message?.toString()} />
