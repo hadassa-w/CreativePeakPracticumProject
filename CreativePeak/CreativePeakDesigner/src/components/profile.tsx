@@ -63,6 +63,7 @@ const InfoText = styled(Typography)({
     gap: "10px",
     marginBottom: "12px",
 });
+
 interface DesignerDetails {
     id: number;
     fullName: string;
@@ -102,15 +103,15 @@ export default function DesignerDetailsForm() {
         setLoading(true);
         const token = localStorage.getItem("token");
         const designerData = { ...data, userId };
-    
+
         console.log("🔵 Submitting data:", designerData);
-    
+
         if (!token) {
             alert("⚠️ Authentication token is missing!");
             setLoading(false);
             return;
         }
-    
+
         try {
             let response;
             if (designerDetails) {
@@ -128,26 +129,26 @@ export default function DesignerDetailsForm() {
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
             }
-    
+
             console.log("✅ Response from server:", response.data);
             alert("🎉 Details saved successfully!");
-    
+
             // 🔄 שליפת הנתונים מחדש
             console.log("🔄 Fetching updated data...");
             const updatedResponse = await axios.get(
                 "https://creativepeak-api.onrender.com/api/DesignerDetails",
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-    
+
             const updatedData = updatedResponse.data.find((d: DesignerDetails) => d.userId === userId);
             console.log("🔄 Updated data:", updatedData);
-    
+
             setDesignerDetails(updatedData || null);
             setIsEditing(false);
-    
+
         } catch (error: any) {
             console.error("❌ Error submitting data:", error);
-    
+
             if (error.response) {
                 console.error("🔴 Server response:", error.response.data);
                 alert(`Error: ${error.response.data.message || "Failed to save details."}`);
@@ -158,7 +159,7 @@ export default function DesignerDetailsForm() {
             setLoading(false);
         }
     };
-        
+
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
             <ContentBox>
@@ -181,13 +182,32 @@ export default function DesignerDetailsForm() {
                     </form>
                 ) : (
                     <ProfileContainer elevation={3}>
-                        <InfoText> <Label>👤 Full Name:</Label><Value>{designerDetails.fullName}</Value></InfoText>
-                        {designerDetails.addressSite && <InfoText><Label>🌐 Website:</Label> <Value> {designerDetails.addressSite}</Value></InfoText>}
-                        <InfoText><Label>✉️ Email:</Label> <Value>{designerDetails.email}</Value></InfoText>
-                        <InfoText><Label>📞 Phone:</Label> <Value>{designerDetails.phone}</Value></InfoText>
-                        <InfoText><Label>🛠️ Experience:</Label> <Value>{designerDetails.yearsExperience} years</Value></InfoText>
-                        <InfoText><Label>💰 Price Range:</Label> <Value>{designerDetails.priceRangeMin}₪ - {designerDetails.priceRangeMax}₪</Value></InfoText>
-
+                        <InfoText as="div">
+                            <Label as="span">👤 Full Name:</Label>
+                            <Value as="span">{designerDetails.fullName}</Value>
+                        </InfoText>
+                        <InfoText as="div">
+                            <Label as="span">✉️ Email:</Label>
+                            <Value as="span">{designerDetails.email}</Value>
+                        </InfoText>
+                        {designerDetails.addressSite && (
+                            <InfoText as="div">
+                                <Label as="span">🌐 Website Address:</Label>
+                                <Value as="span">{designerDetails.addressSite}</Value>
+                            </InfoText>
+                        )}
+                        <InfoText as="div">
+                            <Label as="span">📞 Phone:</Label>
+                            <Value as="span">{designerDetails.phone}</Value>
+                        </InfoText>
+                        <InfoText as="div">
+                            <Label as="span">🛠️ Experience:</Label>
+                            <Value as="span">{designerDetails.yearsExperience} years</Value>
+                        </InfoText>
+                        <InfoText as="div">
+                            <Label as="span">💰 Price Range:</Label>
+                            <Value as="span">{designerDetails.priceRangeMin}₪ - {designerDetails.priceRangeMax}₪</Value>
+                        </InfoText>
                         <StyledButton variant="contained" color="secondary" onClick={() => setIsEditing(true)}>Edit Profile</StyledButton>
                     </ProfileContainer>
                 )}

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header";
 import { Box } from "@mui/material";
