@@ -94,17 +94,17 @@ const AddImageForm = () => {
       if (image) {
         // אם מדובר בעדכון תמונה
         await axios.put(`https://creativepeak-api.onrender.com/api/Image/${image.id}`, dataToSubmit);
-        alert("🎉 Image updated successfully!");
+        alert("🎉 Project updated successfully!");
       } else {
         // אם מדובר בהוספת תמונה חדשה
         await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
-        alert("🎉 Image added successfully!");
+        alert("🎉 Project added successfully!");
       }
 
       reset(); // לאפס את הטופס לאחר ההגשה
     } catch (error) {
       console.error("❌ Upload failed", error);
-      alert("Error uploading image. Please try again later.");
+      alert("Error uploading project. Please try again later.");
     } finally {
       setLoading(false);
     }

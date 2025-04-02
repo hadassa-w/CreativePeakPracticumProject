@@ -100,25 +100,65 @@ export default function DesignerDetailsForm() {
 
     const onSubmit = async (data: DesignerDetails) => {
         setLoading(true);
+        const token = localStorage.getItem("token");
         const designerData = { ...data, userId };
+    
+        console.log("🔵 Submitting data:", designerData);
+    
+        if (!token) {
+            alert("⚠️ Authentication token is missing!");
+            setLoading(false);
+            return;
+        }
+    
         try {
+            let response;
             if (designerDetails) {
-                await axios.put(`https://creativepeak-api.onrender.com/api/DesignerDetails/${designerDetails.id}`, designerData);
-                alert("🎉 Details updated successfully!");
+                console.log("🟡 Updating existing designer details...");
+                response = await axios.put(
+                    `https://creativepeak-api.onrender.com/api/DesignerDetails/${designerDetails.id}`,
+                    designerData,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
             } else {
-                await axios.post("https://creativepeak-api.onrender.com/api/DesignerDetails", designerData);
-                alert("🎉 Designer details submitted successfully!");
+                console.log("🟢 Creating new designer details...");
+                response = await axios.post(
+                    "https://creativepeak-api.onrender.com/api/DesignerDetails",
+                    designerData,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
             }
-            setDesignerDetails(designerData);
+    
+            console.log("✅ Response from server:", response.data);
+            alert("🎉 Details saved successfully!");
+    
+            // 🔄 שליפת הנתונים מחדש
+            console.log("🔄 Fetching updated data...");
+            const updatedResponse = await axios.get(
+                "https://creativepeak-api.onrender.com/api/DesignerDetails",
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+    
+            const updatedData = updatedResponse.data.find((d: DesignerDetails) => d.userId === userId);
+            console.log("🔄 Updated data:", updatedData);
+    
+            setDesignerDetails(updatedData || null);
             setIsEditing(false);
-        } catch (error) {
-            console.error("❌ Submission failed", error);
-            alert("Error submitting designer details.");
+    
+        } catch (error: any) {
+            console.error("❌ Error submitting data:", error);
+    
+            if (error.response) {
+                console.error("🔴 Server response:", error.response.data);
+                alert(`Error: ${error.response.data.message || "Failed to save details."}`);
+            } else {
+                alert("❌ Network error. Please check your connection.");
+            }
         } finally {
             setLoading(false);
         }
     };
-
+        
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
             <ContentBox>
