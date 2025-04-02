@@ -137,7 +137,6 @@ function Register({ setIsLoggedIn }: RegisterProps) {
             formData.fullname.trim() !== "" &&
             formData.email.trim() !== "" &&
             formData.password.trim() !== "" &&
-            formData.password.length >= 6 &&
             formData.phone.trim() !== "" &&
         );
     };
