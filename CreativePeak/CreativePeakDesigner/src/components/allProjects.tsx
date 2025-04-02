@@ -4,7 +4,7 @@ import { Box, Typography, CircularProgress, Card, CardMedia, CardContent, Button
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
 import { Add, Edit, Delete } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 const ContentBox = styled(Box)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",

@@ -48,7 +48,6 @@ interface User {
 
 const CategoriesList = () => {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [images, setImages] = useState<Image[]>([]);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState<number | null>(null);
     const userId = parseInt(localStorage.getItem("userId") || "0", 10);
@@ -73,19 +72,28 @@ const CategoriesList = () => {
     };
 
     const handleDelete = async (categoryId: number) => {
+        console.log("Clicked delete for category:", categoryId); // בדיקה אם הכפתור באמת נקלט
+        const confirmed = window.confirm("Are you sure you want to delete this category (When you delete a category, all projects in it are also deleted)?");
+
+        if (!confirmed) return; // אם המשתמש לחץ על "Cancel" – הפונקציה תעצור כאן
+
         setDeleting(categoryId);
+
         try {
+            console.log("Deleting category:", categoryId);
             await axios.delete(`https://creativepeak-api.onrender.com/api/Category/${categoryId}`);
-            setCategories(categories.filter((category) => category.id !== categoryId));
+
+            setCategories((prevCategories) => prevCategories.filter((category) => category.id !== categoryId));
             alert("Category deleted successfully");
-            await axios.get("https://creativepeak-api.onrender.com/api/Image")
-                .then((response) => {
-                    const Images = response.data.filter((image: Image) => image.user.id == userId);
-                    setImages(Images);
-                    images.map((image: Image) => {
-                        axios.delete(`https://creativepeak-api.onrender.com/api/Image/${image.id}`);
-                    })
-                })
+
+            const response = await axios.get("https://creativepeak-api.onrender.com/api/Image");
+            const userImages = response.data.filter((image: Image) => image.user.id === userId);
+
+            await Promise.all(
+                userImages.map((image: Image) => axios.delete(`https://creativepeak-api.onrender.com/api/Image/${image.id}`))
+            );
+
+            console.log("Deleted all images related to the category.");
         } catch (error) {
             console.error("Error deleting category:", error);
             alert("Error deleting category. Please try again.");
