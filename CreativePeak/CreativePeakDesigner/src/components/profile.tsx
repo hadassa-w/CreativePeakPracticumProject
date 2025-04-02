@@ -123,7 +123,7 @@ export default function DesignerDetailsForm() {
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>✏️ Designer Details</Typography>
-                <Typography variant="h6" sx={{ fontSize: "20px", mb: 3 }}>please enter your business information.</Typography>
+                <Typography variant="h6" sx={{ fontSize: "20px", mb: 3 }}>Please enter your business information.</Typography>
                 {loading ? (
                     <CircularProgress />
                 ) : isEditing || !designerDetails ? (
