@@ -125,7 +125,9 @@ const CategoriesList = () => {
                 {loading ? (
                     <CircularProgress />
                 ) : categories.length === 0 ? (
-                    <Typography>No categories found.</Typography>
+                    <Typography sx={{ color: "gray" }}>
+                        No categories found.
+                    </Typography>
                 ) : (
                     <CategoryList>
                         {categories.map((category) => (

@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useLocation } from "react-router-dom"; // הוספת useLocation
-import FileUploader from "../AWS/s3Image";
+import FileUploader from "../AWS/s3AddImage";
 
 const ContentBox = styled(Container)({
   backgroundColor: "rgba(255, 255, 255, 0.9)",

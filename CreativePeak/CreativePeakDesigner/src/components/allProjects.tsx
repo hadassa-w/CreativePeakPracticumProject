@@ -63,39 +63,24 @@ export default function ImageGallery() {
 
                 setImages(filteredImages);
                 setCategories(filteredCategories);
-
-                // console.log("Images:", filteredImages);
-                // console.log("Categories:", filteredCategories);
             })
             .catch(error => {
                 console.error("Error while retrieving data:", error);
             })
             .finally(() => {
-                setLoading(false); // הפסק טעינה רק אחרי שהכל נטען
+                setLoading(false);
             });
     }, [userId]);
 
-    // פונקציה לעיבוד התאריך לפורמט של חודש/יום/שנה
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // הוספת 0 לפני חודש אם צריך
-        const day = date.getDate().toString().padStart(2, '0'); // הוספת 0 לפני יום אם צריך
-        const year = date.getFullYear();
-
-        return `${month}/${day}/${year}`; // פורמט MM/DD/YYYY
-    };
-
     const handleEdit = (image: Image) => {
-        // העבר לכתובת של דף העריכה עם מזהה התמונה
         navigate("/addProject", { state: { image } });
-        // window.location.href = `/editProject/${imageId}`;
     };
 
     const handleDelete = (imageId: number) => {
         if (window.confirm("Are you sure you want to delete this project?")) {
             axios.delete(`https://creativepeak-api.onrender.com/api/Image/${imageId}`)
                 .then(() => {
-                    setImages(images.filter((image) => image.id !== imageId)); // עדכון הממשק לאחר מחיקה
+                    setImages(prevImages => prevImages.filter((image) => image.id !== imageId));
                     alert("Project deleted successfully!");
                 })
                 .catch((error) => {
@@ -106,95 +91,62 @@ export default function ImageGallery() {
     };
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "100vh",
-                padding: "30px",
-            }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
                     🖼️ Project Gallery
                 </Typography>
-
-                {/* כפתור הוספת פרויקט */}
                 <Link to="/addProject" style={{ textDecoration: "none" }}>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        sx={{
-                            marginTop: 3,
-                            textTransform: "none",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                            borderRadius: "10px",
-                            padding: "10px 20px",
-                            transition: "0.3s",
-                            "&:hover": {
-                                transform: "scale(1.05)",
-                            },
-                        }}
-                    >
+                    <Button variant="contained" color="secondary" sx={{ marginTop: 3, textTransform: "none", fontSize: "16px", fontWeight: "bold", borderRadius: "10px", padding: "10px 20px", transition: "0.3s", "&:hover": { transform: "scale(1.05)" } }}>
                         <Add /> Add project
                     </Button>
                 </Link>
-
                 <br /><br />
                 {loading ? (
                     <CircularProgress />
                 ) : (
-                    categories.map((category) => {
-                        const categoryImages = images.filter((img) => img.category.id == category.id);
-                        if (categoryImages.length === 0) return null; // אם אין תמונות לקטגוריה, לא להציג אותה
-
-                        return (
-                            <Box key={category.id} sx={{ mb: 4 }}>
-                                <Typography variant="h2" sx={{ fontWeight: "bold", color: "#333", mb: 2, fontSize: "30px" }}>
-                                    {category.categoryName}
-                                </Typography>
-                                <Typography variant="h6" sx={{ color: "#333", mb: 2, fontSize: "25px" }}>
-                                    {category.description}
-                                </Typography>
-                                {categoryImages.map((image) => (
-                                    <Card key={image.id} sx={{ maxWidth: 300, margin: "auto" }}>
-                                        <CardMedia component="img" height="200" image={image.linkURL} alt={image.fileName} />
-                                        <CardContent>
-                                            <Typography variant="body1" sx={{ fontWeight: "bold" }}>{image.fileName}</Typography>
-                                            <Typography variant="body2" color="text.secondary">{image.description}</Typography>
-                                            <Typography variant="body2" sx={{ color: "gray", fontFamily: "monospace", mb: 2, fontSize: "12px" }}>
-                                                Create at: {formatDate(image.createdAt)}
-                                                <br />
-                                                Update at: {formatDate(image.updatedAt)}
-                                            </Typography>
-                                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                                <Button
-                                                    variant="outlined"
-                                                    color="primary"
-                                                    size="small"
-                                                    sx={{ borderRadius: "10px" }}
-                                                    onClick={() => handleEdit(image)}
-                                                >
-                                                    <Edit /> Edit
-                                                </Button>
-                                                <Button
-                                                    variant="outlined"
-                                                    color="error"
-                                                    size="small"
-                                                    sx={{ borderRadius: "10px" }}
-                                                    onClick={() => handleDelete(image.id)}
-                                                >
-                                                    <Delete /> Delete
-                                                </Button>
-                                            </Box>
-                                        </CardContent>
-                                    </Card>
-                                ))}
-                            </Box>
-                        );
-                    })
+                    images.length === 0 ? (
+                        <Typography sx={{ color: "gray" }}>
+                            No projects available. <br />Add a new project to get started!
+                        </Typography>
+                    ) : (
+                        categories.map((category) => {
+                            const categoryImages = images.filter((img) => img.category.id == category.id);
+                            if (categoryImages.length === 0) return null;
+                            return (
+                                <Box key={category.id} sx={{ mb: 4 }}>
+                                    <Typography variant="h2" sx={{ fontWeight: "bold", color: "#333", mb: 2, fontSize: "30px" }}>
+                                        {category.categoryName}
+                                    </Typography>
+                                    <Typography variant="h6" sx={{ color: "#333", mb: 2, fontSize: "25px" }}>
+                                        {category.description}
+                                    </Typography>
+                                    {categoryImages.map((image) => (
+                                        <Card key={image.id} sx={{ maxWidth: 300, margin: "auto" }}>
+                                            <CardMedia component="img" height="200" image={image.linkURL} alt={image.fileName} />
+                                            <CardContent>
+                                                <Typography variant="body1" sx={{ fontWeight: "bold" }}>{image.fileName}</Typography>
+                                                <Typography variant="body2" color="text.secondary">{image.description}</Typography>
+                                                <Typography variant="body2" sx={{ color: "gray", fontFamily: "monospace", mb: 2, fontSize: "12px" }}>
+                                                    Create at: {new Date(image.createdAt).toLocaleDateString()}
+                                                    <br />
+                                                    Update at: {new Date(image.updatedAt).toLocaleDateString()}
+                                                </Typography>
+                                                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                                    <Button variant="outlined" color="primary" size="small" sx={{ borderRadius: "10px" }} onClick={() => handleEdit(image)}>
+                                                        <Edit /> Edit
+                                                    </Button>
+                                                    <Button variant="outlined" color="error" size="small" sx={{ borderRadius: "10px" }} onClick={() => handleDelete(image.id)}>
+                                                        <Delete /> Delete
+                                                    </Button>
+                                                </Box>
+                                            </CardContent>
+                                        </Card>
+                                    ))}
+                                </Box>
+                            );
+                        })
+                    )
                 )}
             </ContentBox>
         </Box>
