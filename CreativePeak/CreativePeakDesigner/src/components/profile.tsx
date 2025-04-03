@@ -105,40 +105,40 @@ export default function DesignerDetailsForm() {
         setLoading(true);
         const token = localStorage.getItem("token");
         const designerData = { ...data, userId };
-
+    
         if (!token) {
             alert("⚠️ Authentication token is missing!");
             setLoading(false);
             return;
         }
-
+    
         try {
-            let response = null;
             if (designerDetails) {
-                response = await axios.put(
+                await axios.put(
                     `https://creativepeak-api.onrender.com/api/DesignerDetails/${designerDetails.id}`,
                     designerData,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
             } else {
-                response = await axios.post(
+                await axios.post(
                     "https://creativepeak-api.onrender.com/api/DesignerDetails",
                     designerData,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
             }
-
+    
             alert("🎉 Details saved successfully!");
-
+    
+            // קריאה לעדכון פרטי המעצב לאחר שמירה
             const updatedResponse = await axios.get(
                 "https://creativepeak-api.onrender.com/api/DesignerDetails",
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-
+    
             const updatedData = updatedResponse.data.find((d: DesignerDetails) => d.userId === userId);
             setDesignerDetails(updatedData || null);
             setIsEditing(false);
-
+    
         } catch (error) {
             console.error("❌ Error submitting data:", error);
             alert("❌ Failed to save details.");
@@ -146,7 +146,7 @@ export default function DesignerDetailsForm() {
             setLoading(false);
         }
     };
-
+    
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
             <ContentBox>
