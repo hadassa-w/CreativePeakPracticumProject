@@ -56,7 +56,7 @@ function Welcome() {
                     variant="contained"
                     color="secondary"
                     startIcon={<FolderOpenIcon />}
-                    onClick={() => navigate("/allCategory")} // 👈 ניווט לעמוד "Add Project"
+                    onClick={() => navigate("/allCategories")} // 👈 ניווט לעמוד "Add Project"
                 >
                     All categories
                 </StyledButton>
