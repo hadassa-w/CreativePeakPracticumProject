@@ -77,7 +77,9 @@ interface DesignerDetails {
 }
 
 export default function DesignerDetailsForm() {
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<DesignerDetails>();
+    const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm<DesignerDetails>({
+        mode: "onChange", // נוודא שהטופס יתעדכן בזמן אמת
+    });
     const [loading, setLoading] = useState(true);
     const [designerDetails, setDesignerDetails] = useState<DesignerDetails | null>(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -104,8 +106,6 @@ export default function DesignerDetailsForm() {
         const token = localStorage.getItem("token");
         const designerData = { ...data, userId };
 
-        console.log("🔵 Submitting data:", designerData);
-
         if (!token) {
             alert("⚠️ Authentication token is missing!");
             setLoading(false);
@@ -115,14 +115,12 @@ export default function DesignerDetailsForm() {
         try {
             let response;
             if (designerDetails) {
-                console.log("🟡 Updating existing designer details...");
                 response = await axios.put(
                     `https://creativepeak-api.onrender.com/api/DesignerDetails/${designerDetails.id}`,
                     designerData,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
             } else {
-                console.log("🟢 Creating new designer details...");
                 response = await axios.post(
                     "https://creativepeak-api.onrender.com/api/DesignerDetails",
                     designerData,
@@ -130,31 +128,20 @@ export default function DesignerDetailsForm() {
                 );
             }
 
-            console.log("✅ Response from server:", response.data);
             alert("🎉 Details saved successfully!");
 
-            // 🔄 שליפת הנתונים מחדש
-            console.log("🔄 Fetching updated data...");
             const updatedResponse = await axios.get(
                 "https://creativepeak-api.onrender.com/api/DesignerDetails",
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
             const updatedData = updatedResponse.data.find((d: DesignerDetails) => d.userId === userId);
-            console.log("🔄 Updated data:", updatedData);
-
             setDesignerDetails(updatedData || null);
             setIsEditing(false);
 
-        } catch (error: any) {
+        } catch (error) {
             console.error("❌ Error submitting data:", error);
-
-            if (error.response) {
-                console.error("🔴 Server response:", error.response.data);
-                alert(`Error: ${error.response.data.message || "Failed to save details."}`);
-            } else {
-                alert("❌ Network error. Please check your connection.");
-            }
+            alert("❌ Failed to save details.");
         } finally {
             setLoading(false);
         }
@@ -169,14 +156,14 @@ export default function DesignerDetailsForm() {
                 ) : isEditing || !designerDetails ? (
                     <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                         <Typography variant="h6" sx={{ fontSize: "20px", mb: 3 }}>Please enter your business information.</Typography>
-                        <TextField label="Full Name" {...register("fullName", { required: "Full Name is required" })} fullWidth error={!!errors.fullName} helperText={errors.fullName?.message?.toString()} required/>
+                        <TextField label="Full Name" {...register("fullName", { required: "Full Name is required" })} fullWidth error={!!errors.fullName} helperText={errors.fullName?.message?.toString()} required />
                         <TextField label="Website Address" {...register("addressSite")} fullWidth />
-                        <TextField label="Email" type="email" {...register("email", { required: "Email is required" })} fullWidth error={!!errors.email} helperText={errors.email?.message?.toString()} required/>
-                        <TextField label="Phone" type="tel" {...register("phone", { required: "Phone is required" })} fullWidth error={!!errors.phone} helperText={errors.phone?.message?.toString()} required/>
-                        <TextField label="Years of Experience" type="number" {...register("yearsExperience", { required: "Years of experience is required", min: 0 })} fullWidth error={!!errors.yearsExperience} helperText={errors.yearsExperience?.message?.toString()} required/>
-                        <TextField label="Minimum Price (₪)" type="number" {...register("priceRangeMin", { required: "Minimum price is required", min: 0 })} fullWidth error={!!errors.priceRangeMin} helperText={errors.priceRangeMin?.message?.toString()} required/>
-                        <TextField label="Maximum Price (₪)" type="number" {...register("priceRangeMax", { required: "Maximum price is required", min: 0 })} fullWidth error={!!errors.priceRangeMax} helperText={errors.priceRangeMax?.message?.toString()} required/>
-                        <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading}>
+                        <TextField label="Email" type="email" {...register("email", { required: "Email is required" })} fullWidth error={!!errors.email} helperText={errors.email?.message?.toString()} required />
+                        <TextField label="Phone" type="tel" {...register("phone", { required: "Phone is required" })} fullWidth error={!!errors.phone} helperText={errors.phone?.message?.toString()} required />
+                        <TextField label="Years of Experience" type="number" {...register("yearsExperience", { required: "Years of experience is required", min: 0 })} fullWidth error={!!errors.yearsExperience} helperText={errors.yearsExperience?.message?.toString()} required />
+                        <TextField label="Minimum Price (₪)" type="number" {...register("priceRangeMin", { required: "Minimum price is required", min: 0 })} fullWidth error={!!errors.priceRangeMin} helperText={errors.priceRangeMin?.message?.toString()} required />
+                        <TextField label="Maximum Price (₪)" type="number" {...register("priceRangeMax", { required: "Maximum price is required", min: 0 })} fullWidth error={!!errors.priceRangeMax} helperText={errors.priceRangeMax?.message?.toString()} required />
+                        <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={!isValid || loading}>
                             {loading ? <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> : "Save"}
                         </StyledButton>
                     </form>
