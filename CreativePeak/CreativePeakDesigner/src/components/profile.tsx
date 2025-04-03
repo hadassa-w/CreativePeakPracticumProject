@@ -113,7 +113,7 @@ export default function DesignerDetailsForm() {
         }
 
         try {
-            let response;
+            let response = null;
             if (designerDetails) {
                 response = await axios.put(
                     `https://creativepeak-api.onrender.com/api/DesignerDetails/${designerDetails.id}`,
