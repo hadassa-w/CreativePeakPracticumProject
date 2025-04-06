@@ -15,10 +15,10 @@ import {
   FormHelperText
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { useLocation, useNavigate } from "react-router-dom"; // הוספת useLocation
+import { useLocation, useNavigate } from "react-router-dom";
 import FileUploader from "../AWS/s3AddImage";
 import Category from "../models/category";
-import ProjectForm from "../models/ProjectForm";
+import ProjectForm from "../models/project";
 
 const ContentBox = styled(Container)({
   backgroundColor: "rgba(255, 255, 255, 0.9)",
