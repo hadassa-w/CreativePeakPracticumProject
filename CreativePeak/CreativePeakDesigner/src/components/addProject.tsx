@@ -15,8 +15,10 @@ import {
   FormHelperText
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { useLocation } from "react-router-dom"; // הוספת useLocation
+import { useLocation, useNavigate } from "react-router-dom"; // הוספת useLocation
 import FileUploader from "../AWS/s3AddImage";
+import Category from "../models/category";
+import ProjectForm from "../models/ProjectForm";
 
 const ContentBox = styled(Container)({
   backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -39,28 +41,14 @@ const StyledButton = styled(Button)({
   }
 });
 
-interface FormData {
-  fileName: string;
-  description: string;
-  linkURL: string;
-  userId: number;
-  categoryId: number;
-}
-
-interface Category {
-  id: number;
-  categoryName: string;
-  DesignerDetailsId: number;
-  userId: number;
-}
-
 const AddImageForm = () => {
-  const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm<FormData>();
+  const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm<ProjectForm>();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
   const location = useLocation();
   const { image } = location.state || {}; // גישה למידע שהתמונה שנשלחה
+  const navigate = useNavigate();
 
   // Fetch categories inside useEffect
   useEffect(() => {
@@ -81,7 +69,7 @@ const AddImageForm = () => {
     }
   }, [userId, image, setValue]);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: ProjectForm) => {
     setLoading(true);
 
     try {
@@ -101,6 +89,7 @@ const AddImageForm = () => {
         alert("🎉 Project added successfully!");
       }
 
+      navigate("/allProjects"); // נווט לדף כל הפרויקטים
       reset(); // לאפס את הטופס לאחר ההגשה
     } catch (error) {
       console.error("❌ Upload failed", error);

@@ -5,6 +5,8 @@ import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
 import { Add, Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import Image from "../models/image";
+import Category from "../models/category";
 
 const ContentBox = styled(Box)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -16,34 +18,7 @@ const ContentBox = styled(Box)({
     margin: "auto",
 });
 
-interface Image {
-    id: number;
-    fileName: string;
-    description: string;
-    linkURL: string;
-    updatedAt: string;
-    createdAt: string;
-    category: Category;
-    user: User;
-}
-
-interface User {
-    id: number;
-    fullName: string;
-    email: string;
-    phone: string;
-    address: number;
-}
-
-interface Category {
-    id: number;
-    categoryName: string;
-    description: string;
-    DesignerDetailsId: number;
-    userId: number;
-}
-
-export default function ImageGallery() {
+function ImageGallery() {
     const [images, setImages] = useState<Image[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
@@ -152,3 +127,5 @@ export default function ImageGallery() {
         </Box>
     );
 }
+
+export default ImageGallery;

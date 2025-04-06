@@ -4,6 +4,8 @@ import { styled } from "@mui/system";
 import { Edit, Delete, Add } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Category from "../models/category";
+import Image from "../models/image";
 
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -18,33 +20,6 @@ const CategoryList = styled(List)({
     paddingTop: 0,
     paddingBottom: 0,
 });
-
-interface Category {
-    id: number;
-    categoryName: string;
-    description: string;
-    userId: number;
-}
-
-interface Image {
-    id: number;
-    fileName: string;
-    description: string;
-    linkURL: string;
-    updatedAt: string;
-    createdAt: string;
-    category: Category;
-    user: User;
-}
-
-
-interface User {
-    id: number;
-    fullName: string;
-    email: string;
-    phone: string;
-    address: number;
-}
 
 const CategoriesList = () => {
     const [categories, setCategories] = useState<Category[]>([]);

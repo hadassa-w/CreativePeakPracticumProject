@@ -6,6 +6,7 @@ import {
     Paper
 } from "@mui/material";
 import { styled } from "@mui/system";
+import DesignerDetails from "../models/designerDetails";
 
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -63,18 +64,6 @@ const InfoText = styled(Typography)({
     gap: "10px",
     marginBottom: "12px",
 });
-
-interface DesignerDetails {
-    id: number;
-    fullName: string;
-    addressSite: string;
-    email: string;
-    phone: string;
-    yearsExperience: number;
-    priceRangeMin: number;
-    priceRangeMax: number;
-    userId: number;
-}
 
 export default function DesignerDetailsForm() {
     const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm<DesignerDetails>({

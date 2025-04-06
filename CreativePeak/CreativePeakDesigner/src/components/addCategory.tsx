@@ -4,6 +4,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button, TextField, Box, Typography, Container, CircularProgress } from "@mui/material";
 import { styled } from "@mui/system";
+import Category from "../models/category";
 
 const ContentBox = styled(Container)({
   backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -24,19 +25,13 @@ const StyledButton = styled(Button)({
   "&:hover": { transform: "scale(1.05)" },
 });
 
-interface CategoryFormData {
-  categoryName: string;
-  description: string;
-  userId: number;
-}
-
 const AddCategoryForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const categoryToEdit = location.state?.category || null;
   const userId = parseInt(localStorage.getItem("userId") || "0", 10);
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<CategoryFormData>();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<Category>();
   const [loading, setLoading] = useState(false);
 
   // כאשר נכנסים לדף עם קטגוריה לעריכה, נטען את הערכים לטופס
@@ -49,7 +44,7 @@ const AddCategoryForm = () => {
     }
   }, [categoryToEdit, reset]);
 
-  const onSubmit = async (data: CategoryFormData) => {
+  const onSubmit = async (data: Category) => {
     setLoading(true);
     const dataToSubmit = { ...data, userId };
 

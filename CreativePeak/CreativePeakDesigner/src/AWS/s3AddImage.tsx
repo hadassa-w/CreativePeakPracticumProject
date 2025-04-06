@@ -72,7 +72,7 @@ const FileUploader = () => {
         },
       });
   
-      // 🔥 שלב 3: יצירת URL קבוע של התמונה ושמירה
+      // שלב 3: יצירת URL קבוע של התמונה ושמירה
       const s3BaseUrl = "https://s3.us-east-1.amazonaws.com/creativepeakproject.aws-testpnoren/";
       const imageUrl = `${s3BaseUrl}${encodeURIComponent(file.name)}`;
   
