@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useLocation, useNavigate } from "react-router-dom";
-import FileUploader from "../AWS/s3AddImage";
+import FileUploader from "../AWS/s3Image";
 import Category from "../models/category";
 import ProjectForm from "../models/project";
 
@@ -42,7 +42,7 @@ const StyledButton = styled(Button)({
 });
 
 const AddImageForm = () => {
-  const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm<ProjectForm>();
+  const { register, handleSubmit, reset,watch, formState: { errors }, setValue } = useForm<ProjectForm>();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
@@ -130,7 +130,7 @@ const AddImageForm = () => {
             <Select
               {...register("categoryId", { required: "Category is required" })}
               onChange={(e) => setValue("categoryId", Number(e.target.value))}
-              defaultValue=""
+              value={watch("categoryId") || ""} // חשוב!
             >
               <MenuItem value="" disabled>Select a category</MenuItem>
               {categories.map((category) => (
@@ -142,7 +142,7 @@ const AddImageForm = () => {
             <FormHelperText>{errors.categoryId?.message?.toString()}</FormHelperText>
           </FormControl>
 
-          <FileUploader />
+          <FileUploader existingImageUrl={image?.linkURL} />
           <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={loading}>
             {loading ? (
               <>

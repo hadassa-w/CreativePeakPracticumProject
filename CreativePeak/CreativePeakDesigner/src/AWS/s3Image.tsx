@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, CircularProgress, Typography, Container } from '@mui/material';
 import { styled } from '@mui/system';
@@ -37,11 +37,22 @@ const ImagePreview = styled('img')({
   borderRadius: '8px',
 });
 
-const FileUploader = () => {
+interface FileUploaderProps {
+  existingImageUrl?: string;
+}
+
+const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
   const [file, setFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(existingImageUrl || null);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (existingImageUrl) {
+      setImagePreview(existingImageUrl);
+      localStorage.setItem("linkURL", existingImageUrl);
+    }
+  }, [existingImageUrl]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -53,17 +64,15 @@ const FileUploader = () => {
 
   const handleUpload = async () => {
     if (!file) return;
-  
+
     setLoading(true);
-  
+
     try {
-      // שלב 1: בקשת Presigned URL מהשרת
       const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
         params: { fileName: file.name }
       });
       const presignedUrl = response.data.url;
-  
-      // שלב 2: העלאת הקובץ ל-S3
+
       await axios.put(presignedUrl, file, {
         headers: { 'Content-Type': file.type },
         onUploadProgress: (progressEvent) => {
@@ -71,13 +80,13 @@ const FileUploader = () => {
           setProgress(percent);
         },
       });
-  
-      // שלב 3: יצירת URL קבוע של התמונה ושמירה
+
       const s3BaseUrl = "https://s3.us-east-1.amazonaws.com/creativepeakproject.aws-testpnoren/";
       const imageUrl = `${s3BaseUrl}${encodeURIComponent(file.name)}`;
-  
-      localStorage.setItem("linkURL", imageUrl); // שמירת ה-URL הקבוע
-  
+
+      localStorage.setItem("linkURL", imageUrl);
+      setImagePreview(imageUrl);
+
       alert("✅ File uploaded successfully!");
     } catch (error) {
       console.error("❌ Error uploading file:", error);
@@ -86,44 +95,42 @@ const FileUploader = () => {
       setLoading(false);
     }
   };
-  
+
+  // מוצא שם קובץ מה-URL אם לא נבחר קובץ
+  const fileNameToShow = file
+    ? file.name
+    : imagePreview
+    ? decodeURIComponent(imagePreview.split('/').pop() || '')
+    : 'No file selected';
+
   return (
     <UploadContainer>
       <label htmlFor="file-input">
-        <StyledButton
-          variant="contained"
-          color="secondary"
-          component="span"
-          fullWidth
-        >
+        <StyledButton variant="contained" color="secondary" component="span" fullWidth>
           Choose a file in .png format only
         </StyledButton>
       </label>
 
-      <FileInput
-        id="file-input"
-        type="file"
-        onChange={handleFileChange}
-        accept="image/*"
-      />
+      <FileInput id="file-input" type="file" onChange={handleFileChange} accept="image/*" />
 
-      <Typography variant="body1" sx={{ marginTop: '10px', color: '#555' }}>
-        {file ? file.name : 'No file selected'}
-      </Typography>
+      {!imagePreview && (
+        <Typography variant="body1" sx={{ marginTop: '10px', color: '#555' }}>
+          {fileNameToShow}
+        </Typography>
+      )}
+
+      {imagePreview && <ImagePreview src={imagePreview} alt="Preview" />}
 
       {imagePreview && (
-        <ImagePreview src={imagePreview} alt="Preview" />
+        <Typography variant="body1" sx={{ marginTop: '10px', color: '#555' }}>
+          {fileNameToShow}
+        </Typography>
       )}
 
       {loading ? (
         <CircularProgress size={40} sx={{ marginTop: '20px' }} />
       ) : (
-        <StyledButton
-          variant="contained"
-          color="secondary"
-          onClick={handleUpload}
-          disabled={progress === 100 || !file}
-        >
+        <StyledButton variant="contained" color="secondary" onClick={handleUpload} disabled={!file}>
           Upload file
         </StyledButton>
       )}

@@ -63,8 +63,8 @@ namespace CreativePeak.API.Controllers
                 User = await _userService.GetByIdAsync(image.UserId),
                 CategoryId = image.CategoryId,
                 Category = await _categoryService.GetByIdAsync(image.CategoryId),
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
             };
             var imageNew = await _imageService.AddAsync(newImage);
             var imageDTO = _mapper.Map<ImageDTO>(imageNew);
@@ -91,7 +91,7 @@ namespace CreativePeak.API.Controllers
             existingImage.User = await _userService.GetByIdAsync(image.UserId);
             existingImage.CategoryId = image.CategoryId;
             existingImage.Category = await _categoryService.GetByIdAsync(image.CategoryId);
-            existingImage.UpdatedAt = DateTime.UtcNow;
+            existingImage.UpdatedAt = DateTime.Now;
 
             await _imageService.UpdateAsync(id, existingImage);
             return NoContent();

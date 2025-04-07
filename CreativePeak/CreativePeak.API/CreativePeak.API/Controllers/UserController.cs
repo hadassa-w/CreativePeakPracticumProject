@@ -52,8 +52,8 @@ namespace CreativePeak.API.Controllers
                 Password = passwordService.HashPassword(user.Password),
                 Phone = user.Phone,
                 Address = user.Address,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
                 Role = "Graphic designer"
             };
             var userNew = await _userService.AddAsync(newUser);
@@ -80,7 +80,7 @@ namespace CreativePeak.API.Controllers
             existingUser.Password = passwordService.HashPassword(user.Password);
             existingUser.Phone = user.Phone;
             existingUser.Address = user.Address;
-            existingUser.UpdatedAt = DateTime.UtcNow;
+            existingUser.UpdatedAt = DateTime.Now;
 
             await _userService.UpdateAsync(id, existingUser);
             return NoContent();

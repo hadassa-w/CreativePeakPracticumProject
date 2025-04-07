@@ -21,6 +21,25 @@ const CategoryList = styled(List)({
     paddingBottom: 0,
 });
 
+// כפתור הוספה מעוצב
+const AddCategoryButton = styled(Button)({
+    textTransform: "none",
+    fontSize: "16px",
+    fontWeight: "bold",
+    borderRadius: "10px",
+    padding: "10px 20px",
+    transition: "0.3s",
+    backgroundColor: "#9C27B0", // צבע סגלגל
+    color: "white",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    "&:hover": {
+      transform: "scale(1.05)",
+      backgroundColor: "#7B1FA2", // צבע כהה יותר בעת ריחוף
+    },
+});
+
 const CategoriesList = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
@@ -84,17 +103,12 @@ const CategoriesList = () => {
                     🏷️ Categories
                 </Typography>
 
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    sx={{
-                        marginTop: 3, textTransform: "none", fontSize: "16px", fontWeight: "bold", borderRadius: "10px", padding: "10px 20px", transition: "0.3s",
-                        "&:hover": { transform: "scale(1.05)" },
-                    }}
-                    onClick={() => navigate("/addCategory")}
-                >
-                    <Add /> Add Category
-                </Button>
+                {/* כפתור הוספה המעודכן */}
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <AddCategoryButton variant="contained" onClick={() => navigate("/addCategory")}>
+                        <Add /> Add category
+                    </AddCategoryButton>
+                </Box>
 
                 <br /><br />
                 {loading ? (
