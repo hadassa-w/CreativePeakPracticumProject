@@ -7,12 +7,15 @@ import {
     Card,
     CardMedia,
     CardContent,
+    Dialog,
+    IconButton,
     Button,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
 import { Add, Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
 import Image from "../models/image";
 import Category from "../models/category";
 
@@ -94,6 +97,7 @@ function ImageGallery() {
     const [images, setImages] = useState<Image[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
     const navigate = useNavigate();
 
@@ -142,6 +146,14 @@ function ImageGallery() {
                     alert("Error deleting project. Please try again later.");
                 });
         }
+    };
+
+    const handleImageClick = (url: string) => {
+        setSelectedImage(url);
+    };
+
+    const handleCloseDialog = () => {
+        setSelectedImage(null);
     };
 
     return (
@@ -221,6 +233,8 @@ function ImageGallery() {
                                                 height="200"
                                                 image={image.linkURL}
                                                 alt={image.fileName}
+                                                onClick={() => handleImageClick(image.linkURL)}
+                                                sx={{ cursor: "pointer", borderRadius: "6px" }}
                                             />
                                             <CardContent>
                                                 <Typography variant="body1" sx={{ fontWeight: "bold" }}>
@@ -275,6 +289,41 @@ function ImageGallery() {
                     })
                 )}
             </ContentBox>
+            {/* דיאלוג להצגת תמונה מוגדלת עם כפתור סגירה */}
+            <Dialog
+                open={!!selectedImage}
+                onClose={handleCloseDialog}
+                maxWidth="md"
+                fullWidth
+                sx={{ '& .MuiDialog-paper': { position: 'relative', borderRadius: 3 } }}
+            >
+                <IconButton
+                    aria-label="close"
+                    onClick={handleCloseDialog}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                        zIndex: 10,
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+
+                <Box sx={{ p: 2, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <img
+                        src={selectedImage ?? ""}
+                        alt="Enlarged"
+                        style={{
+                            maxWidth: "100%",
+                            maxHeight: "80vh",
+                            objectFit: "contain",
+                            borderRadius: "10px",
+                        }}
+                    />
+                </Box>
+            </Dialog>
         </Box>
     );
 }
