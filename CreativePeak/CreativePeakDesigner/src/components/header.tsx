@@ -1,206 +1,230 @@
 import * as React from "react";
 import {
-   AppBar, Box, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Button, Typography,
-}
-   from "@mui/material";
+  AppBar, Box, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Button, Typography, Popover,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp"; // אייקון יציאה
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { Link, useNavigate } from "react-router-dom";
 import Cartoon_logo from "../images/Cartoon_logoE.png";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import LoginIcon from "@mui/icons-material/Login"; // אייקון כניסה
-import PersonAddIcon from "@mui/icons-material/PersonAdd"; // אייקון הרשמה
-import PersonIcon from "@mui/icons-material/Person"; // אייקון לפרופיל
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonIcon from "@mui/icons-material/Person";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 const drawerWidth = 240;
 
 interface HeaderProps {
-   isLoggedIn: boolean;
-   setIsLoggedIn: (isLoggedIn: boolean) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
-// סוג לפריטי הניווט כדי להימנע משגיאות TypeScript
 interface NavItem {
-   name: string;
-   path: string;
-   icon?: React.ReactNode;
-   action?: () => void;
+  name: string;
+  path: string;
+  icon?: React.ReactNode;
+  action?: () => void;
 }
 
-function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
-   let name = localStorage.getItem("userName") || "?"; // אם אין שם, נשתמש ב"?" כברירת מחדל
+export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
 
-   const [mobileOpen, setMobileOpen] = React.useState(false);
-   const navigate = useNavigate();
+  const name = localStorage.getItem("userName") || "?";
 
-   const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
-   const handleLogOut = () => {
-      setIsLoggedIn(false);
-      localStorage.removeItem("isLoggedIn"); // אופציונלי: הסרת נתוני ההתחברות
-      localStorage.removeItem("userName"); // אופציונלי: הסרת נתוני ההתחברות
-      localStorage.removeItem("userId"); // אופציונלי: הסרת נתוני ההתחברות
-      localStorage.removeItem("token"); // אופציונלי: הסרת נתוני ההתחברות
-      navigate("/");
-   };
+  const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
 
-   // תפריט למשתמש מחובר
-   const loggedInNavItems: NavItem[] = [
-      { name: "Profile", path: "/profile", icon: <PersonIcon /> }, // כפתור פרופיל
-      { name: "All projects", path: "/allProjects", icon: <FolderOpenIcon /> },
-      { name: "All categories", path: "/allCategories", icon: <FolderOpenIcon /> },
-      { name: "Log Out", path: "/", icon: <ExitToAppIcon />, action: handleLogOut },
-   ];
+  const handleLogOut = () => {
+    setIsLoggedIn(false);
+    localStorage.clear();
+    navigate("/");
+  };
 
-   // תפריט למשתמש שלא מחובר
-   const loggedOutNavItems: NavItem[] = [
-      { name: "Log In", path: "/login", icon: <LoginIcon /> },
-      { name: "Sign Up", path: "/register", icon: <PersonAddIcon /> },
-   ];
+  const loggedInNavItems: NavItem[] = [
+    { name: "Designer details", path: "/designerDetails", icon: <PersonIcon /> },
+    { name: "All projects", path: "/allProjects", icon: <FolderOpenIcon /> },
+    { name: "All categories", path: "/allCategories", icon: <FolderOpenIcon /> },
+    { name: "Log Out", path: "/", icon: <ExitToAppIcon />, action: handleLogOut },
+  ];
 
-   // בוחר את התפריט המתאים
-   const navItems = isLoggedIn ? loggedInNavItems : loggedOutNavItems;
+  const loggedOutNavItems: NavItem[] = [
+    { name: "Log In", path: "/login", icon: <LoginIcon /> },
+    { name: "Sign Up", path: "/register", icon: <PersonAddIcon /> },
+  ];
 
-   // תפריט צדדי (למובייל)
-   const drawer = (
-      <Box onClick={handleDrawerToggle} sx={{ textAlign: "center", py: 2 }}>
-         <Typography variant="h6" sx={{ my: 2, fontWeight: "bold", color: "#673AB7" }}>
-            Menu
-         </Typography>
-         <Divider />
-         <List>
-            {navItems.map(({ name, path, icon, action }) => (
-               <ListItem key={name} disablePadding>
-                  <ListItemButton
-                     component={Link}
-                     to={path}
-                     onClick={action || undefined} // בדיקה האם יש action
-                     sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        textAlign: "center",
-                        color: "black",
-                        py: 1.5,
-                        "&:hover": { backgroundColor: "#f5f5f5" },
-                     }}
-                  >
-                     {icon} <ListItemText primary={name} sx={{ ml: 1 }} />
-                  </ListItemButton>
-               </ListItem>
-            ))}
-         </List>
-      </Box>
-   );
+  const navItems = isLoggedIn ? loggedInNavItems : loggedOutNavItems;
 
-   return (
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "profile-popover" : undefined;
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center", py: 2 }}>
+      <Typography variant="h6" sx={{ my: 2, fontWeight: "bold", color: "#673AB7" }}>
+        Menu
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map(({ name, path, icon, action }) => (
+          <ListItem key={name} disablePadding>
+            <ListItemButton
+              component={Link}
+              to={path}
+              onClick={action}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                color: "black",
+                py: 1.5,
+                "&:hover": { backgroundColor: "#f5f5f5" },
+              }}
+            >
+              {icon} <ListItemText primary={name} sx={{ ml: 1 }} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  return (
+    <>
       <Box sx={{ display: "flex" }}>
-         <CssBaseline />
-         <AppBar
-            component="nav"
-            sx={{ backgroundColor: "#ffffff", boxShadow: "0px 2px 10px rgba(0,0,0,0.1)" }}
-         >
-            <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-               {/* תפריט מובייל */}
-               <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  edge="start"
-                  onClick={handleDrawerToggle}
-                  sx={{ display: { sm: "none" }, color: "#333" }}
-               >
-                  <MenuIcon />
-               </IconButton>
+        <CssBaseline />
+        <AppBar
+          component="nav"
+          sx={{ backgroundColor: "#ffffff", boxShadow: "0px 2px 10px rgba(0,0,0,0.1)" }}
+        >
+          <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ display: { sm: "none" }, color: "#333" }}
+            >
+              <MenuIcon />
+            </IconButton>
 
-               {/* לוגו */}
-               <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Box
-                     component="img"
-                     src={Cartoon_logo}
-                     alt="logo"
-                     sx={{ height: 70, maxHeight: "100%", cursor: "pointer" }}
-                     onClick={() => {
-                        handleLogOut();
-                     }}
-                  />
-               </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box
+                component="img"
+                src={Cartoon_logo}
+                alt="logo"
+                sx={{ height: 70, cursor: "pointer" }}
+                onClick={handleLogOut}
+              />
+            </Box>
 
-               {/* ניווט בדסקטופ */}
-               <Box
+            <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center", flexGrow: 1, justifyContent: "center" }}>
+              {navItems.map(({ name, path, icon, action }) => (
+                <Button
+                  key={path}
+                  component={Link}
+                  to={path}
+                  onClick={action}
                   sx={{
-                     display: { xs: "none", sm: "flex" },
-                     alignItems: "center",
-                     justifyContent: "center",
-                     flexGrow: 1,
-                  }}
-               >
-                  {navItems.map(({ name, path, icon, action }) => (
-                     <Button
-                        key={path}
-                        component={Link}
-                        to={path}
-                        onClick={action || undefined} // בדיקה האם יש action
-                        sx={{
-                           display: "flex",
-                           alignItems: "center",
-                           color: "#673AB7",
-                           fontWeight: "bold",
-                           textTransform: "none",
-                           mx: 2,
-                           transition: "0.3s",
-                           "&:hover": { color: "#512DA8", backgroundColor: "rgba(103, 58, 183, 0.1)" },
-                        }}
-                     >
-                        {icon} <Typography sx={{ ml: 1 }}>{name}</Typography>
-                     </Button>
-                  ))}
-               </Box>
-               <Box
-                  sx={{
-                     fontFamily: "revert",
-                     fontSize: "25px",
-                     borderRadius: "50%",
-                     backgroundColor: "rgb(255, 255, 255)",
-                     width: "45px",
-                     height: "45px",
-                     position: "",
-                     display: "flex",
-                     justifyContent: "center",
-                     alignItems: "center",
-                     border: "solid 3px #673AB7",
-                     minWidth: "45px", // לא קטן מזה
-                     minHeight: "45px",
-                     maxWidth: "45px", // לא גדול מזה
-                     maxHeight: "45px",
-                     transition: "box-shadow 0.2s ease", // תנועה רכה לשינוי הצל
-                     "&:hover": {
-                        boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.35)"
+                    display: "flex",
+                    alignItems: "center",
+                    color: "#673AB7",
+                    fontWeight: "bold",
+                    textTransform: "none",
+                    mx: 2,
+                    transition: "0.3s",
+                    "&:hover": {
+                      color: "#512DA8",
+                      backgroundColor: "rgba(103, 58, 183, 0.1)",
                     },
                   }}
-               >
-                  <p style={{ color: "black" }}>
-                     {name?.charAt(0)}
-                  </p>
-               </Box>
-            </Toolbar>
-         </AppBar>
+                >
+                  {icon}
+                  <Typography sx={{ ml: 1 }}>{name}</Typography>
+                </Button>
+              ))}
+            </Box>
 
-         {/* תפריט צדדי למובייל */}
-         <nav>
-            <Drawer
-               variant="temporary"
-               open={mobileOpen}
-               onClose={handleDrawerToggle}
-               ModalProps={{ keepMounted: true }}
-               sx={{
-                  display: { xs: "block", sm: "none" },
-                  "& .MuiDrawer-paper": { width: drawerWidth, boxShadow: "4px 0px 10px rgba(0,0,0,0.1)" },
-               }}
+            <Box
+              sx={{
+                fontFamily: "revert",
+                fontSize: "25px",
+                borderRadius: "50%",
+                backgroundColor: "white",
+                width: "45px",
+                height: "45px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "solid 3px #673AB7",
+                cursor: "pointer",
+                "&:hover": {
+                  boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.35)",
+                },
+              }}
+              onClick={handleClick}
             >
-               {drawer}
-            </Drawer>
-         </nav>
-      </Box>
-   );
-}
+              <Typography sx={{ color: "black", fontSize: "20px" }}>{name.charAt(0)}</Typography>
+            </Box>
+          </Toolbar>
+        </AppBar>
 
-export default Header;
+        <nav>
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{ keepMounted: true }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": { width: drawerWidth, boxShadow: "4px 0px 10px rgba(0,0,0,0.1)" },
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </nav>
+      </Box>
+
+      {/* ✅ פופאובר מתוקן שלא עובר aria-hidden */}
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      //   disableEnforceFocus
+      //   container={document.body}
+      >
+        <Box sx={{ padding: 2, width: 200, textAlign: "center" }}>
+          <Typography variant="h6" sx={{ color: "#673AB7" }}>{name}</Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{ mt: 2, textTransform: "none" }}
+            onClick={() => {
+              handleClose();
+              navigate("/profile");
+            }}
+          >
+            <ManageAccountsIcon sx={{ mr: 1 }} /> My profile
+          </Button>
+        </Box>
+      </Popover>
+    </>
+  );
+}

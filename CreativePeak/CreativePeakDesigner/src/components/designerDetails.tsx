@@ -184,7 +184,7 @@ export default function DesignerDetailsForm() {
                             <Label as="span">💰 Price Range:</Label>
                             <Value as="span">{designerDetails.priceRangeMin}₪ - {designerDetails.priceRangeMax}₪</Value>
                         </InfoText>
-                        <StyledButton variant="contained" color="secondary" onClick={() => setIsEditing(true)}>Edit Profile</StyledButton>
+                        <StyledButton variant="contained" color="secondary" onClick={() => setIsEditing(true)}>Edit designer details</StyledButton>
                     </ProfileContainer>
                 )}
             </ContentBox>

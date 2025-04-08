@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CreativePeak.Core.IServices;
@@ -67,7 +68,7 @@ namespace CreativePeak.API.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] UserPostModel user)
+        public async Task<ActionResult> UpdateWithPassword(int id, [FromBody] UserPostModel user)
         {
             var existingUser = await _userService.GetByIdAsync(id);
             if (existingUser == null)
@@ -77,7 +78,27 @@ namespace CreativePeak.API.Controllers
 
             existingUser.FullName = user.FullName;
             existingUser.Email = user.Email;
-            existingUser.Password = passwordService.HashPassword(user.Password);
+            existingUser.Phone = user.Phone;
+            existingUser.Address = user.Address;
+            existingUser.UpdatedAt = DateTime.Now;
+
+            existingUser.Password = passwordService.HashPassword(user.Password); // עדכון סיסמה
+
+            await _userService.UpdateAsync(id, existingUser);
+            return NoContent();
+        }
+
+        [HttpPut("updateWithoutPassword/{id}")]
+        public async Task<ActionResult> UpdateWithoutPassword(int id, [FromBody] UserWithoutPasswordPostModel user)
+        {
+            var existingUser = await _userService.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            existingUser.FullName = user.FullName;
+            existingUser.Email = user.Email;
             existingUser.Phone = user.Phone;
             existingUser.Address = user.Address;
             existingUser.UpdatedAt = DateTime.Now;
@@ -85,6 +106,7 @@ namespace CreativePeak.API.Controllers
             await _userService.UpdateAsync(id, existingUser);
             return NoContent();
         }
+
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
