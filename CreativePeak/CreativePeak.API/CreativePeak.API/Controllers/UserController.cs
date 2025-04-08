@@ -75,12 +75,18 @@ namespace CreativePeak.API.Controllers
                 return NotFound();
             }
 
+            // עדכון פרטים בלי סיסמה
             existingUser.FullName = user.FullName;
             existingUser.Email = user.Email;
-            existingUser.Password = passwordService.HashPassword(user.Password);
             existingUser.Phone = user.Phone;
             existingUser.Address = user.Address;
             existingUser.UpdatedAt = DateTime.Now;
+
+            // עדכון סיסמה רק אם היא הועברה בבקשה
+            if (!string.IsNullOrEmpty(user.Password))
+            {
+                existingUser.Password = passwordService.HashPassword(user.Password);
+            }
 
             await _userService.UpdateAsync(id, existingUser);
             return NoContent();
