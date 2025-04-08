@@ -212,17 +212,19 @@ export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
       >
         <Box sx={{ padding: 2, width: 200, textAlign: "center" }}>
           <Typography variant="h6" sx={{ color: "#673AB7" }}>{name}</Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{ mt: 2, textTransform: "none" }}
-            onClick={() => {
-              handleClose();
-              navigate("/profile");
-            }}
-          >
-            <ManageAccountsIcon sx={{ mr: 1 }} /> My profile
-          </Button>
+          {name !== "?" && (
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ mt: 2, textTransform: "none" }}
+              onClick={() => {
+                handleClose();
+                navigate("/profile");
+              }}
+            >
+              <ManageAccountsIcon sx={{ mr: 1 }} /> My profile
+            </Button>
+          )}
         </Box>
       </Popover>
     </>
