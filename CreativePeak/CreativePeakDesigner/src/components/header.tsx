@@ -207,8 +207,8 @@ export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
           vertical: "top",
           horizontal: "center",
         }}
-      //   disableEnforceFocus
-      //   container={document.body}
+        disableEnforceFocus
+        container={document.body}
       >
         <Box sx={{ padding: 2, width: 200, textAlign: "center" }}>
           <Typography variant="h6" sx={{ color: "#673AB7" }}>{name}</Typography>

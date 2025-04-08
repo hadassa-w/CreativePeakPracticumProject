@@ -165,7 +165,7 @@ export default function EditUserForm() {
                                 <Value as="span">{userData.address}</Value>
                             </InfoText>
                         )}
-                        <StyledButton variant="contained" color="secondary" onClick={() => setIsEditing(true)}>Edit Profile</StyledButton>
+                        <StyledButton variant="contained" color="secondary" onClick={() => setIsEditing(true)}>Edit profile</StyledButton>
                     </ProfileContainer>
                 )}
             </ContentBox>
