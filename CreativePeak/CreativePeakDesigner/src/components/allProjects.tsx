@@ -210,6 +210,10 @@ function ImageGallery() {
                                                 margin: "auto",
                                                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
                                                 padding: "10px",
+                                                transition: "transform 0.3s ease",
+                                                "&:hover": {
+                                                    transform: "scale(1.05)",
+                                                },
                                             }}
                                         >
                                             <CardMedia
