@@ -106,15 +106,11 @@ function Register({ setIsLoggedIn }: RegisterProps) {
             const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Register", formData);
 
             if (response.status === 200 && response.data.token) {
-                console.log("🎉 Registration successful:", response.data);
-
                 setIsLoggedIn(true);
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("userId", response.data.user.id);
                 localStorage.setItem("userName", response.data.user.fullName);
-
-                console.log(response.data.user);
 
                 navigate("/profile");
             } else {

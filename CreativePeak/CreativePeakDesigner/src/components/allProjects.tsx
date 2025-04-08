@@ -10,12 +10,15 @@ import {
     Dialog,
     IconButton,
     Button,
+    TextField,
+    MenuItem,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
 import { Add, Edit, Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from '@mui/icons-material/Search';
 import Image from "../models/image";
 import Category from "../models/category";
 
@@ -71,8 +74,8 @@ const DeleteButton = styled(StyledButton)({
 const ContentBox = styled(Box)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: "12px",
-    padding: "40px",
-    maxWidth: "900px",
+    padding: "20px",
+    maxWidth: "1500px",
     textAlign: "center",
     boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
     margin: "auto",
@@ -98,6 +101,9 @@ function ImageGallery() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+
     const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
     const navigate = useNavigate();
 
@@ -156,6 +162,12 @@ function ImageGallery() {
         setSelectedImage(null);
     };
 
+    const filteredImages = images.filter((image) => {
+        const matchesSearch = image.fileName.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = selectedCategoryId === null || image.category.id === selectedCategoryId;
+        return matchesSearch && matchesCategory;
+    });
+
     return (
         <Box
             sx={{
@@ -177,119 +189,153 @@ function ImageGallery() {
                 {/* כפתור הוספה במרכז */}
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
                     <Link to="/addProject" style={{ textDecoration: "none" }}>
-                        <AddButton variant="contained" sx={{ marginTop: 3 }}>
+                        <AddButton variant="contained" sx={{ marginTop: 3 ,margin:"20px"}}>
                             <Add /> Add project
                         </AddButton>
                     </Link>
                 </Box>
 
-                <br /><br />
-                {loading ? (
-                    <CircularProgress />
-                ) : images.length === 0 ? (
-                    <Typography sx={{ color: "gray" }}>
-                        No projects available. <br />
-                        Add a new project to get started!
-                    </Typography>
-                ) : (
-                    categories.map((category) => {
-                        const categoryImages = images.filter(
-                            (img) => img.category.id == category.id
-                        );
-                        if (categoryImages.length === 0) return null;
-                        return (
-                            <Box key={category.id} sx={{ mb: 4 }}>
-                                {/* שם הקטגוריה מעוצב */}
-                                <CategoryTitle>{category.categoryName}</CategoryTitle>
-                                {/* תיאור הקטגוריה מעוצב */}
-                                <CategoryDescription>{category.description}</CategoryDescription>
+                {/* שורת חיפוש וסינון */}
+                <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 3 }}>
+                    <ContentBox>
+                        <Typography
+                            variant="h5"
+                            sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}
+                        >
+                            <SearchIcon sx={{marginRight:"10px"}}/>
+                            Filter projects
+                        </Typography>
+                        <TextField
+                            label="Search by name"
+                            variant="outlined"
+                            size="small"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            sx={{ margin: "10px" }}
+                        />
+                        <TextField
+                            select
+                            label="Filter by category"
+                            variant="outlined"
+                            size="small"
+                            value={selectedCategoryId ?? ""}
+                            onChange={(e) => setSelectedCategoryId(e.target.value === "" ? null : Number(e.target.value))}
+                            sx={{ minWidth: 200, margin: "10px" }}
+                        >
+                            <MenuItem value="">All</MenuItem>
+                            {categories.map((cat) => (
+                                <MenuItem key={cat.id} value={cat.id}>
+                                    {cat.categoryName}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </ContentBox>
+                </Box>
 
-                                {/* הצגת התמונות בצורה של כרטיסים אחד ליד השני */}
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        flexWrap: "wrap",
-                                        justifyContent: "center",
-                                        gap: "20px",
-                                    }}
-                                >
-                                    {categoryImages.map((image) => (
-                                        <Card
-                                            key={image.id}
-                                            sx={{
-                                                maxWidth: 320,
-                                                minWidth: 250,
-                                                margin: "auto",
-                                                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                                                padding: "10px",
-                                                transition: "transform 0.3s ease",
-                                                "&:hover": {
-                                                    transform: "scale(1.05)",
-                                                },
-                                            }}
-                                        >
-                                            <CardMedia
-                                                component="img"
-                                                height="200"
-                                                image={image.linkURL}
-                                                alt={image.fileName}
-                                                onClick={() => handleImageClick(image.linkURL)}
-                                                sx={{ cursor: "pointer", borderRadius: "6px" }}
-                                            />
-                                            <CardContent>
-                                                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                                                    {image.fileName}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {image.description}
-                                                </Typography>
-                                                <Typography
-                                                    variant="body2"
-                                                    sx={{
-                                                        color: "gray",
-                                                        fontFamily: "monospace",
-                                                        mb: 2,
-                                                        fontSize: "12px",
-                                                    }}
-                                                >
-                                                    Create at:{" "}
-                                                    {new Date(image.createdAt).toLocaleDateString()}
-                                                    <br />
-                                                    Update at:{" "}
-                                                    {new Date(image.updatedAt).toLocaleDateString()}
-                                                </Typography>
-                                                <Box
-                                                    sx={{
-                                                        display: "flex",
-                                                        justifyContent: "space-between",
-                                                        mt: 1,
-                                                    }}
-                                                >
-                                                    <EditButton
-                                                        variant="outlined"
-                                                        size="small"
-                                                        onClick={() => handleEdit(image)}
+                {
+                    loading ? (
+                        <CircularProgress />
+                    ) : filteredImages.length === 0 ? (
+                        <Typography sx={{ color: "gray" }}>
+                            No projects available. <br />
+                            Add a new project to get started!
+                        </Typography>
+                    ) : (
+                        categories.map((category) => {
+                            const categoryImages = filteredImages.filter(
+                                (img) => img.category.id == category.id
+                            );
+                            if (categoryImages.length === 0) return null;
+                            return (
+                                <Box key={category.id} sx={{ mb: 4 }}>
+                                    <CategoryTitle>{category.categoryName}</CategoryTitle>
+                                    <CategoryDescription>{category.description}</CategoryDescription>
+
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexWrap: "wrap",
+                                            justifyContent: "center",
+                                            gap: "20px",
+                                        }}
+                                    >
+                                        {categoryImages.map((image) => (
+                                            <Card
+                                                key={image.id}
+                                                sx={{
+                                                    maxWidth: 320,
+                                                    minWidth: 250,
+                                                    margin: "auto",
+                                                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                                                    padding: "10px",
+                                                    transition: "transform 0.3s ease",
+                                                    "&:hover": {
+                                                        transform: "scale(1.05)",
+                                                    },
+                                                }}
+                                            >
+                                                <CardMedia
+                                                    component="img"
+                                                    height="200"
+                                                    image={image.linkURL}
+                                                    alt={image.fileName}
+                                                    onClick={() => handleImageClick(image.linkURL)}
+                                                    sx={{ cursor: "pointer", borderRadius: "6px" }}
+                                                />
+                                                <CardContent>
+                                                    <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                                                        {image.fileName}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        {image.description}
+                                                    </Typography>
+                                                    <Typography
+                                                        variant="body2"
+                                                        sx={{
+                                                            color: "gray",
+                                                            fontFamily: "monospace",
+                                                            mb: 2,
+                                                            fontSize: "12px",
+                                                        }}
                                                     >
-                                                        <Edit fontSize="small" /> Edit
-                                                    </EditButton>
-                                                    <DeleteButton
-                                                        variant="outlined"
-                                                        size="small"
-                                                        onClick={() => handleDelete(image.id)}
+                                                        Create at:{" "}
+                                                        {new Date(image.createdAt).toLocaleDateString()}
+                                                        <br />
+                                                        Update at:{" "}
+                                                        {new Date(image.updatedAt).toLocaleDateString()}
+                                                    </Typography>
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            justifyContent: "space-between",
+                                                            mt: 1,
+                                                        }}
                                                     >
-                                                        <Delete fontSize="small" /> Delete
-                                                    </DeleteButton>
-                                                </Box>
-                                            </CardContent>
-                                        </Card>
-                                    ))}
+                                                        <EditButton
+                                                            variant="outlined"
+                                                            size="small"
+                                                            onClick={() => handleEdit(image)}
+                                                        >
+                                                            <Edit fontSize="small" /> Edit
+                                                        </EditButton>
+                                                        <DeleteButton
+                                                            variant="outlined"
+                                                            size="small"
+                                                            onClick={() => handleDelete(image.id)}
+                                                        >
+                                                            <Delete fontSize="small" /> Delete
+                                                        </DeleteButton>
+                                                    </Box>
+                                                </CardContent>
+                                            </Card>
+                                        ))}
+                                    </Box>
                                 </Box>
-                            </Box>
-                        );
-                    })
-                )}
-            </ContentBox>
-            {/* דיאלוג להצגת תמונה מוגדלת עם כפתור סגירה */}
+                            );
+                        })
+                    )
+                }
+            </ContentBox >
             <Dialog
                 open={!!selectedImage}
                 onClose={handleCloseDialog}
@@ -324,7 +370,7 @@ function ImageGallery() {
                     />
                 </Box>
             </Dialog>
-        </Box>
+        </Box >
     );
 }
 

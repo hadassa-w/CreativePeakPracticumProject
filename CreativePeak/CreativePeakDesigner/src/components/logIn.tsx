@@ -73,13 +73,11 @@ function LogIn({ setIsLoggedIn }: LoginProps) {
 
         // 🔹 ניסיון התחברות
         try {
-            console.log("Sending login request:", { username, password });
             const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Login", {
                 UserName: username,
                 Password: password,
             });
 
-            console.log("Login successful:", response.data);
             localStorage.setItem("isLoggedIn", "true");
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userId", response.data.user.id);

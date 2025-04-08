@@ -66,7 +66,6 @@ const CategoriesList = () => {
     };
 
     const handleDelete = async (categoryId: number) => {
-        console.log("Clicked delete for category:", categoryId); // בדיקה אם הכפתור באמת נקלט
         const confirmed = window.confirm("Are you sure you want to delete this category (When you delete a category, all projects in it are also deleted)?");
 
         if (!confirmed) return; // אם המשתמש לחץ על "Cancel" – הפונקציה תעצור כאן
@@ -74,7 +73,6 @@ const CategoriesList = () => {
         setDeleting(categoryId);
 
         try {
-            console.log("Deleting category:", categoryId);
             await axios.delete(`https://creativepeak-api.onrender.com/api/Category/${categoryId}`);
 
             setCategories((prevCategories) => prevCategories.filter((category) => category.id !== categoryId));
@@ -87,7 +85,6 @@ const CategoriesList = () => {
                 userImages.map((image: Image) => axios.delete(`https://creativepeak-api.onrender.com/api/Image/${image.id}`))
             );
 
-            console.log("Deleted all images related to the category.");
         } catch (error) {
             console.error("Error deleting category:", error);
             alert("Error deleting category. Please try again.");
