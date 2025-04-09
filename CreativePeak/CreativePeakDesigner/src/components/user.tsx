@@ -81,7 +81,7 @@ export default function EditUserForm() {
     const [userData, setUserData] = useState<UserData | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const userId = parseInt(localStorage.getItem("userId") || "0", 10);
-
+    
     useEffect(() => {
         const token = localStorage.getItem("token");
         axios.get(`https://creativepeak-api.onrender.com/api/User/${userId}`, {

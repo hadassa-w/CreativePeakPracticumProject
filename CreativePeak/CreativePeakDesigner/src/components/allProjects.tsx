@@ -189,48 +189,54 @@ function ImageGallery() {
                 {/* כפתור הוספה במרכז */}
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
                     <Link to="/addProject" style={{ textDecoration: "none" }}>
-                        <AddButton variant="contained" sx={{ marginTop: 3 ,margin:"20px"}}>
+                        <AddButton variant="contained" sx={{ marginTop: 3, margin: "20px" }}>
                             <Add /> Add project
                         </AddButton>
                     </Link>
                 </Box>
 
-                {/* שורת חיפוש וסינון */}
-                <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 3 }}>
-                    <ContentBox>
-                        <Typography
-                            variant="h5"
-                            sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}
-                        >
-                            <SearchIcon sx={{marginRight:"10px"}}/>
-                            Filter projects
-                        </Typography>
-                        <TextField
-                            label="Search by name"
-                            variant="outlined"
-                            size="small"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            sx={{ margin: "10px" }}
-                        />
-                        <TextField
-                            select
-                            label="Filter by category"
-                            variant="outlined"
-                            size="small"
-                            value={selectedCategoryId ?? ""}
-                            onChange={(e) => setSelectedCategoryId(e.target.value === "" ? null : Number(e.target.value))}
-                            sx={{ minWidth: 200, margin: "10px" }}
-                        >
-                            <MenuItem value="">All</MenuItem>
-                            {categories.map((cat) => (
-                                <MenuItem key={cat.id} value={cat.id}>
-                                    {cat.categoryName}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </ContentBox>
-                </Box>
+                {/* שורת חיפוש וסינון - תוצג רק אם יש תמונות */}
+                {filteredImages.length > 0 && (
+                    <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 3 }}>
+                        <ContentBox>
+                            <Typography
+                                variant="h5"
+                                sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}
+                            >
+                                <SearchIcon sx={{ marginRight: "10px" }} />
+                                Filter projects
+                            </Typography>
+                            <TextField
+                                label="Search by name"
+                                variant="outlined"
+                                size="small"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                sx={{ margin: "10px" }}
+                            />
+                            <TextField
+                                select
+                                label="Filter by category"
+                                variant="outlined"
+                                size="small"
+                                value={selectedCategoryId ?? ""}
+                                onChange={(e) =>
+                                    setSelectedCategoryId(
+                                        e.target.value === "" ? null : Number(e.target.value)
+                                    )
+                                }
+                                sx={{ minWidth: 200, margin: "10px" }}
+                            >
+                                <MenuItem value="">All</MenuItem>
+                                {categories.map((cat) => (
+                                    <MenuItem key={cat.id} value={cat.id}>
+                                        {cat.categoryName}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </ContentBox>
+                    </Box>
+                )}
 
                 {
                     loading ? (
