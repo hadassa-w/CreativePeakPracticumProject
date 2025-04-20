@@ -183,7 +183,7 @@ function ImageGallery() {
                     variant="h4"
                     sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}
                 >
-                    🖼️ Project Gallery
+                    🖼️ Projects Gallery
                 </Typography>
 
                 {/* כפתור הוספה במרכז */}
@@ -195,8 +195,7 @@ function ImageGallery() {
                     </Link>
                 </Box>
 
-                {/* שורת חיפוש וסינון - תוצג רק אם יש תמונות */}
-                {filteredImages.length > 0 && (
+                {categories.length > 0 && (
                     <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 3 }}>
                         <ContentBox>
                             <Typography

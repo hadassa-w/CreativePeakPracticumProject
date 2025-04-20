@@ -6,6 +6,7 @@ import {
     Paper
 } from "@mui/material";
 import { styled } from "@mui/system";
+import User from "../models/user";
 
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -64,21 +65,13 @@ const InfoText = styled(Typography)({
     marginBottom: "12px",
 });
 
-interface UserData {
-    fullName: string;
-    email: string;
-    password: string;
-    phone: string;
-    address: string;
-}
-
 export default function EditUserForm() {
-    const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm<UserData>({
+    const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm<User>({
         mode: "onChange",
     });
 
     const [loading, setLoading] = useState(true);
-    const [userData, setUserData] = useState<UserData | null>(null);
+    const [userData, setUserData] = useState<User | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const userId = parseInt(localStorage.getItem("userId") || "0", 10);
     
@@ -90,13 +83,13 @@ export default function EditUserForm() {
             .then(response => {
                 const data = response.data;
                 setUserData(data);
-                Object.keys(data).forEach(key => setValue(key as keyof UserData, data[key as keyof UserData]));
+                Object.keys(data).forEach(key => setValue(key as keyof User, data[key as keyof User]));
             })
             .catch(error => console.error("Error fetching user data", error))
             .finally(() => setLoading(false));
     }, [userId, setValue]);
 
-    const onSubmit = async (data: UserData) => {
+    const onSubmit = async (data: User) => {
         setLoading(true);
         const token = localStorage.getItem("token");
     

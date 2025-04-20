@@ -6,11 +6,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { Link, useNavigate } from "react-router-dom";
 import Cartoon_logo from "../images/Cartoon_logoE.png";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonIcon from "@mui/icons-material/Person";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import FolderIcon from '@mui/icons-material/Folder';
+import CategoryIcon from '@mui/icons-material/Category';
+// import HomeIcon from '@mui/icons-material/Home';
 
 const drawerWidth = 240;
 
@@ -42,9 +44,10 @@ export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
   };
 
   const loggedInNavItems: NavItem[] = [
+    // { name: "Home", path: "/welcome", icon: <HomeIcon /> },
     { name: "Designer details", path: "/designerDetails", icon: <PersonIcon /> },
-    { name: "All projects", path: "/allProjects", icon: <FolderOpenIcon /> },
-    { name: "All categories", path: "/allCategories", icon: <FolderOpenIcon /> },
+    { name: "Projects", path: "/projects", icon: <FolderIcon /> },
+    { name: "Categories", path: "/categories", icon: <CategoryIcon /> },
     { name: "Log Out", path: "/", icon: <ExitToAppIcon />, action: handleLogOut },
   ];
 
@@ -134,6 +137,8 @@ export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
                   to={path}
                   onClick={action}
                   sx={{
+                    padding:"10px 20px",
+                    borderRadius:"20px",
                     display: "flex",
                     alignItems: "center",
                     color: "#673AB7",

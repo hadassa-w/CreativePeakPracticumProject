@@ -9,9 +9,9 @@ import LogIn from "./components/logIn";
 import Register from "./components/register";
 import AddProject from "./components/addProject";
 import DesignerDetailsForm from "./components/designerDetails";
-import ImageGallery from "./components/allProjects";
+import ImageGallery from "./components/projects";
 import AddCategoryForm from "./components/addCategory";
-import CategoriesList from "./components/allCategories";
+import CategoriesList from "./components/categories";
 import EditUserForm from "./components/user";
 
 function App() {
@@ -29,10 +29,10 @@ function App() {
           <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/addProject" element={<AddProject />} />
-          <Route path="/allProjects" element={<ImageGallery />} />
-          <Route path="/designerDetails" element={<DesignerDetailsForm />} />
           <Route path="/addCategory" element={<AddCategoryForm />} />
-          <Route path="/allCategories" element={<CategoriesList />} />
+          <Route path="/projects" element={<ImageGallery />} />
+          <Route path="/categories" element={<CategoriesList />} />
+          <Route path="/designerDetails" element={<DesignerDetailsForm />} />
           <Route path="/profile" element={<EditUserForm />} />
         </Routes>
       </Box>

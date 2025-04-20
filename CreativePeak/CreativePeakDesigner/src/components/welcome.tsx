@@ -1,18 +1,22 @@
 import { Box, Typography, Container, Button } from "@mui/material";
 import { styled } from "@mui/system";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import { useNavigate } from "react-router-dom"; // 👈 ייבוא הפונקציה לניווט
+import FolderIcon from '@mui/icons-material/Folder';
+import CategoryIcon from '@mui/icons-material/Category';
+import { useNavigate } from "react-router-dom"; // ייבוא הפונקציה לניווט
 
 // עיצוב הכפתור
 const StyledButton = styled(Button)({
     textTransform: "none",
     fontSize: "15px",
     fontWeight: "bold",
-    borderRadius: "10px",
-    padding: "10px 20px",
+    borderRadius: "100px",
+    padding: "10px 30px",
+    marginLeft: "20px",
+    marginRight: "20px",
     transition: "0.3s",
     "&:hover": {
         transform: "scale(1.05)",
+        border: "solid 1px #673AB7",
     },
 });
 
@@ -20,7 +24,7 @@ const StyledButton = styled(Button)({
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: "10px",
-    padding: "40px",
+    padding: "50px",
     maxWidth: "600px",
 });
 
@@ -39,7 +43,7 @@ function Welcome() {
 
             <Typography variant="body1" sx={{ color: "#555", mb: 4, fontSize: 18 }}>
                 A professional portfolio helps you attract clients and share your creativity.
-                Upload your best work, describe your design process, and let others see your unique talent!
+                <br />  Upload your best work, describe your design process, and let others see your unique talent!
             </Typography>
 
             {/* כפתורים לניווט בין עמודים */}
@@ -47,21 +51,21 @@ function Welcome() {
                 <StyledButton
                     variant="outlined"
                     color="secondary"
-                    startIcon={<FolderOpenIcon />}
-                    onClick={() => navigate("/allProjects")} // 👈 ניווט לעמוד "View Portfolio"
+                    startIcon={<FolderIcon />}
+                    onClick={() => navigate("/projects")}
                 >
-                    All projects
+                    Projects
                 </StyledButton>
                 <StyledButton
-                    variant="contained"
+                    variant="outlined"
                     color="secondary"
-                    startIcon={<FolderOpenIcon />}
-                    onClick={() => navigate("/allCategories")} // 👈 ניווט לעמוד "Add Project"
+                    startIcon={<CategoryIcon />}
+                    onClick={() => navigate("/categories")}
                 >
-                    All categories
+                    Categories
                 </StyledButton>
             </Box>
-        </ContentBox>
+        </ContentBox >
     );
 }
 

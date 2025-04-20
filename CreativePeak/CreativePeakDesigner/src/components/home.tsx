@@ -10,11 +10,14 @@ const StyledButton = styled(Button)({
     textTransform: "none",
     fontSize: "15px",
     fontWeight: "bold",
-    borderRadius: "10px",
-    padding: "10px 20px",
+    borderRadius: "100px",
+    padding: "10px 30px",
+    marginLeft: "20px",
+    marginRight: "20px",
     transition: "0.3s",
     "&:hover": {
         transform: "scale(1.05)",
+        border: "solid 1px #673AB7",
     },
 });
 
@@ -44,7 +47,7 @@ function Home() {
 
             <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
                 <StyledButton
-                    variant="contained"
+                    variant="outlined"
                     color="secondary"
                     startIcon={<LoginIcon />}
                     onClick={() => navigate("/logIn")}

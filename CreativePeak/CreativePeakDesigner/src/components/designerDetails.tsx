@@ -65,7 +65,7 @@ const InfoText = styled(Typography)({
     marginBottom: "12px",
 });
 
-export default function DesignerDetailsForm() {
+function DesignerDetailsForm() {
     const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm<DesignerDetails>({
         mode: "onChange", // נוודא שהטופס יתעדכן בזמן אמת
     });
@@ -191,3 +191,5 @@ export default function DesignerDetailsForm() {
         </Box>
     );
 }
+
+export default DesignerDetailsForm;
