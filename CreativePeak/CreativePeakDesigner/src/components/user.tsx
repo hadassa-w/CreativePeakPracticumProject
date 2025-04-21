@@ -7,6 +7,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import User from "../models/user";
+import { useAuth } from "../contexts/authContext";
+import AutoSnackbar from "./snackbar";
 
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -70,11 +72,15 @@ export default function EditUserForm() {
         mode: "onChange",
     });
 
-    const [loading, setLoading] = useState(true);
-    const [userData, setUserData] = useState<User | null>(null);
+    const [loadingInitial, setLoadingInitial] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
     const [isEditing, setIsEditing] = useState(false);
-    const userId = parseInt(localStorage.getItem("userId") || "0", 10);
-    
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+    const { userId } = useAuth();
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         axios.get(`https://creativepeak-api.onrender.com/api/User/${userId}`, {
@@ -82,56 +88,65 @@ export default function EditUserForm() {
         })
             .then(response => {
                 const data = response.data;
-                setUserData(data);
+                setUser(data);
                 Object.keys(data).forEach(key => setValue(key as keyof User, data[key as keyof User]));
             })
             .catch(error => console.error("Error fetching user data", error))
-            .finally(() => setLoading(false));
+            .finally(() => setLoadingInitial(false));
     }, [userId, setValue]);
 
     const onSubmit = async (data: User) => {
-        setLoading(true);
+        setSaving(true);
         const token = localStorage.getItem("token");
-    
+
         if (!token) {
-            alert("⚠️ Authentication token is missing!");
-            setLoading(false);
+            setSnackbarMessage("⚠️ Authentication token is missing!");
+            setSnackbarSeverity("error");
+            setSnackbarOpen(true);
+            setSaving(false);
             return;
         }
-    
+
         try {
             await axios.put(
                 `https://creativepeak-api.onrender.com/api/User/updateWithoutPassword/${userId}`,
                 data,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            setUserData(data); // ✅ עדכון הסטייט המקומי כדי להציג את הנתונים החדשים
-            alert("🎉 Details updated successfully!");
-            setIsEditing(false);
+            setUser(data);
+            setSnackbarMessage("🎉 Details updated successfully!");
+            setSnackbarSeverity("success");
+            setSnackbarOpen(true);
+
+            setTimeout(() => {
+                setIsEditing(false);
+            }, 1000); // ❗ מוסיף השהייה קלה כדי לאפשר ל-snackbar להופיע קודם
         } catch (error) {
             console.error("❌ Error updating data:", error);
-            alert("❌ Failed to update details.");
+            setSnackbarMessage("❌ Failed to update details.");
+            setSnackbarSeverity("error");
+            setSnackbarOpen(true);
         } finally {
-            setLoading(false);
+            setSaving(false);
         }
     };
-    
+
     return (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
             <ContentBox>
                 <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>✏️ Profile</Typography>
-                {loading ? (
-                    <CircularProgress />
-                ) : isEditing || !userData ? (
+                {loadingInitial ? (
+                    <CircularProgress sx={{ color: "grey" }} />
+                ) : isEditing || !user ? (
                     <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                         <TextField label="Full Name" {...register("fullName", { required: "Full Name is required" })} fullWidth error={!!errors.fullName} helperText={errors.fullName?.message?.toString()} required />
                         <TextField label="Email" type="email" {...register("email", { required: "Email is required" })} fullWidth error={!!errors.email} helperText={errors.email?.message?.toString()} required />
                         <TextField label="Phone" type="tel" {...register("phone", { required: "Phone is required" })} fullWidth error={!!errors.phone} helperText={errors.phone?.message?.toString()} required />
                         <TextField label="Address" {...register("address")} fullWidth />
-                        <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={!isValid || loading}>
-                            {loading ? (
+                        <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={!isValid || saving}>
+                            {saving ? (
                                 <>
-                                    <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Saveing...
+                                    <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Saving...
                                 </>
                             ) : (
                                 "Save Changes"
@@ -142,26 +157,32 @@ export default function EditUserForm() {
                     <ProfileContainer elevation={3}>
                         <InfoText as="div">
                             <Label as="span">👤 Full Name:</Label>
-                            <Value as="span">{userData.fullName}</Value>
+                            <Value as="span">{user.fullName}</Value>
                         </InfoText>
                         <InfoText as="div">
                             <Label as="span">✉️ Email:</Label>
-                            <Value as="span">{userData.email}</Value>
+                            <Value as="span">{user.email}</Value>
                         </InfoText>
                         <InfoText as="div">
                             <Label as="span">📞 Phone:</Label>
-                            <Value as="span">{userData.phone}</Value>
+                            <Value as="span">{user.phone}</Value>
                         </InfoText>
-                        {userData.address && (
+                        {user.address && (
                             <InfoText as="div">
                                 <Label as="span">🏠 Address:</Label>
-                                <Value as="span">{userData.address}</Value>
+                                <Value as="span">{user.address}</Value>
                             </InfoText>
                         )}
                         <StyledButton variant="contained" color="secondary" onClick={() => setIsEditing(true)}>Edit profile</StyledButton>
                     </ProfileContainer>
                 )}
             </ContentBox>
+            <AutoSnackbar
+                open={snackbarOpen}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+                onClose={() => setSnackbarOpen(false)}
+            />
         </Box>
     );
 }

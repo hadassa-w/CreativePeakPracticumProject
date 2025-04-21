@@ -3,12 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|c:\\users\\user1\\documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\creativepeakproject\\creativepeak\\creativepeak.api\\creativepeak.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|solutionrelative:creativepeak.api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{60ACAB5F-2620-4C0F-8B72-59010209AA43}|CreativePeak.Core\\CreativePeak.Core.csproj|c:\\users\\user1\\documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\creativepeakproject\\creativepeak\\creativepeak.api\\creativepeak.core\\postmodels\\userwithoutpasswordpostmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{60ACAB5F-2620-4C0F-8B72-59010209AA43}|CreativePeak.Core\\CreativePeak.Core.csproj|solutionrelative:creativepeak.core\\postmodels\\userwithoutpasswordpostmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|c:\\users\\user1\\documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\creativepeakproject\\creativepeak\\creativepeak.api\\creativepeak.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DF180A4E-7348-4A09-9E1A-BCC50650E792}|CreativePeak.API\\CreativePeak.API.csproj|solutionrelative:creativepeak.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserWithoutPasswordPostModel.cs",
-              "DocumentMoniker": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.Core\\PostModels\\UserWithoutPasswordPostModel.cs",
-              "RelativeDocumentMoniker": "CreativePeak.Core\\PostModels\\UserWithoutPasswordPostModel.cs",
-              "ToolTip": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.Core\\PostModels\\UserWithoutPasswordPostModel.cs*",
-              "RelativeToolTip": "CreativePeak.Core\\PostModels\\UserWithoutPasswordPostModel.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T09:18:24.548Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UserController.cs",
-              "DocumentMoniker": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\Controllers\\UserController.cs",
-              "RelativeDocumentMoniker": "CreativePeak.API\\Controllers\\UserController.cs",
-              "ToolTip": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\Controllers\\UserController.cs*",
-              "RelativeToolTip": "CreativePeak.API\\Controllers\\UserController.cs*",
-              "ViewState": "AgIAAFcAAAAAAAAAAADwv1sAAABtAAAAAAAAAA==",
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "CreativePeak.API\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\user1\\Documents\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05E9\u05D9\u05E2\u05D5\u05E8\u05D9\u05DD\\\u05E9\u05E0\u05D4 \u05D1 \u05EA\u05E9\u05E4\u05D4\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8\u05D9\u05DD\\\u05E4\u05E8\u05E7\u05D8\u05D9\u05E7\u05D5\u05DD\\CreativePeakProject\\CreativePeak\\CreativePeak.API\\CreativePeak.API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "CreativePeak.API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAF8AAAAAAAAAAAAowH0AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T01:07:48.363Z",
+              "WhenOpened": "2025-04-15T20:29:30.545Z",
               "EditorCaption": ""
             }
           ]

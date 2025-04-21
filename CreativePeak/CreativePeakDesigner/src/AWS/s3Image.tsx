@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, CircularProgress, Typography, Container } from '@mui/material';
 import { styled } from '@mui/system';
+import AutoSnackbar from '../components/snackbar';
 
 const UploadContainer = styled(Container)({
   display: 'flex',
@@ -46,6 +47,10 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(existingImageUrl || null);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
   useEffect(() => {
     if (existingImageUrl) {
@@ -59,6 +64,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
       setImagePreview(URL.createObjectURL(selectedFile));
+      setUploaded(false); // מאפשר להעלות קובץ חדש
+      setProgress(0);
     }
   };
 
@@ -87,21 +94,26 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
       localStorage.setItem("linkURL", imageUrl);
       setImagePreview(imageUrl);
 
-      alert("✅ File uploaded successfully!");
+      setUploaded(true); // לא לאפשר העלאה חוזרת
+      setSnackbarMessage("🎉 File uploaded successfully!");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+
     } catch (error) {
       console.error("❌ Error uploading file:", error);
-      alert("File upload failed. Please try again.");
+      setSnackbarMessage("❌ File upload failed. Please try again.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     } finally {
       setLoading(false);
     }
   };
 
-  // מוצא שם קובץ מה-URL אם לא נבחר קובץ
   const fileNameToShow = file
     ? file.name
     : imagePreview
-    ? decodeURIComponent(imagePreview.split('/').pop() || '')
-    : 'No file selected';
+      ? decodeURIComponent(imagePreview.split('/').pop() || '')
+      : 'No file selected';
 
   return (
     <UploadContainer>
@@ -128,9 +140,14 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
       )}
 
       {loading ? (
-        <CircularProgress size={40} sx={{ marginTop: '20px' }} />
+        <CircularProgress size={40} sx={{ marginTop: '20px',color:"gray" }} />
       ) : (
-        <StyledButton variant="contained" color="secondary" onClick={handleUpload} disabled={!file}>
+        <StyledButton
+          variant="contained"
+          color="secondary"
+          onClick={handleUpload}
+          disabled={!file || uploaded}
+        >
           Upload file
         </StyledButton>
       )}
@@ -140,6 +157,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
           Progress: {progress}%
         </Typography>
       )}
+
+      <AutoSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+        onClose={() => setSnackbarOpen(false)}
+      />
     </UploadContainer>
   );
 };

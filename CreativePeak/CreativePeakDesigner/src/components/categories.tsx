@@ -6,6 +6,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Category from "../models/category";
 import Image from "../models/image";
+import { useAuth } from "../contexts/authContext";
+import AutoSnackbar from "./snackbar";
 
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -35,8 +37,8 @@ const AddCategoryButton = styled(Button)({
     alignItems: "center",
     gap: "6px",
     "&:hover": {
-      transform: "scale(1.05)",
-      backgroundColor: "#7B1FA2", // צבע כהה יותר בעת ריחוף
+        transform: "scale(1.05)",
+        backgroundColor: "#7B1FA2", // צבע כהה יותר בעת ריחוף
     },
 });
 
@@ -44,8 +46,11 @@ const CategoriesList = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState<number | null>(null);
-    const userId = parseInt(localStorage.getItem("userId") || "0", 10);
+    const { userId } = useAuth();
     const navigate = useNavigate();
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
     useEffect(() => {
         axios.get("https://creativepeak-api.onrender.com/api/Category")
@@ -66,23 +71,32 @@ const CategoriesList = () => {
     };
 
     const handleDelete = async (categoryId: number) => {
-        const confirmed = window.confirm("Are you sure you want to delete this category (When you delete a category, all projects in it are also deleted)?");
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this category (When you delete a category, all projects in it are also deleted)?"
+        );
 
-        if (!confirmed) return; // אם המשתמש לחץ על "Cancel" – הפונקציה תעצור כאן
+        if (!confirmed) return;
 
         setDeleting(categoryId);
 
         try {
             await axios.delete(`https://creativepeak-api.onrender.com/api/Category/${categoryId}`);
 
-            setCategories((prevCategories) => prevCategories.filter((category) => category.id !== categoryId));
-            alert("Category deleted successfully");
+            setCategories((prevCategories) =>
+                prevCategories.filter((category) => category.id !== categoryId)
+            );
+
+            setSnackbarMessage("🎉 Category deleted successfully");
+            setSnackbarSeverity("success");
+            setSnackbarOpen(true);
 
             const response = await axios.get("https://creativepeak-api.onrender.com/api/Image");
             const userImages = response.data.filter((image: Image) => image.user.id === userId);
 
             await Promise.all(
-                userImages.map((image: Image) => axios.delete(`https://creativepeak-api.onrender.com/api/Image/${image.id}`))
+                userImages.map((image: Image) =>
+                    axios.delete(`https://creativepeak-api.onrender.com/api/Image/${image.id}`)
+                )
             );
 
         } catch (error) {
@@ -109,7 +123,7 @@ const CategoriesList = () => {
 
                 <br /><br />
                 {loading ? (
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: "grey" }} />
                 ) : categories.length === 0 ? (
                     <Typography sx={{ color: "gray" }}>
                         No categories found.
@@ -124,7 +138,7 @@ const CategoriesList = () => {
                                         <Edit />
                                     </IconButton>
                                     <IconButton color="default" onClick={() => handleDelete(category.id)} disabled={deleting === category.id}>
-                                        {deleting === category.id ? <CircularProgress size={20} sx={{ color: "white" }} /> : <Delete />}
+                                        {deleting === category.id ? <CircularProgress size={20} sx={{ color: "grey" }} /> : <Delete />}
                                     </IconButton>
                                 </Box>
                             </ListItem>
@@ -132,6 +146,12 @@ const CategoriesList = () => {
                     </CategoryList>
                 )}
             </ContentBox>
+            <AutoSnackbar
+                open={snackbarOpen}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+                onClose={() => setSnackbarOpen(false)}
+            />
         </Box>
     );
 };

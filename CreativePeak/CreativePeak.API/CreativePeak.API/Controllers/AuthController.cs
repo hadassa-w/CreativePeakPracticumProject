@@ -39,23 +39,17 @@ namespace CreativePeak.API.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            // חפש את המשתמש בבסיס הנתונים
+            // מחפש את המשתמש בבסיס הנתונים
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginModel.UserName);
 
             if (user == null)
             {
-                return Unauthorized("משתמש לא נמצא");
+                return Unauthorized("The user not found.");
             }
 
-            // כעת, אחרי שהמשתמש נמצא, ניתן לבדוק את הסיסמה
+            // בדיקת הסיסמה
             bool isPasswordValid = passwordService.VerifyPassword(user.Password, loginModel.Password);
 
-            if (!isPasswordValid)
-            {
-                return Unauthorized("סיסמה לא נכונה");
-            }
-
-            // אם הגענו לכאן, הסיסמה נכונה
             //return Ok(user);
 
             if (user != null)

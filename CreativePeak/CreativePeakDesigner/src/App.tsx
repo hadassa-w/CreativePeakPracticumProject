@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header";
@@ -13,27 +12,26 @@ import ImageGallery from "./components/projects";
 import AddCategoryForm from "./components/addCategory";
 import CategoriesList from "./components/categories";
 import EditUserForm from "./components/user";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    return localStorage.getItem("token") !== null;
-  });
-
   return (
     <Router>
-      <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <Header />
       <Box component="main" sx={{ p: 3 }}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/logIn" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/addProject" element={<AddProject />} />
-          <Route path="/addCategory" element={<AddCategoryForm />} />
-          <Route path="/projects" element={<ImageGallery />} />
-          <Route path="/categories" element={<CategoriesList />} />
-          <Route path="/designerDetails" element={<DesignerDetailsForm />} />
-          <Route path="/profile" element={<EditUserForm />} />
+          <Route path="/logIn" element={<LogIn />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* מוגנים */}
+          <Route path="/welcome" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
+          <Route path="/addProject" element={<ProtectedRoute><AddProject /></ProtectedRoute>} />
+          <Route path="/addCategory" element={<ProtectedRoute><AddCategoryForm /></ProtectedRoute>} />
+          <Route path="/projects" element={<ProtectedRoute><ImageGallery /></ProtectedRoute>} />
+          <Route path="/categories" element={<ProtectedRoute><CategoriesList /></ProtectedRoute>} />
+          <Route path="/designerDetails" element={<ProtectedRoute><DesignerDetailsForm /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><EditUserForm /></ProtectedRoute>} />
         </Routes>
       </Box>
     </Router>

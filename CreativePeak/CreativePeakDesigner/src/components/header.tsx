@@ -1,6 +1,7 @@
 import * as React from "react";
 import {
-  AppBar, Box, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Button, Typography, Popover,
+  AppBar, Box, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText,
+  Toolbar, Button, Typography, Popover,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -12,14 +13,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import FolderIcon from '@mui/icons-material/Folder';
 import CategoryIcon from '@mui/icons-material/Category';
-// import HomeIcon from '@mui/icons-material/Home';
+import { useAuth } from "../contexts/authContext"; // 🔁 עדכן לפי המיקום אצלך
 
 const drawerWidth = 240;
-
-interface HeaderProps {
-  isLoggedIn: boolean;
-  setIsLoggedIn: (isLoggedIn: boolean) => void;
-}
 
 interface NavItem {
   name: string;
@@ -28,23 +24,22 @@ interface NavItem {
   action?: () => void;
 }
 
-export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
+export default function Header() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
-  const name = localStorage.getItem("userName") || "?";
+  const { isLoggedIn, logout, userName } = useAuth();
+  const name = userName || "?";
 
   const handleDrawerToggle = () => setMobileOpen((prev) => !prev);
 
   const handleLogOut = () => {
-    setIsLoggedIn(false);
-    localStorage.clear();
+    logout();
     navigate("/");
   };
 
   const loggedInNavItems: NavItem[] = [
-    // { name: "Home", path: "/welcome", icon: <HomeIcon /> },
     { name: "Designer details", path: "/designerDetails", icon: <PersonIcon /> },
     { name: "Projects", path: "/projects", icon: <FolderIcon /> },
     { name: "Categories", path: "/categories", icon: <CategoryIcon /> },
@@ -58,13 +53,8 @@ export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
 
   const navItems = isLoggedIn ? loggedInNavItems : loggedOutNavItems;
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
 
   const open = Boolean(anchorEl);
   const id = open ? "profile-popover" : undefined;
@@ -125,7 +115,7 @@ export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
                 src={Cartoon_logo}
                 alt="logo"
                 sx={{ height: 70, cursor: "pointer" }}
-                onClick={handleLogOut}
+                onClick={() => logout()}
               />
             </Box>
 
@@ -137,8 +127,8 @@ export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
                   to={path}
                   onClick={action}
                   sx={{
-                    padding:"10px 20px",
-                    borderRadius:"20px",
+                    padding: "10px 20px",
+                    borderRadius: "20px",
                     display: "flex",
                     alignItems: "center",
                     color: "#673AB7",
@@ -198,20 +188,13 @@ export default function Header({ isLoggedIn, setIsLoggedIn }: HeaderProps) {
         </nav>
       </Box>
 
-      {/* ✅ פופאובר מתוקן שלא עובר aria-hidden */}
       <Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
         disableEnforceFocus
         container={document.body}
       >

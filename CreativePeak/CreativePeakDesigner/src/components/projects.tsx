@@ -1,18 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-    Box,
-    Typography,
-    CircularProgress,
-    Card,
-    CardMedia,
-    CardContent,
-    Dialog,
-    IconButton,
-    Button,
-    TextField,
-    MenuItem,
-} from "@mui/material";
+import { Box, Typography, CircularProgress, Card, CardMedia, CardContent, Dialog, IconButton, Button, TextField, MenuItem, } from "@mui/material";
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
 import { Add, Edit, Delete } from "@mui/icons-material";
@@ -21,6 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from '@mui/icons-material/Search';
 import Image from "../models/image";
 import Category from "../models/category";
+import AutoSnackbar from "./snackbar";
 
 // כפתור כללי בסיסי
 const StyledButton = styled(Button)({
@@ -103,6 +92,9 @@ function ImageGallery() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
     const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
     const navigate = useNavigate();
@@ -145,11 +137,15 @@ function ImageGallery() {
                     setImages((prevImages) =>
                         prevImages.filter((image) => image.id !== imageId)
                     );
-                    alert("Project deleted successfully!");
+                    setSnackbarMessage("🎉 Project deleted successfully!");
+                    setSnackbarSeverity("success");
+                    setSnackbarOpen(true);
                 })
                 .catch((error) => {
                     console.error("Error deleting project:", error);
-                    alert("Error deleting project. Please try again later.");
+                    setSnackbarMessage("❌ Error deleting project. Please try again later.");
+                    setSnackbarSeverity("error");
+                    setSnackbarOpen(true);
                 });
         }
     };
@@ -195,7 +191,8 @@ function ImageGallery() {
                     </Link>
                 </Box>
 
-                {categories.length > 0 && (
+                {/* שורת חיפוש וסינון - תוצג רק אם יש תמונות */}
+                {filteredImages.length > 0 && (
                     <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 3 }}>
                         <ContentBox>
                             <Typography
@@ -239,7 +236,7 @@ function ImageGallery() {
 
                 {
                     loading ? (
-                        <CircularProgress />
+                        <CircularProgress sx={{ color: "grey" }} />
                     ) : filteredImages.length === 0 ? (
                         <Typography sx={{ color: "gray" }}>
                             No projects available. <br />
@@ -375,6 +372,13 @@ function ImageGallery() {
                     />
                 </Box>
             </Dialog>
+            <AutoSnackbar
+                open={snackbarOpen}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+                onClose={() => setSnackbarOpen(false)}
+            />
+
         </Box >
     );
 }
