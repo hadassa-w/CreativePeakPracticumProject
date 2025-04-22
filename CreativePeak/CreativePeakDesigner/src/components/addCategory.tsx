@@ -13,7 +13,7 @@ import {
 import { styled } from "@mui/system";
 import Category from "../models/category";
 import { useAuth } from "../contexts/authContext";
-import AutoSnackbar from "./snackbar"; // ✅ ייבוא
+import AutoSnackbar from "./snackbar";
 
 const ContentBox = styled(Container)({
   backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -51,7 +51,7 @@ const AddCategoryForm = () => {
   const [loading, setLoading] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState("");
-  const [userCategories, setUserCategories] = useState<Category[]>([]); // ✅ קטגוריות קיימות
+  const [userCategories, setUserCategories] = useState<Category[]>([]);
 
   // טעינת קטגוריות של המשתמש
   useEffect(() => {
@@ -71,7 +71,7 @@ const AddCategoryForm = () => {
     }
   }, [userId]);
 
-  // אם עורכים, נאפס טופס עם ערכים
+  // אם זה עריכה - מילוי הטופס בנתונים הקיימים
   useEffect(() => {
     if (categoryToEdit) {
       reset({
@@ -85,13 +85,13 @@ const AddCategoryForm = () => {
     setLoading(true);
     const dataToSubmit = { ...data, userId };
 
-    // בדיקה אם הקטגוריה כבר קיימת אצל המשתמש (case-insensitive)
+    // בדיקה אם הקטגוריה כבר קיימת אצל המשתמש
     const nameExists = userCategories.some(cat =>
       cat.categoryName.trim().toLowerCase() === data.categoryName.trim().toLowerCase()
     );
 
     if (!categoryToEdit && nameExists) {
-      alert("⚠️ Category name already exists!"); // שימוש ב-alert במקום Snackbar
+      alert("⚠️ Category name already exists!");
       setLoading(false);
       return;
     }
@@ -102,20 +102,20 @@ const AddCategoryForm = () => {
           `https://creativepeak-api.onrender.com/api/Category/${categoryToEdit.id}`,
           dataToSubmit
         );
-        setSnackbarMsg("✅ Category updated successfully!"); // הודעת הצלחה ב-Snackbar
+        setSnackbarMsg("🎉 Category updated successfully!"); // עדכון הצליח
       } else {
         await axios.post(
           "https://creativepeak-api.onrender.com/api/Category",
           dataToSubmit
         );
-        setSnackbarMsg("🎉 Category added successfully!"); // הודעת הצלחה ב-Snackbar
+        setSnackbarMsg("🎉 Category added successfully!"); // יצירה הצליחה
       }
 
       setSnackbarOpen(true);
       setTimeout(() => navigate("/categories"), 1000);
     } catch (error) {
       console.error("❌ Error saving category", error);
-      alert("Error saving category. Please try again."); // שגיאה תוצג ב-alert
+      alert("Error saving category. Please try again."); // שגיאה
     } finally {
       setLoading(false);
     }

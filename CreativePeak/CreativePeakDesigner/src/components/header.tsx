@@ -13,7 +13,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import FolderIcon from '@mui/icons-material/Folder';
 import CategoryIcon from '@mui/icons-material/Category';
-import { useAuth } from "../contexts/authContext"; // 🔁 עדכן לפי המיקום אצלך
+import { useAuth } from "../contexts/authContext";
 
 const drawerWidth = 240;
 
@@ -115,7 +115,7 @@ export default function Header() {
                 src={Cartoon_logo}
                 alt="logo"
                 sx={{ height: 70, cursor: "pointer" }}
-                onClick={() => logout()}
+                onClick={() => { logout(); navigate("/") }}
               />
             </Box>
 
@@ -150,6 +150,7 @@ export default function Header() {
 
             <Box
               sx={{
+                aspectRatio: "1",
                 fontFamily: "revert",
                 fontSize: "25px",
                 borderRadius: "50%",

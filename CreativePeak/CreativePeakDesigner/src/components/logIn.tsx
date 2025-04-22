@@ -7,7 +7,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useAuth } from "../contexts/authContext"; // שימוש בקונטקסט
+import { useAuth } from "../contexts/authContext";
 
 // עיצוב
 const ContentBox = styled(Container)({
@@ -33,7 +33,7 @@ const StyledButton = styled(Button)({
 
 function LogIn() {
   const navigate = useNavigate();
-  const { login } = useAuth(); // שימוש בפונקציית login מהקונטקסט
+  const { login } = useAuth();
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -45,7 +45,7 @@ function LogIn() {
   const handleLogin = async () => {
     let newFieldErrors: { username?: string; password?: string } = {};
     let hasError = false;
-
+  
     if (!username.trim()) {
       newFieldErrors.username = "Username is required";
       hasError = true;
@@ -54,28 +54,28 @@ function LogIn() {
       newFieldErrors.password = "Password is required";
       hasError = true;
     }
-
+  
     if (hasError) {
       setFieldErrors(newFieldErrors);
       setGeneralError("");
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
       const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Login", {
         UserName: username,
         Password: password,
       });
-
-      const token = response.data.token;
+  
+      const token = response.data.accessToken;
+      const refreshToken = response.data.refreshToken;
       const userId = response.data.user.id;
       const fullName = response.data.user.fullName;
-
-      // שמירה בקונטקסט
-      login(token, fullName, userId);
-
+  
+      login(token, refreshToken, fullName, userId);
+  
       setFieldErrors({});
       setGeneralError("");
       navigate("/welcome");
@@ -86,7 +86,7 @@ function LogIn() {
       setLoading(false);
     }
   };
-
+  
   return (
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", maxWidth: "500px", height: "100%", overflow: "hidden", padding: "50px" }}>
       <ContentBox>

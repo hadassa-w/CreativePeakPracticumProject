@@ -100,10 +100,12 @@ const AddImageForm = () => {
       userId
     };
 
+      localStorage.removeItem("linkURL");
+
     try {
       if (image) {
         await axios.put(`https://creativepeak-api.onrender.com/api/Image/${image.id}`, dataToSubmit);
-        setSnackbarMsg("✅ Project updated successfully!");
+        setSnackbarMsg("🎉 Project updated successfully!");
       } else {
         await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
         setSnackbarMsg("🎉 Project added successfully!");

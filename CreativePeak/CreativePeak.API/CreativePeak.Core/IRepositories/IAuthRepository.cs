@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,5 +13,6 @@ namespace CreativePeak.Core.IRepositories
     {
         Task<User> GetByCondition(Expression<Func<User, bool>> expression);
         Task<User> CreateUserAsync(User user);
+        string GenerateRefreshToken();
     }
 }

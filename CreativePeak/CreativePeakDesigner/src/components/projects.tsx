@@ -11,6 +11,8 @@ import Image from "../models/image";
 import Category from "../models/category";
 import AutoSnackbar from "./snackbar";
 
+// עיצוב
+
 // כפתור כללי בסיסי
 const StyledButton = styled(Button)({
     textTransform: "none",
@@ -72,17 +74,17 @@ const ContentBox = styled(Box)({
 
 const CategoryTitle = styled(Typography)({
     fontWeight: "bold",
-    color: "#9C27B0",  // צבע סגלגל
+    color: "#9C27B0",
     marginBottom: "15px",
     fontSize: "36px",
-    letterSpacing: "1px", // רווחים בין האותיות
-    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.40)", // הצללה קלה
+    letterSpacing: "1px",
+    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.40)",
 });
 
 const CategoryDescription = styled(Typography)({
     marginBottom: "20px",
     fontSize: "22px",
-    fontStyle: "italic", // גרסה נטויה
+    fontStyle: "italic",
 });
 
 function ImageGallery() {

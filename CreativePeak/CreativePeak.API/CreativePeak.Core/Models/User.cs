@@ -34,5 +34,8 @@ namespace CreativePeak.Core.Models
 
         public List<Category> Categories { get; set; }
         public List<Image> Images { get; set; }
+
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiry { get; set; }
     }
 }

@@ -116,7 +116,7 @@ function DesignerDetailsForm() {
       // רענון הנתונים לאחר שמירה
       const updatedResponse = await axios.get("https://creativepeak-api.onrender.com/api/DesignerDetails");
       const updatedData = updatedResponse.data.find((d: DesignerDetails) => d.userId === userId);
-      setDesignerDetails(updatedData || null);
+      setDesignerDetails(updatedData);
       setIsEditing(false);
     } catch (error) {
       console.error("❌ Error submitting data:", error);

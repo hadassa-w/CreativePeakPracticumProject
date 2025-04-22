@@ -10,6 +10,7 @@ import User from "../models/user";
 import { useAuth } from "../contexts/authContext";
 import AutoSnackbar from "./snackbar";
 
+// עיצוב
 const ContentBox = styled(Container)({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: "12px",
@@ -120,7 +121,7 @@ export default function EditUserForm() {
 
             setTimeout(() => {
                 setIsEditing(false);
-            }, 1000); // ❗ מוסיף השהייה קלה כדי לאפשר ל-snackbar להופיע קודם
+            }, 1000);
         } catch (error) {
             console.error("❌ Error updating data:", error);
             setSnackbarMessage("❌ Failed to update details.");

@@ -112,6 +112,8 @@ builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 //builder.Services.AddDbContext<DataContext>();
 //builder.Services.AddSingleton<DataContext>();
 
+builder.Services.AddScoped<ITokenService,TokenService>();
+
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 //builder.Services.AddSingleton<Mapping>();

@@ -4,9 +4,9 @@ import { useState } from "react";
 import { styled } from "@mui/system";
 import { AccountCircle, Lock, Phone, Email, Home, Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
-import { useAuth } from "../contexts/authContext"; // ודא שזה הנתיב הנכון לקובץ ה-Context שלך
+import { useAuth } from "../contexts/authContext";
 
-// עיצוב התיבה המרכזית
+// עיצוב
 const ContentBox = styled(Container)({
   backgroundColor: "rgba(255, 255, 255, 0.85)",
   borderRadius: "12px",
@@ -102,7 +102,7 @@ function Register() {
       const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Register", formData);
 
       if (response.status === 200 && response.data.token) {
-        login(response.data.token, response.data.user.fullName, response.data.user.id);
+        login(response.data.token, response.data.refreshToken, response.data.user.fullName, response.data.user.id);
         navigate("/designerDetails");
       } else {
         setError("Registration failed. Please check your details.");
@@ -150,8 +150,7 @@ function Register() {
           Fill in your details to get started.
         </Typography>
 
-        {[
-          { label: "Full Name", name: "fullname", icon: <AccountCircle /> },
+        {[{ label: "Full Name", name: "fullname", icon: <AccountCircle /> },
           { label: "Email", name: "email", icon: <Email /> },
           { label: "Phone", name: "phone", icon: <Phone /> },
         ].map(({ label, name, icon }) => (

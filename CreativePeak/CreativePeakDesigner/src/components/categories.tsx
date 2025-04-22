@@ -53,10 +53,10 @@ const CategoriesList = () => {
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
     useEffect(() => {
-        axios.get("https://creativepeak-api.onrender.com/api/Category")
+        axios.get("https://creativepeak-api.onrender.com/api/Category?userId=${userId}")
             .then((response) => {
-                const filteredCategories = response.data.filter((category: Category) => category.userId == userId);
-                setCategories(filteredCategories);
+                // const filteredCategories = response.data.filter((category: Category) => category.userId == userId);
+                setCategories(response.data);
             })
             .catch((error) => {
                 console.error("Error fetching categories:", error);

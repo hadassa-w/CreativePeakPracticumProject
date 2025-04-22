@@ -5,7 +5,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd"; // אייקון הר�
 import { useNavigate } from "react-router-dom";
 import "../css/home.css";
 
-// עיצוב כפתור
+// עיצוב
 const StyledButton = styled(Button)({
     textTransform: "none",
     fontSize: "15px",
@@ -22,7 +22,7 @@ const StyledButton = styled(Button)({
 });
 
 const ContentBox = styled(Container)({
-    backgroundColor: "rgba(255, 255, 255, 0.8)", // רקע חצי-שקוף
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
     borderRadius: "10px",
     padding: "40px",
     maxWidth: "600px",

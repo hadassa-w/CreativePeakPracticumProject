@@ -17,10 +17,10 @@ const AutoSnackbar = ({
     <Snackbar
       open={open}
       onClose={onClose}
-      autoHideDuration={5000} // ⏱️ זמן ארוך יותר: 5 שניות
+      autoHideDuration={5000}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
       sx={{
-        top: "80px !important", // ⬇️ מרווח קטן מהחלק העליון (ברירת מחדל היא 16px)
+        top: "80px !important",
       }}
     >
       <Alert onClose={onClose} severity={severity} sx={{ width: "100%", fontSize: "17px" }}>

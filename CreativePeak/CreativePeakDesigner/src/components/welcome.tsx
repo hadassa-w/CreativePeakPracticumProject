@@ -2,7 +2,9 @@ import { Box, Typography, Container, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import FolderIcon from '@mui/icons-material/Folder';
 import CategoryIcon from '@mui/icons-material/Category';
-import { useNavigate } from "react-router-dom"; // ייבוא הפונקציה לניווט
+import { useNavigate } from "react-router-dom";
+
+// עיצוב
 
 // עיצוב הכפתור
 const StyledButton = styled(Button)({
