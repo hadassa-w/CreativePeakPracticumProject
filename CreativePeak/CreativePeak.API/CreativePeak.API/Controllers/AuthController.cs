@@ -169,7 +169,7 @@ namespace CreativePeak.API.Controllers
             }
         }
         [AllowAnonymous]
-        [HttpPost("refresh-token")]
+        [HttpPost("Refresh-token")]
         public async Task<IActionResult> Refresh([FromBody] TokenRequestModel model)
         {
             var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
