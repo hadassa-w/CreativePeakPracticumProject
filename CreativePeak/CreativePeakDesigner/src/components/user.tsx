@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import {
-    Button, TextField, Box, Typography, Container, CircularProgress,
-    Paper
-} from "@mui/material";
+import { Button, TextField, Box, Typography, Container, CircularProgress, Paper } from "@mui/material";
 import { styled } from "@mui/system";
 import User from "../models/user";
 import { useAuth } from "../contexts/authContext";

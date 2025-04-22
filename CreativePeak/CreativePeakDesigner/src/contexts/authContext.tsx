@@ -33,25 +33,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  
   // פונקציה לריענון טוקן
   const refreshAuthToken = async () => {
     const currentRefreshToken = refreshToken;
-
+  
     try {
-      const response = await axios.post("https://creativepeak-api.onrender.com/api/refresh-token", {
+      const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Refresh-token", {
         refreshToken: currentRefreshToken,
       });
-
-      const newAccessToken = response.data.token;
+  
+      const newAccessToken = response.data.accessToken;
       const newRefreshToken = response.data.refreshToken;
-
-      // עדכון הטוקנים ב-localStorage ובסטייט
+  
+      // const expirationTime = Date.now() + 15 * 60 * 1000; // לדוגמה: 15 דקות מהעכשיו
+  
+      // עדכון הטוקנים והזמן ב-localStorage ובסטייט
       localStorage.setItem("token", newAccessToken);
       localStorage.setItem("refreshToken", newRefreshToken);
+      // localStorage.setItem("tokenExpirationTime", expirationTime.toString());
+  
       setToken(newAccessToken);
       setRefreshToken(newRefreshToken);
     } catch (error) {
       console.error("❌ Error refreshing token:", error);
+      // logout(); // כדי למנוע לולאת שגיאות, תנתקי את המשתמש אם הריענון נכשל
     }
   };
 

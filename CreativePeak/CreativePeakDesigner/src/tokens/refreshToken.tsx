@@ -5,14 +5,16 @@ const TokenRefresher = () => {
   const { token, refreshAuthToken } = useAuth();
 
   useEffect(() => {
-    if (token) {
+    const interval = setInterval(() => {
       const tokenExpirationTime = localStorage.getItem("tokenExpirationTime");
 
-      // מרעננים את הטוקן אם הזמן הנותר לטוקן פג
-      if (tokenExpirationTime && Date.now() > parseInt(tokenExpirationTime, 10)) {
-        refreshAuthToken(); // פונקציית ריענון הטוקן
+      if (token && tokenExpirationTime && Date.now() > parseInt(tokenExpirationTime, 10)) {
+        console.log("🔄 Token expired, refreshing...");
+        refreshAuthToken();
       }
-    }
+    }, 60 * 1000); // בדיקה כל דקה
+
+    return () => clearInterval(interval);
   }, [token, refreshAuthToken]);
 
   return null;
