@@ -33,26 +33,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  
+
   // פונקציה לריענון טוקן
   const refreshAuthToken = async () => {
-    const currentRefreshToken = refreshToken;
-  
+    setRefreshToken(localStorage.getItem("refreshToken"));
+    setToken(localStorage.getItem("token"));
+
+    if (!refreshToken || !token) {
+      return;
+    }
+
     try {
       const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Refresh-token", {
-        refreshToken: currentRefreshToken,
+        accessToken: token,
+        refreshToken: refreshToken,
       });
-  
+      console.log("for!");
+
       const newAccessToken = response.data.accessToken;
       const newRefreshToken = response.data.refreshToken;
-  
+
       // const expirationTime = Date.now() + 15 * 60 * 1000; // לדוגמה: 15 דקות מהעכשיו
-  
+
       // עדכון הטוקנים והזמן ב-localStorage ובסטייט
       localStorage.setItem("token", newAccessToken);
       localStorage.setItem("refreshToken", newRefreshToken);
       // localStorage.setItem("tokenExpirationTime", expirationTime.toString());
-  
+
       setToken(newAccessToken);
       setRefreshToken(newRefreshToken);
     } catch (error) {
@@ -103,7 +110,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUserId(null);
     setIsLoggedIn(false);
 
-    
+
   };
 
   return (

@@ -173,7 +173,8 @@ namespace CreativePeak.API.Controllers
         public async Task<IActionResult> Refresh([FromBody] TokenRequestModel model)
         {
             var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
-            var email = principal.Identity?.Name;
+            var email = principal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            //var email = principal.Identity?.Name;
             //var user = await _userService.GetByEmailAsync(email);
             var user = await _authRepository.GetByCondition(u => u.Email == email);
 

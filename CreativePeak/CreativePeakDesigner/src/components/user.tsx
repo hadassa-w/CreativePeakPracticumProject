@@ -77,9 +77,10 @@ export default function EditUserForm() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
-    const { userId } = useAuth();
+    const { userId, refreshAuthToken } = useAuth();
 
     useEffect(() => {
+        refreshAuthToken();
         const token = localStorage.getItem("token");
         axios.get(`https://creativepeak-api.onrender.com/api/User/${userId}`, {
             headers: { Authorization: `Bearer ${token}` }

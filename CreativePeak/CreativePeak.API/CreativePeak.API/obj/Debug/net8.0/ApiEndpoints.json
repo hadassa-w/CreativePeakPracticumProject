@@ -18,7 +18,7 @@
   {
     "ContainingType": "CreativePeak.API.Controllers.AuthController",
     "Method": "Refresh",
-    "RelativePath": "api/Auth/refresh-token",
+    "RelativePath": "api/Auth/Refresh-token",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
