@@ -31,7 +31,7 @@ namespace CreativePeak.API.Controllers
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
 
-        public AuthController(IConfiguration configuration, IAuthRepository authRepository,IUserService userService,ITokenService tokenService, IMapper mapper, DataContext dataContext)
+        public AuthController(IConfiguration configuration, IAuthRepository authRepository, IUserService userService, ITokenService tokenService, IMapper mapper, DataContext dataContext)
         {
             _configuration = configuration;
             _authRepository = authRepository;
@@ -100,10 +100,11 @@ namespace CreativePeak.API.Controllers
             }
 
             var claims = new List<Claim>()
-    {
-        new Claim(ClaimTypes.Name, user.FullName),
-        new Claim(ClaimTypes.Role, user.Role)
-    };
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
 
             var userNew = _mapper.Map<UserDTO>(user);
 
@@ -144,6 +145,7 @@ namespace CreativePeak.API.Controllers
                 // יצירת טוקן JWT למשתמש החדש
                 var claims = new List<Claim>()
                 {
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Name, user.FullName),
                     new Claim(ClaimTypes.Role, user.Role)
                 };
@@ -196,6 +198,5 @@ namespace CreativePeak.API.Controllers
                 RefreshToken = newRefreshToken
             });
         }
-
     }
 }
