@@ -10,9 +10,9 @@ using CreativePeak.Core.PostModels;
 
 namespace CreativePeak.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
