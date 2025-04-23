@@ -8,7 +8,7 @@ const UploadContainer = styled(Container)({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '40px',
+  padding: '10px',
   borderRadius: '12px',
   maxWidth: '500px',
   margin: '0 auto',

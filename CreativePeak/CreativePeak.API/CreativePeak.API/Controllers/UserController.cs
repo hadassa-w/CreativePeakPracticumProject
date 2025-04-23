@@ -89,6 +89,7 @@ namespace CreativePeak.API.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpPut("updateWithoutPassword/{id}")]
         public async Task<ActionResult> UpdateWithoutPassword(int id, [FromBody] UserWithoutPasswordPostModel user)
         {

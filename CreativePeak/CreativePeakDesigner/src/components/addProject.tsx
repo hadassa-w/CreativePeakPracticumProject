@@ -21,6 +21,7 @@ import Category from "../models/category";
 import Project from "../models/project";
 import { useAuth } from "../contexts/authContext";
 import AutoSnackbar from "./snackbar";
+import { Add } from "@mui/icons-material";
 
 const ContentBox = styled(Container)({
   backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -39,6 +40,23 @@ const StyledButton = styled(Button)({
   padding: "10px 20px",
   transition: "0.3s",
   "&:hover": { transform: "scale(1.05)" }
+});
+
+const AddCategoryButton = styled(Button)({
+  textTransform: "none",
+  fontSize: "15px",
+  borderRadius: "5px",
+  padding: "5px 5px",
+  transition: "0.2s",
+  backgroundColor: "#9C27B0", // צבע סגלגל
+  color: "white",
+  display: "flex",
+  alignItems: "center",
+  gap: "5px",
+  "&:hover": {
+    transform: "scale(1.05)",
+    backgroundColor: "#7B1FA2", // צבע כהה יותר בעת ריחוף
+  },
 });
 
 const AddImageForm = () => {
@@ -100,7 +118,7 @@ const AddImageForm = () => {
       userId
     };
 
-      localStorage.removeItem("linkURL");
+    localStorage.removeItem("linkURL");
 
     try {
       if (image) {
@@ -128,6 +146,17 @@ const AddImageForm = () => {
         <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>
           {image ? "✏️ Edit Project" : "🖼️ Add Project"}
         </Typography>
+
+        <Typography variant="body1" sx={{ mb: 3 }}>
+        <span style={{fontWeight: "bold"}}>  Please note!<br /></span>
+          To create a new project, you are required to select a category.
+        </Typography>
+
+        <Box sx={{ display: "flex", justifyContent: "center", marginBottom: "30px", marginTop: "10px" }}>
+          <AddCategoryButton variant="contained" onClick={() => navigate("/addCategory")}>
+            <Add /> Interested in adding a new category?
+          </AddCategoryButton>
+        </Box>
 
         <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <TextField
