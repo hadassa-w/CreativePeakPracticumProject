@@ -6,7 +6,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Category from "../models/category";
 import Image from "../models/image";
-import { useAuth } from "../contexts/authContext";
 import AutoSnackbar from "./snackbar";
 
 const ContentBox = styled(Container)({
@@ -46,7 +45,6 @@ const CategoriesList = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState<number | null>(null);
-    const { userId } = useAuth();
     const navigate = useNavigate();
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -55,7 +53,6 @@ const CategoriesList = () => {
     useEffect(() => {
         axios.get("https://creativepeak-api.onrender.com/api/Category?userId=${userId}")
             .then((response) => {
-                // const filteredCategories = response.data.filter((category: Category) => category.userId == userId);
                 setCategories(response.data);
             })
             .catch((error) => {
@@ -91,7 +88,7 @@ const CategoriesList = () => {
             setSnackbarOpen(true);
 
             const response = await axios.get("https://creativepeak-api.onrender.com/api/Image");
-            const userImages = response.data.filter((image: Image) => image.user.id === userId);
+            const userImages = response.data.filter((image: Image) => image.category.id == categoryId);
 
             await Promise.all(
                 userImages.map((image: Image) =>
