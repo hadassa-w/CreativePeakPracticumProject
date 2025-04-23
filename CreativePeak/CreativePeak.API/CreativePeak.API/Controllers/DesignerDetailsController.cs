@@ -56,8 +56,8 @@ namespace CreativePeak.API.Controllers
                 YearsExperience = designerDetails.YearsExperience,
                 PriceRangeMin = designerDetails.PriceRangeMin,
                 PriceRangeMax = designerDetails.PriceRangeMax,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 UserId = designerDetails.UserId // הוסף את ה-UserId כאן
             };
 
@@ -90,7 +90,7 @@ namespace CreativePeak.API.Controllers
             existingDesignerDetails.YearsExperience = designerDetails.YearsExperience;
             existingDesignerDetails.PriceRangeMin = designerDetails.PriceRangeMin;
             existingDesignerDetails.PriceRangeMax = designerDetails.PriceRangeMax;
-            existingDesignerDetails.UpdatedAt = DateTime.Now;
+            existingDesignerDetails.UpdatedAt = DateTime.UtcNow;
 
             await _designerDetailsService.UpdateAsync(id, existingDesignerDetails);
             return NoContent();

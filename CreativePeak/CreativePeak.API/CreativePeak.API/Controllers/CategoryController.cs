@@ -54,8 +54,8 @@ namespace CreativePeak.API.Controllers
                 Description = category.Description,
                 UserId = category.UserId,
                 User = await _userService.GetByIdAsync(category.UserId),
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
             };
 
             var categoryNew = await _categoryService.AddAsync(newCategory);
@@ -80,7 +80,7 @@ namespace CreativePeak.API.Controllers
             existingCategory.Description = category.Description;
             existingCategory.UserId = category.UserId;
             existingCategory.User = await _userService.GetByIdAsync(category.UserId);
-            existingCategory.UpdatedAt = DateTime.Now;
+            existingCategory.UpdatedAt = DateTime.UtcNow;
 
             await _categoryService.UpdateAsync(id, existingCategory);
             return NoContent();

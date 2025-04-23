@@ -246,9 +246,9 @@ function ImageGallery() {
                         </Typography>
                     ) : (
                         categories.map((category) => {
-                            const categoryImages = filteredImages.filter(
-                                (img) => img.category.id == category.id
-                            );
+                            const categoryImages = filteredImages
+                                .filter((img) => img.category.id === category.id)
+                                .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
                             if (categoryImages.length === 0) return null;
                             return (
                                 <Box key={category.id} sx={{ mb: 4 }}>
