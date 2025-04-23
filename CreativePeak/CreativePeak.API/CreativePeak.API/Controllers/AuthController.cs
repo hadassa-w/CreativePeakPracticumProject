@@ -158,7 +158,7 @@ namespace CreativePeak.API.Controllers
                     issuer: _configuration["JWT:Issuer"],
                     audience: _configuration["JWT:Audience"],
                     claims: claims,
-                    expires: DateTime.UtcNow.AddMinutes(6),
+                    //expires: DateTime.UtcNow.AddMinutes(6),
                     signingCredentials: signinCredentials
                 );
 

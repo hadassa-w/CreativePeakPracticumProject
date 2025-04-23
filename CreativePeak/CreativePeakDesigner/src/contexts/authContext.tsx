@@ -36,38 +36,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // פונקציה לריענון טוקן
   const refreshAuthToken = async () => {
-    setRefreshToken(localStorage.getItem("refreshToken"));
-    setToken(localStorage.getItem("token"));
-
-    if (!refreshToken || !token) {
-      return;
-    }
-
+    const storedToken = localStorage.getItem("token");
+    const storedRefreshToken = localStorage.getItem("refreshToken");
+  
+    if (!storedToken || !storedRefreshToken) return;
+  
     try {
       const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Refresh-token", {
-        accessToken: token,
-        refreshToken: refreshToken,
+        accessToken: storedToken,
+        refreshToken: storedRefreshToken,
       });
-      console.log("for!");
-
+  
       const newAccessToken = response.data.accessToken;
       const newRefreshToken = response.data.refreshToken;
-
-      // const expirationTime = Date.now() + 15 * 60 * 1000; // לדוגמה: 15 דקות מהעכשיו
-
-      // עדכון הטוקנים והזמן ב-localStorage ובסטייט
+  
+      const expirationTime = Date.now() + 15 * 60 * 1000; // 15 דקות קדימה
+  
       localStorage.setItem("token", newAccessToken);
       localStorage.setItem("refreshToken", newRefreshToken);
-      // localStorage.setItem("tokenExpirationTime", expirationTime.toString());
-
+      localStorage.setItem("tokenExpirationTime", expirationTime.toString());
+  
       setToken(newAccessToken);
       setRefreshToken(newRefreshToken);
     } catch (error) {
       console.error("❌ Error refreshing token:", error);
-      // logout(); // כדי למנוע לולאת שגיאות, תנתקי את המשתמש אם הריענון נכשל
+      // logout(); // אם רוצים לנתק את המשתמש
     }
   };
-
+  
   useEffect(() => {
     // שחזור הנתונים מ-localStorage
     const storedToken = localStorage.getItem("token");

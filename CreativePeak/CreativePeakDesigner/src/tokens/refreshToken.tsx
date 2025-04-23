@@ -1,19 +1,24 @@
 import { useEffect } from "react";
 import { useAuth } from "../contexts/authContext";
 
-const TokenRefresher = () => {
-  const { token, refreshAuthToken } = useAuth();
+const TokenRefresher: React.FC = () => {
+  const { refreshAuthToken } = useAuth();
 
   useEffect(() => {
-    if (token) {
-      // const tokenExpirationTime = localStorage.getItem("tokenExpirationTime");
+    const interval = setInterval(() => {
+      const expirationTimeStr = localStorage.getItem("tokenExpirationTime");
+      if (!expirationTimeStr) return;
 
-      // מרעננים את הטוקן אם הזמן הנותר לטוקן פג
-      // if (tokenExpirationTime && Date.now() > parseInt(tokenExpirationTime, 10)) {
-        refreshAuthToken(); // פונקציית ריענון הטוקן
-      // }
-    }
-  }, [token, refreshAuthToken]);
+      const expirationTime = parseInt(expirationTimeStr, 10);
+      const timeLeft = expirationTime - Date.now();
+
+      if (timeLeft < 60 * 1000) {
+        refreshAuthToken();
+      }
+    }, 30 * 1000);
+
+    return () => clearInterval(interval);
+  }, [refreshAuthToken]);
 
   return null;
 };

@@ -10,9 +10,9 @@ using CreativePeak.Core.PostModels;
 
 namespace CreativePeak.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -34,6 +34,7 @@ namespace CreativePeak.API.Controllers
         }
 
         // GET api/<UserController>/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
