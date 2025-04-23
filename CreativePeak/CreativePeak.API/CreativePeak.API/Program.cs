@@ -50,26 +50,26 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; // �� ReferenceHandler.Preserve
     });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("MyPolicy", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
-
 //builder.Services.AddCors(options =>
 //{
 //    options.AddPolicy("MyPolicy", policy =>
 //    {
-//        policy.WithOrigins("http://localhost:5173")
+//        policy.AllowAnyOrigin()
 //              .AllowAnyHeader()
-//              .AllowAnyMethod()
-//              .AllowCredentials(); // חשוב אם את שולחת Authorization headers
+//              .AllowAnyMethod();
 //    });
 //});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // חשוב אם את שולחת Authorization headers
+    });
+});
 
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(options =>

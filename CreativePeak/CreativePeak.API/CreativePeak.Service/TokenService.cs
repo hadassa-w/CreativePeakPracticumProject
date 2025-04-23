@@ -39,7 +39,7 @@ namespace CreativePeak.Service
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                //expires: DateTime.UtcNow.AddMinutes(15), // Access Token תקף ל-15 דקות
+                expires: DateTime.UtcNow.AddMinutes(15), // Access Token תקף ל-15 דקות
                 signingCredentials: creds
             );
 
@@ -61,7 +61,7 @@ namespace CreativePeak.Service
                 ValidateAudience = true,
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
-                //ValidateLifetime = false, // לא נבדוק אם הטוקן פג תוקף כאן
+                ValidateLifetime = false, // לא נבדוק אם הטוקן פג תוקף כאן
                 ValidIssuer = _configuration["Jwt:Issuer"],
                 ValidAudience = _configuration["Jwt:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!))
