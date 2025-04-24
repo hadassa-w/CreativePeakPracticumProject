@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, CircularProgress, Typography, Container } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Typography,
+  Container,
+  LinearProgress,
+} from '@mui/material';
 import { styled } from '@mui/system';
 import AutoSnackbar from '../components/snackbar';
 
@@ -16,7 +22,7 @@ const UploadContainer = styled(Container)({
 
 const StyledButton = styled(Button)<{ component?: React.ElementType }>({
   textTransform: 'none',
-  fontSize: '16px',
+  fontSize: '15px',
   fontWeight: 'bold',
   borderRadius: '10px',
   padding: '10px 20px',
@@ -64,19 +70,19 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
       setImagePreview(URL.createObjectURL(selectedFile));
-      setUploaded(false); // מאפשר להעלות קובץ חדש
+      setUploaded(false);
       setProgress(0);
     }
   };
 
   const handleUpload = async () => {
     if (!file) return;
-
     setLoading(true);
 
     try {
+      const uniqueFileName = `${Date.now()}-${file.name}`;
       const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
-        params: { fileName: file.name }
+        params: { fileName: uniqueFileName }
       });
       const presignedUrl = response.data.url;
 
@@ -89,12 +95,11 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
       });
 
       const s3BaseUrl = "https://s3.us-east-1.amazonaws.com/creativepeakproject.aws-testpnoren/";
-      const imageUrl = `${s3BaseUrl}${encodeURIComponent(file.name)}`;
+      const imageUrl = `${s3BaseUrl}${encodeURIComponent(uniqueFileName)}`;
 
       localStorage.setItem("linkURL", imageUrl);
       setImagePreview(imageUrl);
-
-      setUploaded(true); // לא לאפשר העלאה חוזרת
+      setUploaded(true);
       setSnackbarMessage("🎉 File uploaded successfully!");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
@@ -140,7 +145,29 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
       )}
 
       {loading ? (
-        <CircularProgress size={40} sx={{ marginTop: '20px',color:"gray" }} />
+        <>
+          <Typography variant="body1" sx={{ marginTop: 2 }}>
+            Uploading file...
+          </Typography>
+          <CircularProgress size={20} sx={{ marginRight: '10px', color: "gray" }} />
+          <LinearProgress
+            variant="determinate"
+            value={progress}
+            sx={{
+              width: '100%',
+              height: 5,
+              borderRadius: 1,
+              marginTop: 2,
+              backgroundColor: '#e0e0e0', // צבע רקע של ה־bar
+              '& .MuiLinearProgress-bar': {
+                backgroundColor: '#673ab7', // צבע הקו המתקדם (לדוגמה: סגול)
+                borderRadius: 1,
+              },
+            }}
+          />
+          <Typography variant="body1" sx={{ marginTop: 2 }}>
+            Progress: {progress}%
+          </Typography> </>
       ) : (
         <StyledButton
           variant="contained"
@@ -150,12 +177,6 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
         >
           Upload file
         </StyledButton>
-      )}
-
-      {progress > 0 && (
-        <Typography variant="body2" sx={{ marginTop: '10px' }}>
-          Progress: {progress}%
-        </Typography>
       )}
 
       <AutoSnackbar

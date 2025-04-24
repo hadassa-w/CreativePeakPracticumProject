@@ -97,6 +97,8 @@ function ImageGallery() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [imageId1, setImageId1] = useState<number | null>(null);
 
     const userId = parseInt(localStorage.getItem("userId") || "0", 10) || null;
     const navigate = useNavigate();
@@ -133,6 +135,8 @@ function ImageGallery() {
 
     const handleDelete = (imageId: number) => {
         if (window.confirm("Are you sure you want to delete this project?")) {
+            setImageId1(imageId);
+            setIsDeleting(true);
             axios
                 .delete(`https://creativepeak-api.onrender.com/api/Image/${imageId}`)
                 .then(() => {
@@ -148,6 +152,10 @@ function ImageGallery() {
                     setSnackbarMessage("❌ Error deleting project. Please try again later.");
                     setSnackbarSeverity("error");
                     setSnackbarOpen(true);
+                })
+                .finally(() => {
+                    setIsDeleting(false);
+                    setImageId1(null);
                 });
         }
     };
@@ -322,13 +330,25 @@ function ImageGallery() {
                                                         >
                                                             <Edit fontSize="small" /> Edit
                                                         </EditButton>
-                                                        <DeleteButton
-                                                            variant="outlined"
-                                                            size="small"
-                                                            onClick={() => handleDelete(image.id)}
-                                                        >
-                                                            <Delete fontSize="small" /> Delete
-                                                        </DeleteButton>
+                                                        {isDeleting && image.id === imageId1 ? (
+                                                            <DeleteButton
+                                                                variant="outlined"
+                                                                size="small"
+                                                                onClick={() => handleDelete(image.id)}
+                                                                disabled
+                                                            >
+                                                                <CircularProgress size={24} style={{ color: "gray" }} />
+                                                                Deleting...
+                                                            </DeleteButton>
+                                                        ) : (
+                                                            <DeleteButton
+                                                                variant="outlined"
+                                                                size="small"
+                                                                onClick={() => handleDelete(image.id)}
+                                                            > <Delete fontSize="small" />
+                                                                Delete
+                                                            </DeleteButton>
+                                                        )}
                                                     </Box>
                                                 </CardContent>
                                             </Card>

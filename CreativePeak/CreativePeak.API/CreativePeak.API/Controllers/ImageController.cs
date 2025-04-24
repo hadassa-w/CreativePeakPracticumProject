@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using Amazon.Extensions.NETCore.Setup;
+using Amazon.S3.Model;
+using Amazon.S3;
+using AutoMapper;
 using CreativePeak.Core.DTOs;
 using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
@@ -14,16 +17,18 @@ namespace CreativePeak.API.Controllers
     //[Authorize]
     public class ImageController : Controller
     {
+        private readonly IAmazonS3 _amazonS3;
         private readonly IImageService _imageService;
         private readonly ICategoryService _categoryService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public ImageController(IImageService imageService, IMapper mapper, ICategoryService categoryService, IUserService userService)
+        public ImageController(IImageService imageService, IAmazonS3 amazonS3, IMapper mapper, ICategoryService categoryService, IUserService userService)
         {
             _imageService = imageService;
             _mapper = mapper;
             _categoryService = categoryService;
             _userService = userService;
+            _amazonS3 = amazonS3;
         }
 
         // GET: api/<ImageController>
@@ -39,7 +44,7 @@ namespace CreativePeak.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetByIdAsync(int id)
         {
-            var image =await _imageService.GetByIdAsync(id);
+            var image = await _imageService.GetByIdAsync(id);
             if (image == null)
             {
                 return NotFound();
@@ -58,7 +63,7 @@ namespace CreativePeak.API.Controllers
                 Description = image.Description,
                 FileType = image.FileName.Substring(image.FileName.LastIndexOf('.') + 1),
                 LinkURL = image.LinkURL,
-                IsDeleted=false,
+                IsDeleted = false,
                 UserId = image.UserId,
                 User = await _userService.GetByIdAsync(image.UserId),
                 CategoryId = image.CategoryId,
@@ -69,9 +74,6 @@ namespace CreativePeak.API.Controllers
             var imageNew = await _imageService.AddAsync(newImage);
             var imageDTO = _mapper.Map<ImageDTO>(imageNew);
             return CreatedAtAction(nameof(Get), new { id = imageDTO.Id }, imageDTO);
-            //var imageDTO = _mapper.Map<Image>(image);
-            //var userNew = await _imageService.AddAsync(imageDTO);
-            //return Ok(imageDTO);
         }
 
         // PUT api/<ImageController>/5
@@ -97,7 +99,19 @@ namespace CreativePeak.API.Controllers
             return NoContent();
         }
 
-        // DELETE api/<ImageController>/5
+        //// DELETE api/<ImageController>/5
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult> Delete(int id)
+        //{
+        //    var image = await _imageService.GetByIdAsync(id);
+        //    if (image is null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    image.IsDeleted = true;
+        //    _imageService.Delete(image);
+        //    return NoContent();
+        //}
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -106,9 +120,39 @@ namespace CreativePeak.API.Controllers
             {
                 return NotFound();
             }
+            try
+            {
+                var key = GetKeyFromUrl(image.LinkURL);
+                var deleteRequest = new DeleteObjectRequest
+                {
+                    BucketName = "creativepeakproject.aws-testpnoren",
+                    Key = key
+                };
+
+                await _amazonS3.DeleteObjectAsync(deleteRequest);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "שגיאה במחיקת הקובץ מה-S3: " + ex.Message);
+            }
+
             image.IsDeleted = true;
             _imageService.Delete(image);
+
             return NoContent();
         }
+
+        private string GetKeyFromUrl(string url)
+        {
+            var uri = new Uri(url);
+            var segments = uri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+            // מסיר את שם הבקט מתוך ה-Path
+            var keySegments = segments.Skip(1);
+            var key = string.Join("/", keySegments);
+
+            return Uri.UnescapeDataString(key);
+        }
+
     }
 }
