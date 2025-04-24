@@ -174,6 +174,8 @@ function ImageGallery() {
         return matchesSearch && matchesCategory;
     });
 
+    const showSearchBox = filteredImages.length > 0 || searchTerm.length > 0;
+
     return (
         <Box
             sx={{
@@ -201,8 +203,8 @@ function ImageGallery() {
                     </Link>
                 </Box>
 
-                {/* שורת חיפוש וסינון - תוצג רק אם יש תמונות */}
-                {filteredImages.length > 0 && (
+                {/* שורת חיפוש וסינון - תוצג רק אם יש תמונות או חיפשו משהו */}
+                {showSearchBox && (
                     <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 3 }}>
                         <ContentBox>
                             <Typography
@@ -249,160 +251,161 @@ function ImageGallery() {
                         <CircularProgress sx={{ color: "grey" }} />
                     ) : filteredImages.length === 0 ? (
                         <Typography sx={{ color: "gray" }}>
-                            No projects available. <br />
-                            Add a new project to get started!
-                        </Typography>
-                    ) : (
-                        categories.map((category) => {
-                            const categoryImages = filteredImages
-                                .filter((img) => img.category.id === category.id)
-                                .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-                            if (categoryImages.length === 0) return null;
-                            return (
-                                <Box key={category.id} sx={{ mb: 4 }}>
-                                    <CategoryTitle>{category.categoryName}</CategoryTitle>
-                                    <CategoryDescription>{category.description}</CategoryDescription>
+                        No projects available. <br />
+                        Add a new project to get started!
+                    </Typography>
+                ) : (
+                    categories.map((category) => {
+                        const categoryImages = filteredImages
+                            .filter((img) => img.category.id === category.id)
+                            .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+                        if (categoryImages.length === 0) return null;
+                        return (
+                            <Box key={category.id} sx={{ mb: 4 }}>
+                                <CategoryTitle>{category.categoryName}</CategoryTitle>
+                                <CategoryDescription>{category.description}</CategoryDescription>
 
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexWrap: "wrap",
-                                            justifyContent: "center",
-                                            gap: "20px",
-                                        }}
-                                    >
-                                        {categoryImages.map((image) => (
-                                            <Card
-                                                key={image.id}
-                                                sx={{
-                                                    maxWidth: 320,
-                                                    minWidth: 250,
-                                                    margin: "auto",
-                                                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                                                    padding: "10px",
-                                                    transition: "transform 0.3s ease",
-                                                    "&:hover": {
-                                                        transform: "scale(1.05)",
-                                                    },
-                                                }}
-                                            >
-                                                <CardMedia
-                                                    component="img"
-                                                    height="200"
-                                                    image={image.linkURL}
-                                                    alt={image.fileName}
-                                                    onClick={() => handleImageClick(image.linkURL)}
-                                                    sx={{ cursor: "pointer", borderRadius: "6px" }}
-                                                />
-                                                <CardContent>
-                                                    <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                                                        {image.fileName}
-                                                    </Typography>
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        {image.description}
-                                                    </Typography>
-                                                    <Typography
-                                                        variant="body2"
-                                                        sx={{
-                                                            color: "gray",
-                                                            fontFamily: "monospace",
-                                                            mb: 2,
-                                                            fontSize: "12px",
-                                                        }}
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexWrap: "wrap",
+                                        justifyContent: "center",
+                                        gap: "20px",
+                                    }}
+                                >
+                                    {categoryImages.map((image) => (
+                                        <Card
+                                            key={image.id}
+                                            sx={{
+                                                maxWidth: 320,
+                                                minWidth: 250,
+                                                margin: "auto",
+                                                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                                                padding: "10px",
+                                                transition: "transform 0.3s ease",
+                                                "&:hover": {
+                                                    transform: "scale(1.05)",
+                                                },
+                                            }}
+                                        >
+                                            <CardMedia
+                                                component="img"
+                                                height="200"
+                                                image={image.linkURL}
+                                                alt={image.fileName}
+                                                onClick={() => handleImageClick(image.linkURL)}
+                                                sx={{ cursor: "pointer", borderRadius: "6px" }}
+                                            />
+                                            <CardContent>
+                                                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                                                    {image.fileName}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    {image.description}
+                                                </Typography>
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        color: "gray",
+                                                        fontFamily: "monospace",
+                                                        mb: 2,
+                                                        fontSize: "12px",
+                                                    }}
+                                                >
+                                                    Created at:{" "}
+                                                    {new Date(image.createdAt).toLocaleDateString()}
+                                                    <br />
+                                                    Updated at:{" "}
+                                                    {new Date(image.updatedAt).toLocaleDateString()}
+                                                </Typography>
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        justifyContent: "space-between",
+                                                        mt: 1,
+                                                    }}
+                                                >
+                                                    <EditButton
+                                                        variant="outlined"
+                                                        size="small"
+                                                        onClick={() => handleEdit(image)}
                                                     >
-                                                        Create at:{" "}
-                                                        {new Date(image.createdAt).toLocaleDateString()}
-                                                        <br />
-                                                        Update at:{" "}
-                                                        {new Date(image.updatedAt).toLocaleDateString()}
-                                                    </Typography>
-                                                    <Box
-                                                        sx={{
-                                                            display: "flex",
-                                                            justifyContent: "space-between",
-                                                            mt: 1,
-                                                        }}
-                                                    >
-                                                        <EditButton
+                                                        <Edit fontSize="small" /> Edit
+                                                    </EditButton>
+                                                    {isDeleting && image.id === imageId1 ? (
+                                                        <DeleteButton
                                                             variant="outlined"
                                                             size="small"
-                                                            onClick={() => handleEdit(image)}
+                                                            onClick={() => handleDelete(image.id)}
+                                                            disabled
                                                         >
-                                                            <Edit fontSize="small" /> Edit
-                                                        </EditButton>
-                                                        {isDeleting && image.id === imageId1 ? (
-                                                            <DeleteButton
-                                                                variant="outlined"
-                                                                size="small"
-                                                                onClick={() => handleDelete(image.id)}
-                                                                disabled
-                                                            >
-                                                                <CircularProgress size={24} style={{ color: "gray" }} />
-                                                                Deleting...
-                                                            </DeleteButton>
-                                                        ) : (
-                                                            <DeleteButton
-                                                                variant="outlined"
-                                                                size="small"
-                                                                onClick={() => handleDelete(image.id)}
-                                                            > <Delete fontSize="small" />
-                                                                Delete
-                                                            </DeleteButton>
-                                                        )}
-                                                    </Box>
-                                                </CardContent>
-                                            </Card>
-                                        ))}
-                                    </Box>
+                                                            <CircularProgress size={24} style={{ color: "gray" }} />
+                                                            Deleting...
+                                                        </DeleteButton>
+                                                    ) : (
+                                                        <DeleteButton
+                                                            variant="outlined"
+                                                            size="small"
+                                                            onClick={() => handleDelete(image.id)}
+                                                        >
+                                                            <Delete fontSize="small" />
+                                                            Delete
+                                                        </DeleteButton>
+                                                    )}
+                                                </Box>
+                                            </CardContent>
+                                        </Card>
+                                    ))}
                                 </Box>
-                            );
-                        })
-                    )
-                }
-            </ContentBox >
-            <Dialog
-                open={!!selectedImage}
-                onClose={handleCloseDialog}
-                maxWidth="md"
-                fullWidth
-                sx={{ '& .MuiDialog-paper': { position: 'relative', borderRadius: 3 } }}
+                            </Box>
+                        );
+                    })
+                )
+            }
+        </ContentBox >
+        <Dialog
+            open={!!selectedImage}
+            onClose={handleCloseDialog}
+            maxWidth="md"
+            fullWidth
+            sx={{ '& .MuiDialog-paper': { position: 'relative', borderRadius: 3 } }}
+        >
+            <IconButton
+                aria-label="close"
+                onClick={handleCloseDialog}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500],
+                    zIndex: 10,
+                }}
             >
-                <IconButton
-                    aria-label="close"
-                    onClick={handleCloseDialog}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[500],
-                        zIndex: 10,
+                <CloseIcon />
+            </IconButton>
+
+            <Box sx={{ p: 2, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <img
+                    src={selectedImage ?? ""}
+                    alt="Enlarged"
+                    style={{
+                        maxWidth: "100%",
+                        maxHeight: "80vh",
+                        objectFit: "contain",
+                        borderRadius: "10px",
                     }}
-                >
-                    <CloseIcon />
-                </IconButton>
-
-                <Box sx={{ p: 2, display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <img
-                        src={selectedImage ?? ""}
-                        alt="Enlarged"
-                        style={{
-                            maxWidth: "100%",
-                            maxHeight: "80vh",
-                            objectFit: "contain",
-                            borderRadius: "10px",
-                        }}
-                    />
-                </Box>
-            </Dialog>
-            <AutoSnackbar
-                open={snackbarOpen}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-                onClose={() => setSnackbarOpen(false)}
-            />
-
-        </Box >
-    );
+                />
+            </Box>
+        </Dialog>
+        <AutoSnackbar
+            open={snackbarOpen}
+            message={snackbarMessage}
+            severity={snackbarSeverity}
+            onClose={() => setSnackbarOpen(false)}
+        />
+    </Box >
+);
 }
 
 export default ImageGallery;
+
