@@ -124,7 +124,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
     <UploadContainer>
       <label htmlFor="file-input">
         <StyledButton variant="contained" color="secondary" component="span" fullWidth>
-          Choose a file in .png format only
+          Choose a file in .png .jpg or .jpeg format only
         </StyledButton>
       </label>
 
@@ -158,9 +158,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
               height: 5,
               borderRadius: 1,
               marginTop: 2,
-              backgroundColor: '#e0e0e0', // צבע רקע של ה־bar
+              backgroundColor: '#e0e0e0',
               '& .MuiLinearProgress-bar': {
-                backgroundColor: '#673ab7', // צבע הקו המתקדם (לדוגמה: סגול)
+                backgroundColor: '#673ab7',
                 borderRadius: 1,
               },
             }}

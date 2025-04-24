@@ -21,7 +21,16 @@ namespace CreativePeak.API.Controllers
         [HttpGet("image-url")]
         public async Task<IActionResult> GetPresignedUrl([FromQuery] string fileName)
         {
-            string contentType = "image/png";
+            string contentType = "image/jpeg"; // ברירת מחדל
+
+            if (fileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+            {
+                contentType = "image/png";
+            }
+            else if (fileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) || fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
+            {
+                contentType = "image/jpeg";
+            }
 
             var request = new GetPreSignedUrlRequest
             {
