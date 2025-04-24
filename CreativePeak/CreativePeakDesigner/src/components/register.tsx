@@ -25,6 +25,7 @@ const StyledButton = styled(Button)({
   transition: "0.3s",
   "&:hover": {
     transform: "scale(1.05)",
+    borderColor: "#673AB7",
   },
 });
 
