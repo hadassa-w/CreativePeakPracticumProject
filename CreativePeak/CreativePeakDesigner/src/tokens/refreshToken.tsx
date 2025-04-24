@@ -6,15 +6,15 @@ const TokenRefresher: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const expirationTimeStr = localStorage.getItem("tokenExpirationTime");
-      if (!expirationTimeStr) return;
+      // const expirationTimeStr = localStorage.getItem("tokenExpirationTime");
+      // if (!expirationTimeStr) return;
 
-      const expirationTime = parseInt(expirationTimeStr, 10);
-      const timeLeft = expirationTime - Date.now();
+      // const expirationTime = parseInt(expirationTimeStr, 10);
+      // const timeLeft = expirationTime - Date.now();
 
-      if (timeLeft < 60 * 1000) {
-        refreshAuthToken();
-      }
+      // if (timeLeft < 60 * 1000) {
+      //   refreshAuthToken();
+      // }
     }, 30 * 1000);
 
     return () => clearInterval(interval);

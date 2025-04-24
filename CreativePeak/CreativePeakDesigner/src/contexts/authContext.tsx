@@ -50,11 +50,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const newAccessToken = response.data.accessToken;
       const newRefreshToken = response.data.refreshToken;
   
-      const expirationTime = Date.now() + 15 * 60 * 1000; // 15 דקות קדימה
+      // const expirationTime = Date.now() + 15 * 60 * 1000; // 15 דקות קדימה
   
       localStorage.setItem("token", newAccessToken);
       localStorage.setItem("refreshToken", newRefreshToken);
-      localStorage.setItem("tokenExpirationTime", expirationTime.toString());
+      // localStorage.setItem("tokenExpirationTime", expirationTime.toString());
   
       setToken(newAccessToken);
       setRefreshToken(newRefreshToken);
