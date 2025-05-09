@@ -32,7 +32,6 @@ import {
     Add,
     Category as CategoryIcon,
     Search as SearchIcon,
-    ArrowBack,
     Sort as SortIcon,
     FilterList as FilterIcon,
     ExpandMore,
@@ -317,12 +316,12 @@ const CategoriesList = () => {
             <ContentBox elevation={3}>
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <IconButton
+                        {/* <IconButton
                             onClick={() => navigate("/")}
                             sx={{ mr: 2, bgcolor: "rgba(0,0,0,0.04)", "&:hover": { bgcolor: "rgba(0,0,0,0.08)" } }}
                         >
                             <ArrowBack />
-                        </IconButton>
+                        </IconButton> */}
                         <Typography
                             variant="h4"
                             sx={{

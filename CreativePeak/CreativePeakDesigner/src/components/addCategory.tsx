@@ -27,6 +27,7 @@ import {
   Info as InfoIcon,
   Label as LabelIcon,
   Description as DescriptionIcon,
+  ArrowBack,
 } from "@mui/icons-material"
 import type Category from "../models/category"
 import { useAuth } from "../contexts/authContext"
@@ -160,7 +161,8 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
     const fetchUserCategories = async () => {
       try {
         const response = await axios.get(`https://creativepeak-api.onrender.com/api/Category`)
-        setUserCategories(response.data)
+        const uCategories = response.data.filter((category: Category) => category.userId == userId)
+        setUserCategories(uCategories);
       } catch (error) {
         console.error("Failed to load categories", error)
         setSnackbarMsg("❌ Failed to load existing categories")
@@ -197,7 +199,7 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
       })
     }
   }, [finalCategoryToEdit, reset])
-  
+
   const onSubmit = async (data: Category) => {
     if (nameExists) return
 
@@ -246,7 +248,7 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
           onClick={handleCancel}
           sx={{ mr: 2, bgcolor: "rgba(0,0,0,0.04)", "&:hover": { bgcolor: "rgba(0,0,0,0.08)" } }}
         >
-          <Close />
+          <ArrowBack />
         </IconButton>
         <Typography
           variant="h4"
@@ -381,7 +383,7 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
                     fullWidth
                     startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Save />}
                     disabled={loading || nameExists || !isValid}
-                    >
+                  >
                     {loading ? "Saving..." : categoryToEdit ? "Save Changes" : "Create Category"}
                   </PrimaryButton>
                 </span>

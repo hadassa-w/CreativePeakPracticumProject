@@ -309,8 +309,8 @@ function ImageGallery() {
 
     const renderEmptyState = () => (
         <EmptyStateContainer>
-            <ImageIcon sx={{ fontSize: 80, color: "#e0e0e0", mb: 2 }} />
-            <Typography variant="h5" sx={{ color: "#9e9e9e", mb: 1 }}>
+            <ImageIcon sx={{ fontSize: 80, color: "#e0e0e0" }} />
+            <Typography variant="h5" sx={{ color: "#9e9e9e"}}>
                 No projects found
             </Typography>
             <Typography variant="body1" sx={{ color: "#9e9e9e", mb: 3, maxWidth: 400 }}>
@@ -335,11 +335,9 @@ function ImageGallery() {
     return (
         <Box
             sx={{
-                display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 minHeight: "100vh",
-                padding: { xs: "15px", sm: "30px" },
             }}
         >
             <ContentBox elevation={3}>
