@@ -97,7 +97,6 @@ function DesignerDetailsForm() {
   return (
     <Container maxWidth="sm">
       <Box sx={{
-        pt: 5,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

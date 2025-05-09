@@ -60,7 +60,7 @@ const ContentBox = styled(Paper)(() => ({
 }))
 
 const CategoryCard = styled(Card)(() => ({
-    marginBottom: "16px",
+    marginBottom: "15px",
     borderRadius: "12px",
     boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.08)",
     transition: "all 0.3s ease",
@@ -308,15 +308,14 @@ const CategoriesList = () => {
     return (
         <Box
             sx={{
-                display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                minHeight: "100vh",
+                minHeight: "80vh",
                 minWidth: "600px",
             }}
         >
             <ContentBox elevation={3}>
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 4 }}>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                         <IconButton
                             onClick={() => navigate("/")}
@@ -341,13 +340,13 @@ const CategoriesList = () => {
                     </Box>
 
                     <AddCategoryButton variant="contained" onClick={() => navigate("/addCategory")}>
-                        <Add /> Add Category
+                        <Add style={{ marginRight: "5px" }} /> Add Category
                     </AddCategoryButton>
                 </Box>
 
                 {categories.length > 0 && (
-                    <Box sx={{ mb: 3 }}>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+                    <Box>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <SearchField
                                 placeholder="Search categories..."
                                 variant="outlined"
@@ -397,7 +396,7 @@ const CategoriesList = () => {
                                             sx={{
                                                 display: "flex",
                                                 alignItems: "flex-start",
-                                                p: 2,
+                                                p: 1,
                                             }}
                                         >
                                             <Badge

@@ -13,9 +13,8 @@ const HomeWrapper = styled(Container)({
     backgroundColor: "#fcfaff", // רקע בהיר עם גוון סגול עדין
     borderRadius: "16px",
     boxShadow: "0 10px 40px rgba(81, 45, 168, 0.1)",
-    padding: "60px 40px",
+    padding: "40px",
     maxWidth: "1000px",
-    marginBottom: "60px",
     position: "relative",
     overflow: "hidden",
     "&::before": {

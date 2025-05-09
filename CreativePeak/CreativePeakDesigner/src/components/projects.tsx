@@ -343,7 +343,7 @@ function ImageGallery() {
             }}
         >
             <ContentBox elevation={3}>
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 6 }}>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
                     <Typography
                         variant="h4"
                         sx={{
@@ -357,7 +357,7 @@ function ImageGallery() {
                             paddingRight: "50px"
                         }}
                     >
-                        <ImageIcon fontSize="large" sx={{ color: "#9C27B0" }} /> Projects Gallery
+                        <ImageIcon fontSize="large" sx={{ color: "#9C27B0",marginRight: "10px" }} /> Projects Gallery
                     </Typography>
 
                     <Link to="/addProject" style={{ textDecoration: "none" }}>
@@ -370,7 +370,7 @@ function ImageGallery() {
                 {/* Search and Filter Section */}
                 {showSearchBox && (
                     <Fade in={true} timeout={800}>
-                        <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+                        <Box sx={{ display: "flex", justifyContent: "center" }}>
                             <FilterBox elevation={1}>
                                 <Box
                                     sx={{
@@ -378,7 +378,6 @@ function ImageGallery() {
                                         alignItems: "center",
                                         justifyContent: "space-between",
                                         width: "100%",
-                                        mb: 2,
                                     }}
                                 >
                                     <Typography

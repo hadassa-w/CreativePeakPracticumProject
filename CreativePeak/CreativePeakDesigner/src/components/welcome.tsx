@@ -8,15 +8,12 @@ import BrushIcon from '@mui/icons-material/Brush';
 import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import { useNavigate } from "react-router-dom";
 
-// קונטיינר כללי - משופר
 const WelcomeContainer = styled(Container)({
     backgroundColor: "#fcfaff",
     borderRadius: "16px",
     boxShadow: "0 10px 40px rgba(81, 45, 168, 0.1)",
-    padding: "60px 40px",
+    padding: "40px",
     maxWidth: "1000px",
-    marginTop: "50px",
-    marginBottom: "50px",
     position: "relative",
     overflow: "hidden",
     "&::before": {
@@ -30,7 +27,6 @@ const WelcomeContainer = styled(Container)({
     }
 });
 
-// חלוקת תוכן פנימית - משופרת
 const Content = styled(Box)({
     display: "flex",
     flexWrap: "wrap",
@@ -40,7 +36,6 @@ const Content = styled(Box)({
     marginTop: "40px",
 });
 
-// אזור מידע - משופר
 const InfoSection = styled(Box)({
     flex: "1 1 500px",
     display: "flex",
