@@ -1,71 +1,17 @@
-import AutoSnackbar from "./snackbar";
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import axios from "axios";
 import {
-  Button, TextField, Box, Typography, Container, CircularProgress,
-  Paper
+  Typography, Box, Button, TextField, CircularProgress, Container,
+  Card, Avatar, Divider, InputAdornment
 } from "@mui/material";
-import { styled } from "@mui/system";
-import DesignerDetails from "../models/designerDetails";
+import {
+  EditOutlined, SaveOutlined, PersonOutline, EmailOutlined, PhoneOutlined,
+  LanguageOutlined, WorkOutlineOutlined, AttachMoneyOutlined, ArrowBackOutlined
+} from "@mui/icons-material";
+import { useForm } from "react-hook-form";
 import { useAuth } from "../contexts/authContext";
-
-const ContentBox = styled(Container)({
-  backgroundColor: "rgba(255, 255, 255, 0.9)",
-  borderRadius: "12px",
-  padding: "40px",
-  maxWidth: "500px",
-  textAlign: "center",
-  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-});
-
-const StyledButton = styled(Button)({
-  textTransform: "none",
-  fontSize: "16px",
-  fontWeight: "bold",
-  borderRadius: "10px",
-  padding: "10px 20px",
-  transition: "0.3s",
-  "&:hover": {
-    transform: "scale(1.05)",
-  },
-});
-
-const ProfileContainer = styled(Paper)({
-  padding: "30px",
-  borderRadius: "12px",
-  backgroundColor: "rgba(255, 255, 255, 0.97)",
-  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-  maxWidth: "500px",
-  margin: "auto",
-  textAlign: "center",
-});
-
-const Label = styled(Typography)({
-  fontSize: "25px",
-  fontWeight: "600",
-  color: "#673AB7",
-  display: "flex",
-  alignItems: "center",
-  gap: "8px",
-});
-
-const Value = styled(Typography)({
-  fontSize: "20px",
-  fontWeight: "500",
-  color: "#333",
-});
-
-const InfoText = styled(Typography)({
-  fontSize: "18px",
-  fontWeight: "500",
-  color: "#444",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "10px",
-  marginBottom: "12px",
-});
+import AutoSnackbar from "./snackbar";
+import DesignerDetails from "../models/designerDetails";
 
 function DesignerDetailsForm() {
   const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm<DesignerDetails>({ mode: "onChange" });
@@ -75,8 +21,16 @@ function DesignerDetailsForm() {
   const [isEditing, setIsEditing] = useState(false);
   const { userId } = useAuth();
 
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMsg, setSnackbarMsg] = useState("");
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error"
+  });
+
+  // Function to show snackbar message
+  const showSnackbar = (message: string, severity: "success" | "error") => {
+    setSnackbar({ open: true, message, severity });
+  };
 
   useEffect(() => {
     axios.get("https://creativepeak-api.onrender.com/api/DesignerDetails")
@@ -89,7 +43,10 @@ function DesignerDetailsForm() {
           );
         }
       })
-      .catch(error => console.error("Error fetching designer details", error))
+      .catch(error => {
+        console.error("Error fetching designer details", error);
+        showSnackbar("Error loading designer details", "error");
+      })
       .finally(() => setInitialLoading(false));
   }, [userId, setValue]);
 
@@ -110,68 +67,482 @@ function DesignerDetailsForm() {
         );
       }
 
-      setSnackbarMsg("🎉 Details saved successfully!");
-      setSnackbarOpen(true);
+      showSnackbar("Designer details saved successfully! 🎉", "success");
 
-      // רענון הנתונים לאחר שמירה
+      // Refresh data after saving
       const updatedResponse = await axios.get("https://creativepeak-api.onrender.com/api/DesignerDetails");
       const updatedData = updatedResponse.data.find((d: DesignerDetails) => d.userId === userId);
       setDesignerDetails(updatedData);
       setIsEditing(false);
     } catch (error) {
-      console.error("❌ Error submitting data:", error);
-      setSnackbarMsg("❌ Failed to save details.");
-      setSnackbarOpen(true);
+      console.error("Error submitting data:", error);
+      showSnackbar("Failed to save designer details", "error");
     } finally {
       setSaving(false);
     }
   };
 
-  return (
-    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
-      <ContentBox>
-        <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>✏️ Designer Details</Typography>
-        {initialLoading ? (
-          <CircularProgress sx={{ color: "grey" }} />
-        ) : isEditing || !designerDetails ? (
-          <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <Typography variant="h6" sx={{ fontSize: "20px", mb: 3 }}>Please enter your business information.</Typography>
-            <TextField label="Full Name" {...register("fullName", { required: "Full Name is required" })} fullWidth error={!!errors.fullName} helperText={errors.fullName?.message?.toString()} required />
-            <TextField label="Website Address" {...register("addressSite")} fullWidth />
-            <TextField label="Email" type="email" {...register("email", { required: "Email is required" })} fullWidth error={!!errors.email} helperText={errors.email?.message?.toString()} required />
-            <TextField label="Phone" type="tel" {...register("phone", { required: "Phone is required" })} fullWidth error={!!errors.phone} helperText={errors.phone?.message?.toString()} required />
-            <TextField label="Years of Experience" type="number" {...register("yearsExperience", { required: "Years of experience is required", min: 0 })} fullWidth error={!!errors.yearsExperience} helperText={errors.yearsExperience?.message?.toString()} required />
-            <TextField label="Minimum Price (₪)" type="number" {...register("priceRangeMin", { required: "Minimum price is required", min: 0 })} fullWidth error={!!errors.priceRangeMin} helperText={errors.priceRangeMin?.message?.toString()} required />
-            <TextField label="Maximum Price (₪)" type="number" {...register("priceRangeMax", { required: "Maximum price is required", min: 0 })} fullWidth error={!!errors.priceRangeMax} helperText={errors.priceRangeMax?.message?.toString()} required />
-            <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={!isValid || saving}>
-              {saving ? (
-                <>
-                  <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Saving...
-                </>
-              ) : "Save"}
-            </StyledButton>
-          </form>
-        ) : (
-          <ProfileContainer elevation={3}>
-            <InfoText as="div"><Label as="span">👤 Full Name:</Label><Value as="span">{designerDetails.fullName}</Value></InfoText>
-            <InfoText as="div"><Label as="span">✉️ Email:</Label><Value as="span">{designerDetails.email}</Value></InfoText>
-            {designerDetails.addressSite && (
-              <InfoText as="div"><Label as="span">🌐 Website Address:</Label><Value as="span">{designerDetails.addressSite}</Value></InfoText>
-            )}
-            <InfoText as="div"><Label as="span">📞 Phone:</Label><Value as="span">{designerDetails.phone}</Value></InfoText>
-            <InfoText as="div"><Label as="span">🛠️ Experience:</Label><Value as="span">{designerDetails.yearsExperience} years</Value></InfoText>
-            <InfoText as="div"><Label as="span">💰 Price Range:</Label><Value as="span">{designerDetails.priceRangeMin}₪ - {designerDetails.priceRangeMax}₪</Value></InfoText>
-            <StyledButton variant="contained" color="secondary" onClick={() => setIsEditing(true)}>Edit designer details</StyledButton>
-          </ProfileContainer>
-        )}
-      </ContentBox>
+  // Render loading screen
+  if (initialLoading) {
+    return (
+      <Container maxWidth="sm" sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+        <Box sx={{ textAlign: "center" }}>
+          <CircularProgress size={60} sx={{ color: "#673AB7", mb: 3 }} />
+          <Typography variant="h6" sx={{ color: "#666" }}>Loading designer details...</Typography>
+        </Box>
+      </Container>
+    );
+  }
 
+  return (
+    <Container maxWidth="sm">
+      <Box sx={{
+        pt: 5,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        minHeight: "80vh"
+      }}>
+        {/* Designer details card */}
+        <Card
+          elevation={5}
+          sx={{
+            width: "100%",
+            borderRadius: 4,
+            overflow: "hidden",
+            transition: "all 0.3s ease",
+            background: "linear-gradient(to bottom, #f9f9ff, #ffffff)",
+            position: "relative"
+          }}
+        >
+          {/* Card header */}
+          <Box
+            sx={{
+              height: 150,
+              p: 3,
+              pb: 5,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              background: "linear-gradient(145deg, #673AB7 0%, #9c27b0 100%)",
+              position: "relative"
+            }}
+          >
+            <Avatar
+              sx={{
+                width: 50,
+                height: 50,
+                bgcolor: "#fff",
+                color: "#673AB7",
+                fontSize: 40,
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+                border: "4px solid #fff",
+                mb: 2
+              }}
+            >
+              <WorkOutlineOutlined fontSize="medium" />
+            </Avatar>
+            <Typography variant="h5" sx={{ color: "white", fontWeight: 600, textTransform: "none" }}>
+              Designer Profile
+            </Typography>
+          </Box>
+
+          {/* Card content */}
+          <Box sx={{ p: 4, pt: 3 }}>
+            {isEditing || !designerDetails ? (
+              // Edit mode - form
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                  {!designerDetails && (
+                    <Typography variant="h6" sx={{ textAlign: "center", mb: 1, color: "#673AB7" }}>
+                      Please enter your business information
+                    </Typography>
+                  )}
+
+                  {/* Full name */}
+                  <TextField
+                    label="Full Name"
+                    {...register("fullName", { required: "Full name is required" })}
+                    error={!!errors.fullName}
+                    helperText={errors.fullName?.message?.toString()}
+                    fullWidth
+                    required
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start"><PersonOutline sx={{ color: "#673AB7" }} /></InputAdornment>
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": { borderColor: "#9c27b0" },
+                        "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                      }
+                    }}
+                  />
+
+                  {/* Email */}
+                  <TextField
+                    label="Email"
+                    type="email"
+                    {...register("email", { required: "Email is required" })}
+                    error={!!errors.email}
+                    helperText={errors.email?.message?.toString()}
+                    fullWidth
+                    required
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start"><EmailOutlined sx={{ color: "#673AB7" }} /></InputAdornment>
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": { borderColor: "#9c27b0" },
+                        "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                      }
+                    }}
+                  />
+
+                  {/* Website Address */}
+                  <TextField
+                    label="Website Address"
+                    {...register("addressSite")}
+                    fullWidth
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start"><LanguageOutlined sx={{ color: "#673AB7" }} /></InputAdornment>
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": { borderColor: "#9c27b0" },
+                        "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                      }
+                    }}
+                  />
+
+                  {/* Phone */}
+                  <TextField
+                    label="Phone"
+                    type="tel"
+                    {...register("phone", { required: "Phone is required" })}
+                    error={!!errors.phone}
+                    helperText={errors.phone?.message?.toString()}
+                    fullWidth
+                    required
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start"><PhoneOutlined sx={{ color: "#673AB7" }} /></InputAdornment>
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": { borderColor: "#9c27b0" },
+                        "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                      }
+                    }}
+                  />
+
+                  {/* Years of Experience */}
+                  <TextField
+                    label="Years of Experience"
+                    type="number"
+                    {...register("yearsExperience", {
+                      required: "Years of experience is required",
+                      min: { value: 0, message: "Value must be positive" }
+                    })}
+                    error={!!errors.yearsExperience}
+                    helperText={errors.yearsExperience?.message?.toString()}
+                    fullWidth
+                    required
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start"><WorkOutlineOutlined sx={{ color: "#673AB7" }} /></InputAdornment>
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": { borderColor: "#9c27b0" },
+                        "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                      }
+                    }}
+                  />
+
+                  {/* Price Range (Min & Max) */}
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    <TextField
+                      label="Minimum Price (₪)"
+                      type="number"
+                      {...register("priceRangeMin", {
+                        required: "Minimum price is required",
+                        min: { value: 0, message: "Value must be positive" }
+                      })}
+                      error={!!errors.priceRangeMin}
+                      helperText={errors.priceRangeMin?.message?.toString()}
+                      fullWidth
+                      required
+                      variant="outlined"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start"><AttachMoneyOutlined sx={{ color: "#673AB7" }} /></InputAdornment>
+                      }}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "&:hover fieldset": { borderColor: "#9c27b0" },
+                          "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                        }
+                      }}
+                    />
+                    <TextField
+                      label="Maximum Price (₪)"
+                      type="number"
+                      {...register("priceRangeMax", {
+                        required: "Maximum price is required",
+                        min: { value: 0, message: "Value must be positive" },
+                        valueAsNumber: true,
+                        validate: (value, formValues) =>
+                          value >= formValues.priceRangeMin || "Max price must be greater than min price"
+                      })}
+                      error={!!errors.priceRangeMax}
+                      helperText={errors.priceRangeMax?.message?.toString()}
+                      fullWidth
+                      required
+                      variant="outlined"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start"><AttachMoneyOutlined sx={{ color: "#673AB7" }} /></InputAdornment>
+                      }}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "&:hover fieldset": { borderColor: "#9c27b0" },
+                          "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                        }
+                      }}
+                    />
+                  </Box>
+
+                  {/* Action buttons */}
+                  <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+                    {designerDetails && (
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => setIsEditing(false)}
+                        startIcon={<ArrowBackOutlined />}
+                        sx={{
+                          borderRadius: 2,
+                          py: 1.2,
+                          flex: 1,
+                          borderColor: "#673AB7",
+                          color: "#673AB7",
+                          "&:hover": {
+                            borderColor: "#9c27b0",
+                            bgcolor: "rgba(103, 58, 183, 0.04)"
+                          },
+                          textTransform: "none"
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    )}
+
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      disabled={!isValid || saving}
+                      startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <SaveOutlined />}
+                      sx={{
+                        borderRadius: 2,
+                        py: 1.2,
+                        flex: designerDetails ? 2 : 1,
+                        bgcolor: "#673AB7",
+                        color: "white",
+                        boxShadow: "0 4px 10px rgba(103, 58, 183, 0.3)",
+                        "&:hover": {
+                          bgcolor: "#9c27b0",
+                          boxShadow: "0 6px 15px rgba(103, 58, 183, 0.4)"
+                        },
+                        textTransform: "none"
+                      }}
+                    >
+                      {saving ? "Saving..." : "Save Changes"}
+                    </Button>
+                  </Box>
+                </Box>
+              </form>
+            ) : (
+              // View mode - designer details
+              <Box sx={{ py: 1,width:"350px" }}>
+                {/* Full name */}
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box sx={{
+                    bgcolor: "rgba(103, 58, 183, 0.1)",
+                    borderRadius: "50%",
+                    p: 1.5,
+                    display: "flex",
+                    mr: 2
+                  }}>
+                    <PersonOutline sx={{ color: "#673AB7" }} />
+                  </Box>
+                  <Box sx={{ textAlign: "left" }}>
+                    <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                      Full Name
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      {designerDetails.fullName}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* Email */}
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box sx={{
+                    bgcolor: "rgba(103, 58, 183, 0.1)",
+                    borderRadius: "50%",
+                    p: 1.5,
+                    display: "flex",
+                    mr: 2
+                  }}>
+                    <EmailOutlined sx={{ color: "#673AB7" }} />
+                  </Box>
+                  <Box sx={{ textAlign: "left" }}>
+                    <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                      Email
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      {designerDetails.email}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* Phone */}
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box sx={{
+                    bgcolor: "rgba(103, 58, 183, 0.1)",
+                    borderRadius: "50%",
+                    p: 1.5,
+                    display: "flex",
+                    mr: 2
+                  }}>
+                    <PhoneOutlined sx={{ color: "#673AB7" }} />
+                  </Box>
+                  <Box sx={{ textAlign: "left" }}>
+                    <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                      Phone
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      {designerDetails.phone}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                {/* Website address - if exists */}
+                {designerDetails.addressSite && (
+                  <>
+                    <Divider sx={{ my: 2 }} />
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <Box sx={{
+                        bgcolor: "rgba(103, 58, 183, 0.1)",
+                        borderRadius: "50%",
+                        p: 1.5,
+                        display: "flex",
+                        mr: 2
+                      }}>
+                        <LanguageOutlined sx={{ color: "#673AB7" }} />
+                      </Box>
+                      <Box sx={{ textAlign: "left" }}>
+                        <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                          Website
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                          {designerDetails.addressSite}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </>
+                )}
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* Years of Experience */}
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box sx={{
+                    bgcolor: "rgba(103, 58, 183, 0.1)",
+                    borderRadius: "50%",
+                    p: 1.5,
+                    display: "flex",
+                    mr: 2
+                  }}>
+                    <WorkOutlineOutlined sx={{ color: "#673AB7" }} />
+                  </Box>
+                  <Box sx={{ textAlign: "left" }}>
+                    <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                      Experience
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      {designerDetails.yearsExperience} years
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* Price Range */}
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Box sx={{
+                    bgcolor: "rgba(103, 58, 183, 0.1)",
+                    borderRadius: "50%",
+                    p: 1.5,
+                    display: "flex",
+                    mr: 2
+                  }}>
+                    <AttachMoneyOutlined sx={{ color: "#673AB7" }} />
+                  </Box>
+                  <Box sx={{ textAlign: "left" }}>
+                    <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                      Price Range
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      {designerDetails.priceRangeMin}₪ - {designerDetails.priceRangeMax}₪
+                    </Typography>
+                  </Box>
+                </Box>
+
+                {/* Edit button */}
+                <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setIsEditing(true)}
+                    startIcon={<EditOutlined />}
+                    sx={{
+                      borderRadius: 8,
+                      py: 1.2,
+                      px: 4,
+                      bgcolor: "#673AB7",
+                      color: "white",
+                      boxShadow: "0 4px 10px rgba(103, 58, 183, 0.3)",
+                      "&:hover": {
+                        bgcolor: "#9c27b0",
+                        boxShadow: "0 6px 15px rgba(103, 58, 183, 0.4)",
+                        transform: "translateY(-2px)"
+                      },
+                      transition: "all 0.3s ease",
+                      textTransform: "none",
+                    }}
+                  >
+                    Edit Designer Details
+                  </Button>
+                </Box>
+              </Box>
+            )}
+          </Box>
+        </Card>
+      </Box>
+
+      {/* Snackbar notification */}
       <AutoSnackbar
-        open={snackbarOpen}
-        message={snackbarMsg}
-        onClose={() => setSnackbarOpen(false)}
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
       />
-    </Box>
+    </Container>
   );
 }
 

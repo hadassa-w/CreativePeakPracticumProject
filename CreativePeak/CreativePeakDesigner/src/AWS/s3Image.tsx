@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState, useRef } from 'react';
 import {
   Button,
-  CircularProgress,
   Typography,
   Container,
-  LinearProgress,
+  Box,
+  styled
 } from '@mui/material';
-import { styled } from '@mui/system';
-import AutoSnackbar from '../components/snackbar';
+import { PhotoCamera } from '@mui/icons-material';
 
 const UploadContainer = styled(Container)({
   display: 'flex',
@@ -20,7 +18,7 @@ const UploadContainer = styled(Container)({
   margin: '0 auto',
 });
 
-const StyledButton = styled(Button)<{ component?: React.ElementType }>({
+const StyledButton = styled(Button)({
   textTransform: 'none',
   fontSize: '15px',
   fontWeight: 'bold',
@@ -46,145 +44,75 @@ const ImagePreview = styled('img')({
 
 interface FileUploaderProps {
   existingImageUrl?: string;
+  onFileChange: (file: File | null) => void;
+  onPreviewChange: (preview: string | null) => void;
 }
 
-const FileUploader: React.FC<FileUploaderProps> = ({ existingImageUrl }) => {
-  const [file, setFile] = useState<File | null>(null);
+const FileUploader: React.FC<FileUploaderProps> = ({
+  existingImageUrl,
+  onFileChange,
+  onPreviewChange
+}) => {
   const [imagePreview, setImagePreview] = useState<string | null>(existingImageUrl || null);
-  const [progress, setProgress] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [uploaded, setUploaded] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
-
-  useEffect(() => {
-    if (existingImageUrl) {
-      setImagePreview(existingImageUrl);
-      localStorage.setItem("linkURL", existingImageUrl);
-    }
-  }, [existingImageUrl]);
+  const [fileName, setFileName] = useState<string>(
+    existingImageUrl ? decodeURIComponent(existingImageUrl.split('/').pop() || '') : 'No file selected'
+  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
+    if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
-      setFile(selectedFile);
-      setImagePreview(URL.createObjectURL(selectedFile));
-      setUploaded(false);
-      setProgress(0);
+      setFileName(selectedFile.name);
+
+      // Pass the file to parent component
+      onFileChange(selectedFile);
+
+      // Create and set preview
+      const preview = URL.createObjectURL(selectedFile);
+      setImagePreview(preview);
+      onPreviewChange(preview);
     }
   };
 
-  const handleUpload = async () => {
-    if (!file) return;
-    setLoading(true);
-
-    try {
-      const uniqueFileName = `${Date.now()}-${file.name}`;
-      const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
-        params: { fileName: uniqueFileName }
-      });
-      const presignedUrl = response.data.url;
-
-      await axios.put(presignedUrl, file, {
-        headers: { 'Content-Type': file.type },
-        onUploadProgress: (progressEvent) => {
-          const percent = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 1));
-          setProgress(percent);
-        },
-      });
-
-      const s3BaseUrl = "https://s3.us-east-1.amazonaws.com/creativepeakproject.aws-testpnoren/";
-      const imageUrl = `${s3BaseUrl}${encodeURIComponent(uniqueFileName)}`;
-
-      localStorage.setItem("linkURL", imageUrl);
-      setImagePreview(imageUrl);
-      setUploaded(true);
-      setSnackbarMessage("🎉 File uploaded successfully!");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-
-    } catch (error) {
-      console.error("❌ Error uploading file:", error);
-      setSnackbarMessage("❌ File upload failed. Please try again.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
-    } finally {
-      setLoading(false);
+  const handleButtonClick = () => {
+    // Programmatically click the hidden input when button is clicked
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
-
-  const fileNameToShow = file
-    ? file.name
-    : imagePreview
-      ? decodeURIComponent(imagePreview.split('/').pop() || '')
-      : 'No file selected';
 
   return (
     <UploadContainer>
-      <label htmlFor="file-input">
-        <StyledButton variant="contained" color="secondary" component="span" fullWidth>
-          Choose a file in .png .jpg or .jpeg format only
-        </StyledButton>
-      </label>
+      <Box sx={{ width: '100%', textAlign: 'center' }}>
+        <StyledButton
+          {...({
+            component: 'span',
+            variant: 'contained',
+            color: 'secondary',
+            fullWidth: true,
+            startIcon: <PhotoCamera />,
+            onClick: handleButtonClick,
+            children: 'Choose an image (.png, .jpg or .jpeg)',
+          } as any)}
+        />
 
-      <FileInput id="file-input" type="file" onChange={handleFileChange} accept="image/*" />
-
-      {!imagePreview && (
-        <Typography variant="body1" sx={{ marginTop: '10px', color: '#555' }}>
-          {fileNameToShow}
-        </Typography>
-      )}
-
-      {imagePreview && <ImagePreview src={imagePreview} alt="Preview" />}
+        <FileInput
+          ref={fileInputRef}
+          id="file-input"
+          type="file"
+          onChange={handleFileChange}
+          accept="image/*"
+        />
+      </Box>
 
       {imagePreview && (
-        <Typography variant="body1" sx={{ marginTop: '10px', color: '#555' }}>
-          {fileNameToShow}
-        </Typography>
-      )}
-
-      {loading ? (
-        <>
-          <Typography variant="body1" sx={{ marginTop: 2 }}>
-            Uploading file...
+        <Box sx={{ mt: 2, width: '100%', textAlign: 'center' }}>
+          <ImagePreview src={imagePreview} alt="Preview" />
+          <Typography variant="body1" sx={{ marginTop: '10px', color: '#555' }}>
+            {fileName}
           </Typography>
-          <CircularProgress size={20} sx={{ marginRight: '10px', color: "gray" }} />
-          <LinearProgress
-            variant="determinate"
-            value={progress}
-            sx={{
-              width: '100%',
-              height: 5,
-              borderRadius: 1,
-              marginTop: 2,
-              backgroundColor: '#e0e0e0',
-              '& .MuiLinearProgress-bar': {
-                backgroundColor: '#673ab7',
-                borderRadius: 1,
-              },
-            }}
-          />
-          <Typography variant="body1" sx={{ marginTop: 2 }}>
-            Progress: {progress}%
-          </Typography> </>
-      ) : (
-        <StyledButton
-          variant="contained"
-          color="secondary"
-          onClick={handleUpload}
-          disabled={!file || uploaded}
-        >
-          Upload file
-        </StyledButton>
+        </Box>
       )}
-
-      <AutoSnackbar
-        open={snackbarOpen}
-        message={snackbarMessage}
-        severity={snackbarSeverity}
-        onClose={() => setSnackbarOpen(false)}
-      />
     </UploadContainer>
   );
 };

@@ -100,6 +100,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userName");
     localStorage.removeItem("userId");
+    localStorage.removeItem("userId");
     setToken(null);
     setRefreshToken(null);
     setUserName(null);

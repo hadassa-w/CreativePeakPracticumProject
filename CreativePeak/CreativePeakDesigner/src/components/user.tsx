@@ -1,107 +1,129 @@
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Container, Typography, Box, Button, TextField, CircularProgress, Avatar, Divider, Card } from "@mui/material";
+import { EditOutlined, SaveOutlined, PersonOutline, EmailOutlined, PhoneOutlined, HomeOutlined, ArrowBackOutlined } from "@mui/icons-material";
 import axios from "axios";
-import { Button, TextField, Box, Typography, Container, CircularProgress, Paper } from "@mui/material";
-import { styled } from "@mui/system";
 import User from "../models/user";
 import { useAuth } from "../contexts/authContext";
 import AutoSnackbar from "./snackbar";
 
-// עיצוב
-const ContentBox = styled(Container)({
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
-    borderRadius: "12px",
-    padding: "40px",
-    maxWidth: "500px",
-    textAlign: "center",
-    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-});
-
-const StyledButton = styled(Button)({
-    textTransform: "none",
-    fontSize: "16px",
-    fontWeight: "bold",
-    borderRadius: "10px",
-    padding: "10px 20px",
-    transition: "0.3s",
-    "&:hover": {
-        transform: "scale(1.05)",
-    },
-});
-
-const ProfileContainer = styled(Paper)({
-    padding: "30px",
-    borderRadius: "12px",
-    backgroundColor: "rgba(255, 255, 255, 0.97)",
-    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.15)",
-    maxWidth: "500px",
-    margin: "auto",
-    textAlign: "center",
-});
-
-const Label = styled(Typography)({
-    fontSize: "25px",
-    fontWeight: "600",
-    color: "#673AB7",
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-});
-
-const Value = styled(Typography)({
-    fontSize: "20px",
-    fontWeight: "500",
-    color: "#333",
-});
-
-const InfoText = styled(Typography)({
-    fontSize: "18px",
-    fontWeight: "500",
-    color: "#444",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "10px",
-    marginBottom: "12px",
-});
-
-export default function EditUserForm() {
-    const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm<User>({
-        mode: "onChange",
-    });
-
-    const [loadingInitial, setLoadingInitial] = useState(true);
-    const [saving, setSaving] = useState(false);
+export default function Profile() {
     const [user, setUser] = useState<User | null>(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState("");
-    const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [formData, setFormData] = useState({
+        fullName: "",
+        email: "",
+        phone: "",
+        address: ""
+    });
+    const [errors, setErrors] = useState({
+        fullName: "",
+        email: "",
+        phone: ""
+    });
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        severity: "success" as "success" | "error"
+    });
     const { userId } = useAuth();
 
-    useEffect(() => {
-        // refreshAuthToken();
-        const token = localStorage.getItem("token");
-        axios.get(`https://creativepeak-api.onrender.com/api/User/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(response => {
-                const data = response.data;
-                setUser(data);
-                Object.keys(data).forEach(key => setValue(key as keyof User, data[key as keyof User]));
-            })
-            .catch(error => console.error("Error fetching user data", error))
-            .finally(() => setLoadingInitial(false));
-    }, [userId, setValue]);
+    // Function to show snackbar message
+    const showSnackbar = (message: string, severity: "success" | "error") => {
+        setSnackbar({ open: true, message, severity });
+    };
 
-    const onSubmit = async (data: User) => {
+    // Load user data when component mounts
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    showSnackbar("Access denied", "error");
+                    setLoading(false);
+                    return;
+                }
+
+                const response = await axios.get(
+                    `https://creativepeak-api.onrender.com/api/User/${userId}`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                const userData = response.data;
+                setUser(userData);
+                setFormData({
+                    fullName: userData.fullName || "",
+                    email: userData.email || "",
+                    phone: userData.phone || "",
+                    address: userData.address || ""
+                });
+            } catch (error) {
+                console.error("Error loading user data:", error);
+                showSnackbar("Error loading profile", "error");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, [userId]);
+
+    // Handle form input changes
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+
+        // Basic validation
+        validateField(name, value);
+    };
+
+    // Field validation function
+    const validateField = (name: string, value: string) => {
+        let errorMessage = "";
+
+        switch (name) {
+            case "fullName":
+                errorMessage = !value ? "Full name is required" : "";
+                break;
+            case "email":
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                errorMessage = !value ? "Email is required" :
+                    !emailRegex.test(value) ? "Invalid email address" : "";
+                break;
+            case "phone":
+                const phoneRegex = /^[0-9\+\-\s]{9,15}$/;
+                errorMessage = !value ? "Phone number is required" :
+                    !phoneRegex.test(value) ? "Invalid phone number" : "";
+                break;
+        }
+
+        setErrors(prev => ({ ...prev, [name]: errorMessage }));
+        return !errorMessage;
+    };
+
+    // Check if the entire form is valid
+    const isFormValid = () => {
+        return !errors.fullName && !errors.email && !errors.phone &&
+            formData.fullName && formData.email && formData.phone;
+    };
+
+    // Save user data
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // Validate all fields before submission
+        if (!validateField("fullName", formData.fullName) ||
+            !validateField("email", formData.email) ||
+            !validateField("phone", formData.phone)) {
+            return;
+        }
+
         setSaving(true);
         const token = localStorage.getItem("token");
 
         if (!token) {
-            setSnackbarMessage("⚠️ Authentication token is missing!");
-            setSnackbarSeverity("error");
-            setSnackbarOpen(true);
+            showSnackbar("No access permission to save data", "error");
             setSaving(false);
             return;
         }
@@ -109,79 +131,362 @@ export default function EditUserForm() {
         try {
             await axios.put(
                 `https://creativepeak-api.onrender.com/api/User/updateWithoutPassword/${userId}`,
-                data,
+                formData,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            setUser(data);
-            setSnackbarMessage("🎉 Details updated successfully!");
-            setSnackbarSeverity("success");
-            setSnackbarOpen(true);
+
+            setUser({ ...user, ...formData } as User);
+            showSnackbar("Profile updated successfully! 🎉", "success");
 
             setTimeout(() => {
                 setIsEditing(false);
+                setSaving(false);
             }, 1000);
         } catch (error) {
-            console.error("❌ Error updating data:", error);
-            setSnackbarMessage("❌ Failed to update details.");
-            setSnackbarSeverity("error");
-            setSnackbarOpen(true);
-        } finally {
+            console.error("Error updating data:", error);
+            showSnackbar("Error updating profile", "error");
             setSaving(false);
         }
     };
 
+    // Render loading screen
+    if (loading) {
+        return (
+            <Container maxWidth="sm" sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+                <Box sx={{ textAlign: "center" }}>
+                    <CircularProgress size={60} sx={{ color: "#673AB7", mb: 3 }} />
+                    <Typography variant="h6" sx={{ color: "#666" }}>Loading user data...</Typography>
+                </Box>
+            </Container>
+        );
+    }
+
     return (
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", padding: "30px" }}>
-            <ContentBox>
-                <Typography variant="h4" sx={{ fontWeight: "bold", color: "#673AB7", mb: 3 }}>✏️ Profile</Typography>
-                {loadingInitial ? (
-                    <CircularProgress sx={{ color: "grey" }} />
-                ) : isEditing || !user ? (
-                    <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                        <TextField label="Full Name" {...register("fullName", { required: "Full Name is required" })} fullWidth error={!!errors.fullName} helperText={errors.fullName?.message?.toString()} required />
-                        <TextField label="Email" type="email" {...register("email", { required: "Email is required" })} fullWidth error={!!errors.email} helperText={errors.email?.message?.toString()} required />
-                        <TextField label="Phone" type="tel" {...register("phone", { required: "Phone is required" })} fullWidth error={!!errors.phone} helperText={errors.phone?.message?.toString()} required />
-                        <TextField label="Address" {...register("address")} fullWidth />
-                        <StyledButton type="submit" variant="contained" color="secondary" fullWidth disabled={!isValid || saving}>
-                            {saving ? (
-                                <>
-                                    <CircularProgress size={20} sx={{ color: "white", mr: 1 }} /> Saving...
-                                </>
-                            ) : (
-                                "Save Changes"
-                            )}
-                        </StyledButton>
-                    </form>
-                ) : (
-                    <ProfileContainer elevation={3}>
-                        <InfoText as="div">
-                            <Label as="span">👤 Full Name:</Label>
-                            <Value as="span">{user.fullName}</Value>
-                        </InfoText>
-                        <InfoText as="div">
-                            <Label as="span">✉️ Email:</Label>
-                            <Value as="span">{user.email}</Value>
-                        </InfoText>
-                        <InfoText as="div">
-                            <Label as="span">📞 Phone:</Label>
-                            <Value as="span">{user.phone}</Value>
-                        </InfoText>
-                        {user.address && (
-                            <InfoText as="div">
-                                <Label as="span">🏠 Address:</Label>
-                                <Value as="span">{user.address}</Value>
-                            </InfoText>
+        <Container maxWidth="sm">
+            <Box sx={{
+                pt: 5,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                minHeight: "80vh"
+            }}>
+                {/* Profile card */}
+                <Card
+                    elevation={5}
+                    sx={{
+                        width: "100%",
+                        borderRadius: 4,
+                        overflow: "hidden",
+                        transition: "all 0.3s ease",
+                        background: "linear-gradient(to bottom, #f9f9ff, #ffffff)",
+                        position: "relative"
+                    }}
+                >
+                    {/* Card header */}
+                    <Box
+                        sx={{
+                            height: 150,
+                            p: 3,
+                            pb: 5,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            background: "linear-gradient(145deg, #673AB7 0%, #9c27b0 100%)",
+                            position: "relative"
+                        }}
+                    >
+                        <Avatar
+                            sx={{
+                                width: 50,
+                                height: 50,
+                                bgcolor: "#fff",
+                                color: "#673AB7",
+                                fontSize: 40,
+                                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+                                border: "4px solid #fff",
+                                mb: 2
+                            }}
+                        >
+                            {user?.fullName?.charAt(0) || <PersonOutline fontSize="medium" />}
+                        </Avatar>
+                        <Typography variant="h5" sx={{ color: "white", fontWeight: 600, textTransform: "none" }}>
+                            My Profile
+                        </Typography>
+                    </Box>
+
+                    {/* Card content */}
+                    <Box sx={{ p: 4, pt: 3 }}>
+                        {isEditing ? (
+                            // Edit mode - form
+                            <form onSubmit={handleSubmit}>
+                                <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                                    {/* Full name */}
+                                    <TextField
+                                        label="Full Name"
+                                        name="fullName"
+                                        value={formData.fullName}
+                                        onChange={handleInputChange}
+                                        error={!!errors.fullName}
+                                        helperText={errors.fullName}
+                                        fullWidth
+                                        required
+                                        variant="outlined"
+                                        InputProps={{
+                                            startAdornment: <PersonOutline sx={{ mr: 1, color: "#673AB7" }} />
+                                        }}
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "&:hover fieldset": { borderColor: "#9c27b0" },
+                                                "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                                            }
+                                        }}
+                                    />
+
+                                    {/* Email */}
+                                    <TextField
+                                        label="Email"
+                                        name="email"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        error={!!errors.email}
+                                        helperText={errors.email}
+                                        fullWidth
+                                        required
+                                        variant="outlined"
+                                        InputProps={{
+                                            startAdornment: <EmailOutlined sx={{ mr: 1, color: "#673AB7" }} />
+                                        }}
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "&:hover fieldset": { borderColor: "#9c27b0" },
+                                                "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                                            }
+                                        }}
+                                    />
+
+                                    {/* Phone */}
+                                    <TextField
+                                        label="Phone"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
+                                        error={!!errors.phone}
+                                        helperText={errors.phone}
+                                        fullWidth
+                                        required
+                                        variant="outlined"
+                                        InputProps={{
+                                            startAdornment: <PhoneOutlined sx={{ mr: 1, color: "#673AB7" }} />
+                                        }}
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "&:hover fieldset": { borderColor: "#9c27b0" },
+                                                "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                                            }
+                                        }}
+                                    />
+
+                                    {/* Address */}
+                                    <TextField
+                                        label="Address"
+                                        name="address"
+                                        value={formData.address}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        variant="outlined"
+                                        InputProps={{
+                                            startAdornment: <HomeOutlined sx={{ mr: 1, color: "#673AB7" }} />
+                                        }}
+                                        sx={{
+                                            "& .MuiOutlinedInput-root": {
+                                                "&:hover fieldset": { borderColor: "#9c27b0" },
+                                                "&.Mui-focused fieldset": { borderColor: "#673AB7" }
+                                            }
+                                        }}
+                                    />
+
+                                    {/* Action buttons */}
+                                    <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+                                        <Button
+                                            variant="outlined"
+                                            color="primary"
+                                            onClick={() => setIsEditing(false)}
+                                            startIcon={<ArrowBackOutlined />}
+                                            sx={{
+                                                borderRadius: 2,
+                                                py: 1.2,
+                                                flex: 1,
+                                                borderColor: "#673AB7",
+                                                color: "#673AB7",
+                                                "&:hover": {
+                                                    borderColor: "#9c27b0",
+                                                    bgcolor: "rgba(103, 58, 183, 0.04)"
+                                                },
+                                                textTransform: "none"
+                                            }}
+                                        >
+                                            Cancel
+                                        </Button>
+
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            disabled={!isFormValid() || saving}
+                                            startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <SaveOutlined />}
+                                            sx={{
+                                                borderRadius: 2,
+                                                py: 1.2,
+                                                flex: 2,
+                                                bgcolor: "#673AB7",
+                                                color: "white",
+                                                boxShadow: "0 4px 10px rgba(103, 58, 183, 0.3)",
+                                                "&:hover": {
+                                                    bgcolor: "#9c27b0",
+                                                    boxShadow: "0 6px 15px rgba(103, 58, 183, 0.4)"
+                                                },
+                                                textTransform: "none"
+                                            }}
+                                        >
+                                            {saving ? "Saving..." : "Save Changes"}
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            </form>
+                        ) : (
+                            // View mode - user details
+                            <Box sx={{ py: 1,width:"350px" }}>
+                                {/* Full name */}
+                                <Box sx={{ display: "flex", alignItems: "center" }}>
+                                    <Box sx={{
+                                        bgcolor: "rgba(103, 58, 183, 0.1)",
+                                        borderRadius: "50%",
+                                        p: 1.5,
+                                        display: "flex",
+                                        mr: 2
+                                    }}>
+                                        <PersonOutline sx={{ color: "#673AB7" }} />
+                                    </Box>
+                                    <Box sx={{textAlign: "left"}}>
+                                        <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                                            Full Name
+                                        </Typography>
+                                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                                            {user?.fullName}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+
+                                <Divider sx={{ my: 2 }} />
+
+                                {/* Email */}
+                                <Box sx={{ display: "flex", alignItems: "center" }}>
+                                    <Box sx={{
+                                        bgcolor: "rgba(103, 58, 183, 0.1)",
+                                        borderRadius: "50%",
+                                        p: 1.5,
+                                        display: "flex",
+                                        mr: 2
+                                    }}>
+                                        <EmailOutlined sx={{ color: "#673AB7" }} />
+                                    </Box>
+                                    <Box sx={{textAlign: "left"}}>
+                                        <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                                            Email
+                                        </Typography>
+                                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                                            {user?.email}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+
+                                <Divider sx={{ my: 2 }} />
+
+                                {/* Phone */}
+                                <Box sx={{ display: "flex", mb: 3, alignItems: "center" }}>
+                                    <Box sx={{
+                                        bgcolor: "rgba(103, 58, 183, 0.1)",
+                                        borderRadius: "50%",
+                                        p: 1.5,
+                                        display: "flex",
+                                        mr: 2
+                                    }}>
+                                        <PhoneOutlined sx={{ color: "#673AB7" }} />
+                                    </Box>
+                                    <Box sx={{textAlign: "left"}}>
+                                        <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                                            Phone
+                                        </Typography>
+                                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                                            {user?.phone}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+
+                                {/* Address - if exists */}
+                                {user?.address && (
+                                    <>
+                                        <Divider sx={{ my: 2 }} />
+                                        <Box sx={{ display: "flex", mb: 1, alignItems: "center" }}>
+                                            <Box sx={{
+                                                bgcolor: "rgba(103, 58, 183, 0.1)",
+                                                borderRadius: "50%",
+                                                p: 1.5,
+                                                display: "flex",
+                                                mr: 2
+                                            }}>
+                                                <HomeOutlined sx={{ color: "#673AB7" }} />
+                                            </Box>
+                                            <Box sx={{textAlign: "left"}}>
+                                                <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                                                    Address
+                                                </Typography>
+                                                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                                                    {user.address}
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </>
+                                )}
+
+                                {/* Edit button */}
+                                <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => setIsEditing(true)}
+                                        startIcon={<EditOutlined />}
+                                        sx={{
+                                            borderRadius: 8,
+                                            py: 1.2,
+                                            px: 4,
+                                            bgcolor: "#673AB7",
+                                            color: "white",
+                                            boxShadow: "0 4px 10px rgba(103, 58, 183, 0.3)",
+                                            "&:hover": {
+                                                bgcolor: "#9c27b0",
+                                                boxShadow: "0 6px 15px rgba(103, 58, 183, 0.4)",
+                                                transform: "translateY(-2px)"
+                                            },
+                                            transition: "all 0.3s ease",
+                                            textTransform: "none",
+                                        }}
+                                    >
+                                        Edit Profile
+                                    </Button>
+                                </Box>
+                            </Box>
                         )}
-                        <StyledButton variant="contained" color="secondary" onClick={() => setIsEditing(true)}>Edit profile</StyledButton>
-                    </ProfileContainer>
-                )}
-            </ContentBox>
+                    </Box>
+                </Card>
+            </Box>
+
+            {/* Snackbar notification */}
             <AutoSnackbar
-                open={snackbarOpen}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-                onClose={() => setSnackbarOpen(false)}
+                open={snackbar.open}
+                message={snackbar.message}
+                severity={snackbar.severity}
+                onClose={() => setSnackbar(prev => ({ ...prev, open: false }))}
             />
-        </Box>
+        </Container>
     );
 }

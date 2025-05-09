@@ -4,4 +4,5 @@ export default interface Category {
     description: string;
     DesignerDetailsId: number;
     userId: number;
+    createdAt: Date;
 }
