@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
 import { CircularProgress, Box } from "@mui/material";
 
-const ProtectedRoute = ({ children }: { children: any }) => {
+const ProtectedPath = ({ children }: { children: any }) => {
   const { isLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {
@@ -20,4 +20,4 @@ const ProtectedRoute = ({ children }: { children: any }) => {
   return children;
 };
 
-export default ProtectedRoute;
+export default ProtectedPath;

@@ -13,7 +13,7 @@ import AddCategoryForm from "./components/addCategory";
 import CategoriesList from "./components/categories";
 import EditUserForm from "./components/user";
 import ScrollToTop from "./components/scrollToTop";
-import ProtectedRoute from "./components/protectedRoute";
+import ProtectedPath from "./components/protectedPath";
 
 function App() {
   const protectedRoutes = [
@@ -43,9 +43,9 @@ function App() {
               key={path}
               path={path}
               element={
-                <ProtectedRoute>
+                <ProtectedPath>
                   <Component />
-                </ProtectedRoute>
+                </ProtectedPath>
               }
             />
           ))}
