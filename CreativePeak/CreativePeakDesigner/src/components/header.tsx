@@ -51,6 +51,7 @@ export default function Header() {
   ];
 
   const loggedOutNavItems: NavItem[] = [
+    { name: "Home", path: "/", icon: <HomeIcon /> },
     { name: "Log In", path: "/login", icon: <LoginIcon /> },
     { name: "Sign Up", path: "/register", icon: <PersonAddIcon /> },
   ];
