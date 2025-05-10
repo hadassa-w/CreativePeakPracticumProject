@@ -12,8 +12,8 @@ import ImageGallery from "./components/projects";
 import AddCategoryForm from "./components/addCategory";
 import CategoriesList from "./components/categories";
 import EditUserForm from "./components/user";
-import ProtectedRoute from "./components/ProtectedRoute";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./components/scrollToTop";
+import ProtectedRoute from "./components/protectedRoute";
 
 function App() {
   return (
