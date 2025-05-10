@@ -32,7 +32,7 @@ const ContentBox = styled(Paper)({
   borderRadius: "16px",
   padding: "40px 30px",
   width: "100%",
-  maxWidth: "500px",
+  maxWidth: "450px",
   textAlign: "center",
   boxShadow: "0px 8px 30px rgba(81, 45, 168, 0.12)",
   position: "relative",
