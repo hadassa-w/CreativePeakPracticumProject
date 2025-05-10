@@ -122,7 +122,7 @@ export default function Header() {
                   backgroundColor: "rgba(103, 58, 183, 0.08)",
                   color: "#673AB7"
                 },
-              }}
+                }}
             >
               <Box sx={{
                 mr: 2,
@@ -159,7 +159,7 @@ export default function Header() {
           © {new Date().getFullYear()} Design
         </Typography>
       </Box>
-    </Box>
+    </Box >
   );
 
   const MotionBox = motion(Link);
@@ -405,7 +405,7 @@ export default function Header() {
                     "&:hover": {
                       borderColor: "red",
                     }
-   }}
+                  }}
                   onClick={() => {
                     handleClose();
                     handleLogOut();

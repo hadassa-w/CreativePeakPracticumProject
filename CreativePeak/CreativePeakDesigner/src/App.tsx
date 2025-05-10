@@ -13,10 +13,12 @@ import AddCategoryForm from "./components/addCategory";
 import CategoriesList from "./components/categories";
 import EditUserForm from "./components/user";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Header />
       <Box component="main" sx={{ p: 3 }}>
         <Routes>

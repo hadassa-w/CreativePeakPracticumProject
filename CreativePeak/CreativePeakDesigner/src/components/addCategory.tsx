@@ -286,7 +286,7 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
               size="small"
               onClick={toggleExistingCategories}
               endIcon={showExistingCategories ? <Close fontSize="small" /> : <InfoIcon fontSize="small" />}
-              sx={{ textTransform: "none" }}
+              sx={{ textTransform: "none", color: "purple" }}
             >
               {showExistingCategories ? "Hide" : "Show"} existing
             </Button>
@@ -412,6 +412,7 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
             borderRadius: 2,
             fontSize: "0.9rem",
             borderColor: "purple",
+            color: "purple",
           }}
         >
           Categories help you organize your projects. Create meaningful categories to group related projects together.
