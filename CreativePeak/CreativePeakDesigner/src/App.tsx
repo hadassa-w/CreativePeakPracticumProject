@@ -16,24 +16,39 @@ import ScrollToTop from "./components/scrollToTop";
 import ProtectedRoute from "./components/protectedRoute";
 
 function App() {
+  const protectedRoutes = [
+    { path: "/welcome", component: Welcome },
+    { path: "/addProject", component: AddProject },
+    { path: "/addCategory", component: AddCategoryForm },
+    { path: "/projects", component: ImageGallery },
+    { path: "/categories", component: CategoriesList },
+    { path: "/designerDetails", component: DesignerDetailsForm },
+    { path: "/profile", component: EditUserForm },
+  ];
+
   return (
     <Router>
       <ScrollToTop />
       <Header />
       <Box component="main" sx={{ p: 3 }}>
         <Routes>
+          {/* ציבוריים */}
           <Route path="/" element={<Home />} />
           <Route path="/logIn" element={<LogIn />} />
           <Route path="/register" element={<Register />} />
 
           {/* מוגנים */}
-          <Route path="/welcome" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
-          <Route path="/addProject" element={<ProtectedRoute><AddProject /></ProtectedRoute>} />
-          <Route path="/addCategory" element={<ProtectedRoute><AddCategoryForm /></ProtectedRoute>} />
-          <Route path="/projects" element={<ProtectedRoute><ImageGallery /></ProtectedRoute>} />
-          <Route path="/categories" element={<ProtectedRoute><CategoriesList /></ProtectedRoute>} />
-          <Route path="/designerDetails" element={<ProtectedRoute><DesignerDetailsForm /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><EditUserForm /></ProtectedRoute>} />
+          {protectedRoutes.map(({ path, component: Component }) => (
+            <Route
+              key={path}
+              path={path}
+              element={
+                <ProtectedRoute>
+                  <Component />
+                </ProtectedRoute>
+              }
+            />
+          ))}
         </Routes>
       </Box>
     </Router>
