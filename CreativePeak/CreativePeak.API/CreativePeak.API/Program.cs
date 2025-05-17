@@ -31,6 +31,7 @@ builder.Configuration["AWS:SecretKey"] = Environment.GetEnvironmentVariable("AWS
 builder.Configuration["AWS:Region"] = Environment.GetEnvironmentVariable("AWS_REGION");
 builder.Configuration["AWS:BucketName"] = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME");
 builder.Configuration["ConnectionStrings:MyDatabase"] = Environment.GetEnvironmentVariable("ConnectionStrings_CreativePeak");
+builder.Configuration["OpenAIResponse:ApiKey"] = Environment.GetEnvironmentVariable("OpenAIResponse");
 
 // Add services to the container.
 

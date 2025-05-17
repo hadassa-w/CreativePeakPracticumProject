@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "CreativePeak.API.Controllers.AiController",
+    "Method": "GenerateDescription",
+    "RelativePath": "api/Ai/AI-description",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "projectName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "CreativePeak.API.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/Auth/Login",
