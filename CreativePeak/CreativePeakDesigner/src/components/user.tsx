@@ -203,7 +203,8 @@ export default function Profile() {
                                 fontSize: 40,
                                 boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
                                 border: "4px solid #fff",
-                                mb: 2
+                                mb: 2,
+                                fontWeight: "bold"
                             }}
                         >
                             {user?.fullName?.charAt(0) || <PersonOutline fontSize="medium" />}
@@ -354,7 +355,7 @@ export default function Profile() {
                             </form>
                         ) : (
                             // View mode - user details
-                            <Box sx={{ py: 1,width:"350px" }}>
+                            <Box sx={{ py: 1, width: "350px" }}>
                                 {/* Full name */}
                                 <Box sx={{ display: "flex", alignItems: "center" }}>
                                     <Box sx={{
@@ -366,7 +367,7 @@ export default function Profile() {
                                     }}>
                                         <PersonOutline sx={{ color: "#673AB7" }} />
                                     </Box>
-                                    <Box sx={{textAlign: "left"}}>
+                                    <Box sx={{ textAlign: "left" }}>
                                         <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
                                             Full Name
                                         </Typography>
@@ -389,7 +390,7 @@ export default function Profile() {
                                     }}>
                                         <EmailOutlined sx={{ color: "#673AB7" }} />
                                     </Box>
-                                    <Box sx={{textAlign: "left"}}>
+                                    <Box sx={{ textAlign: "left" }}>
                                         <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
                                             Email
                                         </Typography>
@@ -412,7 +413,7 @@ export default function Profile() {
                                     }}>
                                         <PhoneOutlined sx={{ color: "#673AB7" }} />
                                     </Box>
-                                    <Box sx={{textAlign: "left"}}>
+                                    <Box sx={{ textAlign: "left" }}>
                                         <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
                                             Phone
                                         </Typography>
@@ -436,7 +437,7 @@ export default function Profile() {
                                             }}>
                                                 <HomeOutlined sx={{ color: "#673AB7" }} />
                                             </Box>
-                                            <Box sx={{textAlign: "left"}}>
+                                            <Box sx={{ textAlign: "left" }}>
                                                 <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
                                                     Address
                                                 </Typography>

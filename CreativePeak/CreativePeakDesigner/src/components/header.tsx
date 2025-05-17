@@ -6,7 +6,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import Cartoon_logo from "../images/Cartoon_logoE.png";
+import Cartoon_logo from "../images/Cartoon_logo English.png";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonIcon from "@mui/icons-material/Person";

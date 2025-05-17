@@ -21,6 +21,10 @@ import {
   Alert,
   Card,
   CardContent,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material"
 import { styled } from "@mui/system"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -40,6 +44,8 @@ import {
   Image as ImageIcon,
   Info as InfoIcon,
   CloudUpload as CloudUploadIcon,
+  AutoAwesome as AutoAwesomeIcon,
+  Check as CheckIcon,
 } from "@mui/icons-material"
 import type Image from "../models/image"
 import AddCategoryForm from "./addCategory"
@@ -194,7 +200,24 @@ const LinearProgressStyled = styled('div')(() => ({
     borderRadius: '3px',
     transition: 'width 0.3s ease',
   },
-}));
+}))
+
+const AiSuggestionButton = styled(Button)(() => ({
+  marginLeft: '10px',
+  borderRadius: '10px',
+  textTransform: 'none',
+  padding: '8px 12px',
+  background: 'linear-gradient(45deg, #AB47BC 30%, #CE93D8 90%)',
+  color: 'white',
+  fontSize: '14px',
+  minWidth: 'auto',
+  transition: 'all 0.3s ease',
+  boxShadow: '0 2px 5px rgba(156,39,176,0.3)',
+  '&:hover': {
+    boxShadow: '0 4px 8px rgba(156,39,176,0.5)',
+    background: 'linear-gradient(45deg, #9C27B0 30%, #AB47BC 90%)',
+  },
+}))
 
 const AddImageForm = () => {
   const {
@@ -223,13 +246,18 @@ const AddImageForm = () => {
   const [snackbarMsg, setSnackbarMsg] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
   const [nameExists, setNameExists] = useState(false)
-  
+
   // File upload state
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(image?.linkURL || null)
 
   // Category form overlay state
   const [showCategoryForm, setShowCategoryForm] = useState(false)
+
+  // AI description suggestion states
+  const [aiDescriptionOpen, setAiDescriptionOpen] = useState(false)
+  const [aiDescriptionLoading, setAiDescriptionLoading] = useState(false)
+  const [aiDescription, setAiDescription] = useState("")
 
   const watchFileName = watch("fileName")
 
@@ -307,7 +335,7 @@ const AddImageForm = () => {
   const uploadFileToS3 = async (file: File): Promise<string> => {
     setIsUploading(true);
     setUploadProgress(0);
-    
+
     try {
       const uniqueFileName = `${Date.now()}-${file.name}`;
       const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
@@ -325,7 +353,7 @@ const AddImageForm = () => {
 
       const s3BaseUrl = "https://s3.us-east-1.amazonaws.com/creativepeakproject.aws-testpnoren/";
       const imageUrl = `${s3BaseUrl}${encodeURIComponent(uniqueFileName)}`;
-      
+
       setUploadProgress(100);
       return imageUrl;
     } catch (error) {
@@ -340,10 +368,10 @@ const AddImageForm = () => {
     if (nameExists) return;
 
     setLoading(true);
-    
+
     try {
       let linkURL = image?.linkURL;
-      
+
       // If there's a new file selected, upload it first
       if (selectedFile) {
         try {
@@ -415,6 +443,53 @@ const AddImageForm = () => {
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
   }
+
+  // New function to handle AI description suggestion
+  const handleGetAiDescription = async () => {
+    if (!watchFileName || watchFileName.trim() === "") {
+      setSnackbarMsg("❌ Please enter a project name first");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    setAiDescriptionLoading(true);
+    setAiDescriptionOpen(true);
+
+    try {
+      // Simulate API call to AI service
+      // In a real implementation, this would be a call to an AI service API
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulating API call
+
+      // Generate a description based on the project name
+      const response = await axios.post("https://creativepeak-api.onrender.com/api/Ai/AI-description", watchFileName, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      // Randomly select one of the suggestions
+      const randomDescription =response.data;
+      setAiDescription(randomDescription);
+    } catch (err) {
+      console.error("Error generating AI description", err);
+      setSnackbarMsg("❌ Failed to generate description. Please try again.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      setAiDescriptionOpen(false);
+    } finally {
+      setAiDescriptionLoading(false);
+    }
+  };
+
+  // Function to apply the AI suggestion to the description field
+  const applyAiDescription = () => {
+    setValue("description", aiDescription);
+    setAiDescriptionOpen(false);
+    setSnackbarMsg("✓ AI description applied");
+    setSnackbarSeverity("success");
+    setSnackbarOpen(true);
+  };
 
   return (
     <Box
@@ -510,6 +585,20 @@ const AddImageForm = () => {
                       <TitleIcon fontSize="small" color="action" />
                     </InputAdornment>
                   ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Tooltip title="Get AI description suggestion">
+                        <AiSuggestionButton
+                          onClick={handleGetAiDescription}
+                          startIcon={<AutoAwesomeIcon />}
+                          size="small"
+                          disabled={!watchFileName || watchFileName.trim() === ""}
+                        >
+                          AI Description
+                        </AiSuggestionButton>
+                      </Tooltip>
+                    </InputAdornment>
+                  ),
                 }}
               />
 
@@ -585,14 +674,14 @@ const AddImageForm = () => {
                     bgcolor: imagePreview ? "rgba(156, 39, 176, 0.05)" : "transparent",
                   }}
                 >
-                  <FileUploader 
-                    existingImageUrl={image?.linkURL} 
+                  <FileUploader
+                    existingImageUrl={image?.linkURL}
                     onFileChange={handleFileChange}
                     onPreviewChange={handlePreviewChange}
                   />
                 </Paper>
               </Box>
-              
+
               {isUploading && (
                 <Box sx={{ mt: 2, mb: 2 }}>
                   <Typography variant="body2" sx={{ color: '#673AB7', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -663,6 +752,88 @@ const AddImageForm = () => {
           <AddCategoryForm onClose={handleCategoryFormClose} onSuccess={handleCategoryFormSuccess} />
         </OverlayContainer>
       )}
+
+      {/* AI Description Dialog */}
+      <Dialog
+        open={aiDescriptionOpen}
+        onClose={() => setAiDescriptionOpen(false)}
+        maxWidth="md"
+        PaperProps={{
+          style: {
+            borderRadius: '16px',
+            padding: '10px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+          },
+        }}
+      >
+        <DialogTitle sx={{
+          background: 'linear-gradient(45deg, #9C27B0 30%, #AB47BC 90%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          fontWeight: 'bold'
+        }}>
+          <AutoAwesomeIcon sx={{ color: '#9C27B0' }} /> AI Description Suggestion
+        </DialogTitle>
+        <DialogContent sx={{ minWidth: '400px', maxWidth: '600px' }}>
+          {aiDescriptionLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', flexDirection: 'column', gap: 2 }}>
+              <CircularProgress size={50} thickness={4} color="secondary" />
+              <Typography variant="body2" color="text.secondary">
+                Generating creative description...
+              </Typography>
+            </Box>
+          ) : (
+            <Box sx={{ my: 2 }}>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  backgroundColor: 'rgba(156, 39, 176, 0.05)',
+                  border: '1px solid rgba(156, 39, 176, 0.2)'
+                }}
+              >
+                <Typography variant="body1">{aiDescription}</Typography>
+              </Paper>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 3, display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            onClick={() => setAiDescriptionOpen(false)}
+            startIcon={<CloseIcon />}
+            sx={{
+              color: '#666',
+              textTransform: 'none',
+              borderRadius: '8px'
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={applyAiDescription}
+            disabled={aiDescriptionLoading}
+            startIcon={<CheckIcon />}
+            sx={{
+              background: 'linear-gradient(45deg, #9C27B0 30%, #AB47BC 90%)',
+              color: 'white',
+              textTransform: 'none',
+              boxShadow: '0 2px 5px rgba(156,39,176,0.3)',
+              borderRadius: '8px',
+              px: 3,
+              '&:hover': {
+                boxShadow: '0 4px 8px rgba(156,39,176,0.5)',
+                background: 'linear-gradient(45deg, #7B1FA2 30%, #9C27B0 90%)',
+              },
+            }}
+          >
+            Use This Description
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <AutoSnackbar
         open={snackbarOpen}

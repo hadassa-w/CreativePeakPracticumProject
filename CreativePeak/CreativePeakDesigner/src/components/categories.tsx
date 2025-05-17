@@ -24,7 +24,9 @@ import {
     TextField,
     InputAdornment,
     Collapse,
+    useMediaQuery,
 } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 import { styled } from "@mui/system"
 import {
     Edit,
@@ -45,16 +47,19 @@ import type Image from "../models/image"
 import AutoSnackbar from "./snackbar"
 import { useAuth } from "../contexts/authContext"
 
-const ContentBox = styled(Paper)(() => ({
+const ContentBox = styled(Paper)(({ theme }) => ({
     backgroundColor: "rgba(255, 255, 255, 0.98)",
     borderRadius: "20px",
-    padding: "40px",
-    maxWidth: "800px",
+    padding: theme.spacing(5),
     width: "100%",
     boxShadow: "0px 8px 30px rgba(0, 0, 0, 0.12)",
     transition: "transform 0.3s ease, box-shadow 0.3s ease",
     "&:hover": {
         boxShadow: "0px 10px 40px rgba(0, 0, 0, 0.15)",
+    },
+    [theme.breakpoints.down("sm")]: {
+        padding: theme.spacing(3),
+        borderRadius: "16px",
     },
 }))
 
@@ -70,16 +75,21 @@ const CategoryCard = styled(Card)(() => ({
     },
 }))
 
-const CategoryAvatar = styled(Avatar)(() => ({
+const CategoryAvatar = styled(Avatar)(({ theme }) => ({
     background: "linear-gradient(45deg, #9C27B0 30%, #AB47BC 90%)",
     color: "white",
     width: 50,
     height: 50,
     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.15)",
     marginRight: "16px",
+    [theme.breakpoints.down("sm")]: {
+        width: 40,
+        height: 40,
+        marginRight: "12px",
+    },
 }))
 
-const StyledButton = styled(Button)(() => ({
+const StyledButton = styled(Button)(({ theme }) => ({
     textTransform: "none",
     fontSize: "16px",
     fontWeight: "bold",
@@ -90,6 +100,10 @@ const StyledButton = styled(Button)(() => ({
     "&:hover": {
         transform: "translateY(-2px)",
         boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
+    },
+    [theme.breakpoints.down("sm")]: {
+        fontSize: "14px",
+        padding: "8px 16px",
     },
 }))
 
@@ -122,13 +136,16 @@ const DeleteButton = styled(ActionButton)(() => ({
     },
 }))
 
-const EmptyStateContainer = styled(Box)(() => ({
+const EmptyStateContainer = styled(Box)(({ theme }) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     padding: "40px 20px",
     textAlign: "center",
+    [theme.breakpoints.down("sm")]: {
+        padding: "30px 15px",
+    },
 }))
 
 const SearchField = styled(TextField)(() => ({
@@ -162,6 +179,9 @@ const CategoriesList = () => {
 
     const navigate = useNavigate()
     const { userId } = useAuth()
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+    const isTablet = useMediaQuery(theme.breakpoints.down("md"))
 
     // Fetch categories and image counts
     useEffect(() => {
@@ -283,8 +303,8 @@ const CategoriesList = () => {
 
     const renderEmptyState = () => (
         <EmptyStateContainer>
-            <CategoryIcon sx={{ fontSize: 80, color: "#e0e0e0", mb: 2 }} />
-            <Typography variant="h5" sx={{ color: "#9e9e9e", mb: 1 }}>
+            <CategoryIcon sx={{ fontSize: isMobile ? 60 : 80, color: "#e0e0e0", mb: 2 }} />
+            <Typography variant={isMobile ? "h6" : "h5"} sx={{ color: "#9e9e9e", mb: 1 }}>
                 No categories found
             </Typography>
             <Typography variant="body1" sx={{ color: "#9e9e9e", mb: 3, maxWidth: 400 }}>
@@ -294,7 +314,7 @@ const CategoriesList = () => {
             </Typography>
             {categories.length === 0 ? (
                 <AddCategoryButton variant="contained" onClick={() => navigate("/addCategory")}>
-                    <Add /> Create your first category
+                    <Add /> {isMobile ? "Create category" : "Create your first category"}
                 </AddCategoryButton>
             ) : (
                 <Button variant="outlined" color="primary" onClick={() => setSearchTerm("")} startIcon={<FilterIcon />}>
@@ -307,23 +327,23 @@ const CategoriesList = () => {
     return (
         <Box
             sx={{
-                justifyContent: "center",
                 alignItems: "center",
                 minHeight: "80vh",
-                minWidth: "600px",
+                width: "100%",
             }}
         >
             <ContentBox elevation={3}>
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: isMobile ? "column" : "row",
+                    alignItems: isMobile ? "flex-start" : "center",
+                    justifyContent: "space-between",
+                    mb: 2,
+                    gap: isMobile ? 2 : 0
+                }}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                        {/* <IconButton
-                            onClick={() => navigate("/")}
-                            sx={{ mr: 2, bgcolor: "rgba(0,0,0,0.04)", "&:hover": { bgcolor: "rgba(0,0,0,0.08)" } }}
-                        >
-                            <ArrowBack />
-                        </IconButton> */}
                         <Typography
-                            variant="h4"
+                            variant={isMobile ? "h5" : "h4"}
                             sx={{
                                 fontWeight: "bold",
                                 background: "linear-gradient(45deg, #9C27B0 30%, #673AB7 90%)",
@@ -334,18 +354,29 @@ const CategoriesList = () => {
                                 gap: 1,
                             }}
                         >
-                            <CategoryIcon fontSize="large" sx={{ color: "#9C27B0" }} /> Categories
+                            <CategoryIcon fontSize={isMobile ? "medium" : "large"} sx={{ color: "#9C27B0" }} /> Categories
                         </Typography>
                     </Box>
 
-                    <AddCategoryButton variant="contained" onClick={() => navigate("/addCategory")}>
+                    <AddCategoryButton
+                        variant="contained"
+                        onClick={() => navigate("/addCategory")}
+                        fullWidth={isMobile}
+                        style={{ marginLeft: "50px" }}
+                    >
                         <Add style={{ marginRight: "5px" }} /> Add Category
                     </AddCategoryButton>
                 </Box>
 
                 {categories.length > 0 && (
                     <Box>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <Box sx={{
+                            display: "flex",
+                            flexDirection: isTablet ? "column" : "row",
+                            justifyContent: "space-between",
+                            alignItems: isTablet ? "stretch" : "center",
+                            gap: isTablet ? 1 : 0
+                        }}>
                             <SearchField
                                 placeholder="Search categories..."
                                 variant="outlined"
@@ -361,16 +392,36 @@ const CategoriesList = () => {
                                     ),
                                 }}
                             />
-                            <Tooltip title={`Sort ${sortOrder === "asc" ? "Z-A" : "A-Z"}`}>
-                                <IconButton onClick={toggleSort} sx={{ ml: 1 }}>
-                                    <SortIcon
-                                        sx={{
-                                            transform: sortOrder === "desc" ? "rotate(180deg)" : "rotate(0deg)",
-                                            transition: "transform 0.3s ease",
-                                        }}
-                                    />
-                                </IconButton>
-                            </Tooltip>
+                            {isTablet ? (
+                                <Button
+                                    onClick={toggleSort}
+                                    variant="outlined"
+                                    fullWidth
+                                    color="secondary"
+                                    style={{ textTransform: "none" }}
+                                    startIcon={
+                                        <SortIcon
+                                            sx={{
+                                                transform: sortOrder === "desc" ? "rotate(180deg)" : "rotate(0deg)",
+                                                transition: "transform 0.3s ease",
+                                            }}
+                                        />
+                                    }
+                                >
+                                    Sort {sortOrder === "asc" ? "A-Z" : "Z-A"}
+                                </Button>
+                            ) : (
+                                <Tooltip title={`Sort ${sortOrder === "asc" ? "Z-A" : "A-Z"}`}>
+                                    <IconButton onClick={toggleSort} sx={{ ml: 1 }}>
+                                        <SortIcon
+                                            sx={{
+                                                transform: sortOrder === "desc" ? "rotate(180deg)" : "rotate(0deg)",
+                                                transition: "transform 0.3s ease",
+                                            }}
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
                         </Box>
 
                         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -390,40 +441,76 @@ const CategoriesList = () => {
                         {filteredCategories.map((category) => (
                             <Fade key={category.id} in={true} timeout={500}>
                                 <CategoryCard>
-                                    <CardContent sx={{ p: 0 }}>
+                                    <CardContent sx={{ p: isMobile ? 1 : 0 }}>
                                         <ListItem
                                             sx={{
                                                 display: "flex",
-                                                alignItems: "flex-start",
+                                                flexDirection: isMobile ? "column" : "row",
+                                                alignItems: isMobile ? "stretch" : "flex-start",
                                                 p: 1,
                                             }}
                                         >
-                                            <Badge
-                                                badgeContent={categoryStats[category.id] || 0}
-                                                color="primary"
-                                                max={99}
-                                                overlap="circular"
-                                                sx={{
-                                                    "& .MuiBadge-badge": {
-                                                        backgroundColor: "#9C27B0",
-                                                        fontWeight: "bold",
-                                                    },
-                                                }}
-                                            >
-                                                <CategoryAvatar>{getCategoryInitial(category.categoryName)}</CategoryAvatar>
-                                            </Badge>
-
-                                            <Box sx={{ flexGrow: 1, mr: 2 }}>
-                                                <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
-                                                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                                                        {category.categoryName}
-                                                    </Typography>
-                                                    <Chip
-                                                        size="small"
-                                                        label={`${categoryStats[category.id] || 0} projects`}
-                                                        sx={{ ml: 2, bgcolor: "rgba(156, 39, 176, 0.1)", fontSize: "0.7rem" }}
-                                                    />
+                                            {isMobile ? (
+                                                <Box sx={{ display: "flex", alignItems: "center", mb: 1, width: "100%" }}>
+                                                    <Badge
+                                                        badgeContent={categoryStats[category.id] || 0}
+                                                        color="primary"
+                                                        max={99}
+                                                        overlap="circular"
+                                                        sx={{
+                                                            "& .MuiBadge-badge": {
+                                                                backgroundColor: "#9C27B0",
+                                                                fontWeight: "bold",
+                                                            },
+                                                        }}
+                                                    >
+                                                        <CategoryAvatar>{getCategoryInitial(category.categoryName)}</CategoryAvatar>
+                                                    </Badge>
+                                                    <Box sx={{ flexGrow: 1, ml: 1 }}>
+                                                        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                                                            {category.categoryName}
+                                                        </Typography>
+                                                        <Chip
+                                                            size="small"
+                                                            label={`${categoryStats[category.id] || 0} projects`}
+                                                            sx={{ mt: 0.5, bgcolor: "rgba(156, 39, 176, 0.1)", fontSize: "0.7rem" }}
+                                                        />
+                                                    </Box>
                                                 </Box>
+                                            ) : (
+                                                <Badge
+                                                    badgeContent={categoryStats[category.id] || 0}
+                                                    color="primary"
+                                                    max={99}
+                                                    overlap="circular"
+                                                    sx={{
+                                                        "& .MuiBadge-badge": {
+                                                            backgroundColor: "#9C27B0",
+                                                            fontWeight: "bold",
+                                                        },
+                                                    }}
+                                                >
+                                                    <CategoryAvatar>{getCategoryInitial(category.categoryName)}</CategoryAvatar>
+                                                </Badge>
+                                            )}
+
+                                            <Box sx={{
+                                                flexGrow: 1,
+                                                mr: isMobile ? 0 : 2,
+                                                width: isMobile ? "100%" : "auto"
+                                            }}>
+                                                {!isMobile && (
+                                                    <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
+                                                        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                                                            {category.categoryName}
+                                                        </Typography>
+                                                        <Chip
+                                                            size="small"
+                                                            label={`${categoryStats[category.id] || 0} projects`}
+                                                            sx={{ ml: 2, bgcolor: "rgba(156, 39, 176, 0.1)", fontSize: "0.7rem" }}
+                                                        />
+                                                    </Box>
+                                                )}
 
                                                 <Typography
                                                     variant="body2"
@@ -451,7 +538,13 @@ const CategoriesList = () => {
                                                 )}
                                             </Box>
 
-                                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                                            <Box sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: isMobile ? "flex-end" : "center",
+                                                width: isMobile ? "100%" : "auto",
+                                                mt: isMobile ? 1 : 0
+                                            }}>
                                                 <Tooltip title="Edit category">
                                                     <EditButton onClick={() => handleEdit(category)}>
                                                         <Edit />
@@ -489,7 +582,19 @@ const CategoriesList = () => {
             </ContentBox>
 
             {/* Delete Confirmation Dialog */}
-            <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+            <Dialog
+                open={deleteDialogOpen}
+                onClose={() => setDeleteDialogOpen(false)}
+                fullWidth
+                maxWidth="sm"
+                PaperProps={{
+                    sx: {
+                        borderRadius: { xs: "12px", sm: "16px" },
+                        p: { xs: 1, sm: 2 },
+                        width: { xs: "95%", sm: "auto" }
+                    }
+                }}
+            >
                 <DialogTitle sx={{ fontWeight: "bold", color: "#F06292" }}>Delete Category?</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -504,11 +609,20 @@ const CategoriesList = () => {
                         </Box>
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions sx={{ p: 3 }}>
+                <DialogActions sx={{ p: { xs: 2, sm: 3 } }}>
                     <Button
                         variant="outlined"
                         onClick={() => setDeleteDialogOpen(false)}
-                        sx={{ borderRadius: "8px", textTransform: "none", borderColor: "purple", color: "purple", "&:hover": { borderColor: "gray", backgroundColor: "rgba(251, 225, 255, 0.36)" } }}
+                        sx={{
+                            borderRadius: "8px",
+                            textTransform: "none",
+                            borderColor: "purple",
+                            color: "purple",
+                            "&:hover": {
+                                borderColor: "gray",
+                                backgroundColor: "rgba(251, 225, 255, 0.36)"
+                            }
+                        }}
                     >
                         Cancel
                     </Button>

@@ -18,6 +18,10 @@ import {
   Card,
   CardContent,
   FormHelperText,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material"
 import { styled } from "@mui/system"
 import {
@@ -28,6 +32,8 @@ import {
   Label as LabelIcon,
   Description as DescriptionIcon,
   ArrowBack,
+  AutoAwesome as AutoAwesomeIcon,
+  Check as CheckIcon,
 } from "@mui/icons-material"
 import type Category from "../models/category"
 import { useAuth } from "../contexts/authContext"
@@ -118,13 +124,30 @@ const StyledTextField = styled(TextField)(() => ({
   },
 }))
 
+const AiSuggestionButton = styled(Button)(() => ({
+  marginLeft: '10px',
+  borderRadius: '10px',
+  textTransform: 'none',
+  padding: '8px 12px',
+  background: 'linear-gradient(45deg, #AB47BC 30%, #CE93D8 90%)',
+  color: 'white',
+  fontSize: '14px',
+  minWidth: 'auto',
+  transition: 'all 0.3s ease',
+  boxShadow: '0 2px 5px rgba(156,39,176,0.3)',
+  '&:hover': {
+    boxShadow: '0 4px 8px rgba(156,39,176,0.5)',
+    background: 'linear-gradient(45deg, #9C27B0 30%, #AB47BC 90%)',
+  },
+}))
+
 interface AddCategoryFormProps {
   categoryToEdit?: Category | null
   onClose?: () => void
-  onSuccess?: () => void
+  onSuccess?: (newCategory: Category) => void
 }
 
-const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProps) => {
+const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCategoryFormProps) => {
   const location = useLocation();
   const categoryToEditFromRoute = location.state?.category || null;
   const finalCategoryToEdit = categoryToEdit || categoryToEditFromRoute;
@@ -136,6 +159,7 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
     formState: { errors, isDirty, isValid },
     reset,
     watch,
+    setValue,
   } = useForm<Category>({
     mode: "onChange",
     defaultValues: {
@@ -151,6 +175,11 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
   const [userCategories, setUserCategories] = useState<Category[]>([])
   const [nameExists, setNameExists] = useState(false)
   const [showExistingCategories, setShowExistingCategories] = useState(false)
+
+  // AI description states
+  const [aiDescriptionOpen, setAiDescriptionOpen] = useState(false)
+  const [aiDescriptionLoading, setAiDescriptionLoading] = useState(false)
+  const [aiDescription, setAiDescription] = useState("")
 
   const navigate = useNavigate();
 
@@ -218,8 +247,13 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
       setSnackbarSeverity("success")
       setSnackbarOpen(true)
 
-      // Call the success callback after a short delay
-      setTimeout(() => navigate("/categories"), 1500)
+      // Call the success callback if provided
+      if (onSuccess) {
+        onSuccess(dataToSubmit as Category);
+      } else {
+        // Navigate after a short delay if no callback
+        setTimeout(() => navigate("/categories"), 1500)
+      }
     } catch (error) {
       console.error("Error saving category", error)
       setSnackbarMsg("❌ Error saving category. Please try again.")
@@ -240,6 +274,51 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
   const toggleExistingCategories = () => {
     setShowExistingCategories(!showExistingCategories)
   }
+
+  // New function to handle AI description suggestion
+  const handleGetAiDescription = async () => {
+    if (!watchCategoryName || watchCategoryName.trim() === "") {
+      setSnackbarMsg("❌ Please enter a category name first");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    setAiDescriptionLoading(true);
+    setAiDescriptionOpen(true);
+
+    try {
+      // Making the actual API call to the AI service
+      const response = await axios.post(
+        "https://creativepeak-api.onrender.com/api/Ai/AI-description", 
+        watchCategoryName, 
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      setAiDescription(response.data);
+    } catch (err) {
+      console.error("Error generating AI description", err);
+      setSnackbarMsg("❌ Failed to generate description. Please try again.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      setAiDescriptionOpen(false);
+    } finally {
+      setAiDescriptionLoading(false);
+    }
+  };
+
+  // Function to apply the AI suggestion to the description field
+  const applyAiDescription = () => {
+    setValue("description", aiDescription);
+    setAiDescriptionOpen(false);
+    setSnackbarMsg("✓ AI description applied");
+    setSnackbarSeverity("success");
+    setSnackbarOpen(true);
+  };
 
   return (
     <ContentBox elevation={3}>
@@ -343,6 +422,20 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
                     <LabelIcon fontSize="small" color="action" />
                   </InputAdornment>
                 ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Tooltip title="Get AI description suggestion">
+                      <AiSuggestionButton
+                        onClick={handleGetAiDescription}
+                        startIcon={<AutoAwesomeIcon />}
+                        size="small"
+                        disabled={!watchCategoryName || watchCategoryName.trim() === ""}
+                      >
+                        AI Description
+                      </AiSuggestionButton>
+                    </Tooltip>
+                  </InputAdornment>
+                ),
               }}
             />
 
@@ -418,6 +511,88 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose }: AddCategoryFormProp
           Categories help you organize your projects. Create meaningful categories to group related projects together.
         </Alert>
       )}
+
+      {/* AI Description Dialog */}
+      <Dialog
+        open={aiDescriptionOpen}
+        onClose={() => setAiDescriptionOpen(false)}
+        maxWidth="md"
+        PaperProps={{
+          style: {
+            borderRadius: '16px',
+            padding: '10px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+          },
+        }}
+      >
+        <DialogTitle sx={{
+          background: 'linear-gradient(45deg, #9C27B0 30%, #AB47BC 90%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          fontWeight: 'bold'
+        }}>
+          <AutoAwesomeIcon sx={{ color: '#9C27B0' }} /> AI Description Suggestion
+        </DialogTitle>
+        <DialogContent sx={{ minWidth: '400px', maxWidth: '600px' }}>
+          {aiDescriptionLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', flexDirection: 'column', gap: 2 }}>
+              <CircularProgress size={50} thickness={4} color="secondary" />
+              <Typography variant="body2" color="text.secondary">
+                Generating creative description...
+              </Typography>
+            </Box>
+          ) : (
+            <Box sx={{ my: 2 }}>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  backgroundColor: 'rgba(156, 39, 176, 0.05)',
+                  border: '1px solid rgba(156, 39, 176, 0.2)'
+                }}
+              >
+                <Typography variant="body1">{aiDescription}</Typography>
+              </Paper>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 3, display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            onClick={() => setAiDescriptionOpen(false)}
+            startIcon={<Close />}
+            sx={{
+              color: '#666',
+              textTransform: 'none',
+              borderRadius: '8px'
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={applyAiDescription}
+            disabled={aiDescriptionLoading}
+            startIcon={<CheckIcon />}
+            sx={{
+              background: 'linear-gradient(45deg, #9C27B0 30%, #AB47BC 90%)',
+              color: 'white',
+              textTransform: 'none',
+              boxShadow: '0 2px 5px rgba(156,39,176,0.3)',
+              borderRadius: '8px',
+              px: 3,
+              '&:hover': {
+                boxShadow: '0 4px 8px rgba(156,39,176,0.5)',
+                background: 'linear-gradient(45deg, #7B1FA2 30%, #9C27B0 90%)',
+              },
+            }}
+          >
+            Use This Description
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <AutoSnackbar
         open={snackbarOpen}

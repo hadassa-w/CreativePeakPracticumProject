@@ -363,7 +363,7 @@ function DesignerDetailsForm() {
               </form>
             ) : (
               // View mode - designer details
-              <Box sx={{ py: 1,width:"350px" }}>
+              <Box sx={{ py: 1, width: "350px" }}>
                 {/* Full name */}
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Box sx={{
