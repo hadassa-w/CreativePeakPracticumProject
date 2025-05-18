@@ -1,0 +1,94 @@
+<div class="home-wrapper">
+    <div class="header">
+        <h1 class="title">Welcome to CreativePeak Admin</h1>
+        <p class="subtitle">Portfolio and User Management Platform</p>
+    </div>
+
+    <div class="content">
+        <div class="info-section">
+            <div class="info-card">
+                <h2 class="gradient-title">Manage Creative Portfolios</h2>
+
+                <h3 class="description">
+                    Complete administration tools for your portfolio management platform.
+                </h3>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">{{users}}</div>
+                        <div class="stat-label">Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{portfolios}}</div>
+                        <div class="stat-label">Portfolios</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{projects}}</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{categories}}</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                </div>
+
+                <div class="features">
+                    <div class="feature-card">
+                        <mat-icon>folder_shared</mat-icon>
+                        <div class="feature-content">
+                            <h4>Manage Portfolios</h4>
+                            <p>Review, approve, and manage designer portfolios.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <mat-icon>people</mat-icon>
+                        <div class="feature-content">
+                            <h4>User Administration</h4>
+                            <p>Manage user accounts, permissions, and roles.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <mat-icon>insert_chart</mat-icon>
+                        <div class="feature-content">
+                            <h4>View reports</h4>
+                            <p>Tracking usage and activity on the platform.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <h3>Administrative Actions</h3>
+
+            <button mat-raised-button class="action-button" (click)="navigate('/portfolios')">
+                <mat-icon>collections</mat-icon>
+                Manage Portfolios
+            </button>
+
+            <button mat-raised-button class="action-button" (click)="navigate('/users')">
+                <mat-icon>people</mat-icon>
+                Manage Users
+            </button>
+
+            <button mat-raised-button class="action-button" (click)="navigate('/categories')">
+                <mat-icon>category</mat-icon>
+                Manage Categories
+            </button>
+
+            <button mat-raised-button class="action-button" (click)="navigate('/reports')">
+                <mat-icon>assessment</mat-icon>
+                View Reports
+            </button>
+
+            <div class="action-info">
+                Access to all management functions also from the top navigation. </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© CreativePeak Admin Portal {{currentYear}}. All rights reserved.</p>
+    </div>
+</div>

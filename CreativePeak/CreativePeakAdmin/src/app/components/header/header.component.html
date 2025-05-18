@@ -1,0 +1,122 @@
+<div class="app-header">
+    <!-- Main App Bar -->
+    <mat-toolbar color="primary" class="mat-elevation-z0"
+        style="background-color: rgba(255, 255, 255, 0.95); border-bottom: 1px solid rgba(0,0,0,0.08);">
+        <div class="app-container toolbar">
+            <div class="menu-container">
+                <button mat-icon-button class="menu-button" (click)="toggleDrawer()" aria-label="Toggle menu">
+                    <mat-icon>menu</mat-icon>
+                </button>
+
+                <img [@motionAnimation] src="images/Cartoon_logo English.png" alt="logo" class="logo" routerLink="/"
+                    (click)="isLoggedIn && handleLogOut()" />
+            </div>
+
+            <div class="nav-links">
+                <ng-container *ngFor="let item of navItems">
+                    <button mat-button matTooltip="{{ item.name }}" matTooltipPosition="below"
+                        [class.active]="isActive(item.path)" class="nav-button" (click)="navigateTo(item)">
+                        <mat-icon class="icon">{{ item.icon }}</mat-icon>
+                        <span class="label">{{ item.name }}</span>
+                    </button>
+                </ng-container>
+            </div>
+
+            <div matTooltip="{{ isLoggedIn ? 'Account' : 'Sign in' }}" class="avatar-container">
+                <div class="avatar-button" [class.logged-in]="isLoggedIn" [class.logged-out]="!isLoggedIn"
+                    (click)="handleClick($event)">
+                    <div *ngIf="isLoggedIn" class="online-badge"></div>
+                    <ng-container *ngIf="isLoggedIn; else loginIcon">
+                        {{ userName.charAt(0) }}
+                    </ng-container>
+                    <ng-template #loginIcon>
+                        <mat-icon>login</mat-icon>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </mat-toolbar>
+
+    <!-- Mobile Drawer -->
+    <div class="backdrop" [class.open]="mobileOpen" (click)="closeDrawer()"></div>
+    <div class="side-drawer" [class.open]="mobileOpen">
+        <div class="drawer-header">
+            <img src="images/Cartoon_logo English.png" alt="logo">
+            <h2>Menu</h2>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="user-info" *ngIf="isLoggedIn">
+            <div class="avatar">
+                {{ userName.charAt(0) }}
+            </div>
+            <div class="user-text">
+                <div class="welcome">Welcome,</div>
+                <div class="name">{{ userName }}</div>
+            </div>
+        </div>
+
+        <div class="divider" *ngIf="isLoggedIn"></div>
+
+        <ul class="drawer-list">
+            <li class="list-item" *ngFor="let item of navItems">
+                <button mat-button class="list-button" [class.active]="isActive(item.path)" (click)="navigateTo(item)">
+                    <mat-icon class="item-icon">{{ item.icon }}</mat-icon>
+                    <span class="item-text">{{ item.name }}</span>
+                </button>
+            </li>
+        </ul>
+
+        <div class="footer">
+            <div class="copyright">
+                © {{ getCurrentYear() }} Design
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Popover -->
+    <div class="popover" *ngIf="popoverOpen">
+        <div *ngIf="isLoggedIn; else loggedOutPopover">
+            <div class="popover-header">
+                <div class="avatar">
+                    {{ userName.charAt(0) }}
+                </div>
+                <div class="user-info">
+                    <div class="name">{{ userName }}</div>
+                    <div class="role">Designer</div>
+                </div>
+            </div>
+
+            <div class="popover-content">
+                <button class="profile-button" (click)="navigateTo({name: 'Profile', path: '/profile'})">
+                    <mat-icon>manage_accounts</mat-icon>
+                    My Profile
+                </button>
+
+                <button class="logout-button" (click)="handleLogOut(); handleClose()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    Log Out
+                </button>
+            </div>
+        </div>
+
+        <ng-template #loggedOutPopover>
+            <div class="popover-content login-content">
+                <h2 class="welcome-heading">Welcome</h2>
+                <p class="login-message">
+                    Sign in to access all features
+                </p>
+
+                <button mat-raised-button class="login-btn" color="accent" class="login-btn"
+                    (click)="navigateTo({name: 'Log In', path: '/login'}); handleClose()">
+                    <mat-icon>login</mat-icon>
+                    <span>Log In</span>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<!-- Spacer to push content below the fixed header -->
+<div class="toolbar-spacer"></div>

@@ -122,5 +122,13 @@ namespace CreativePeak.API.Controllers
             _userService.Delete(user);
             return NoContent();
         }
+
+        [AllowAnonymous]
+        [HttpGet("Count")]
+        public async Task<ActionResult> GetCount()
+        {
+            var user = await _userService.GetAllAsync();
+            return Ok(user.Count());
+        }
     }
 }

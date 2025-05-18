@@ -255,7 +255,7 @@ function Home() {
                 </ActionSection>
             </Content>
             <Typography variant="body2" sx={{ color: "#666", mt: 3, textAlign: "center", fontSize: "14px" }}>
-                © All rights reserved 2025.
+                © All rights reserved {new Date().getFullYear()}.
             </Typography>
         </HomeWrapper>
     );

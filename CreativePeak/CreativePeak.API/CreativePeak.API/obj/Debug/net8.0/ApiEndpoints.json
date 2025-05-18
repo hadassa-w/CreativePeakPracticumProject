@@ -397,6 +397,16 @@
   },
   {
     "ContainingType": "CreativePeak.API.Controllers.UserController",
+    "Method": "GetCount",
+    "RelativePath": "api/User/Count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.UserController",
     "Method": "UpdateWithoutPassword",
     "RelativePath": "api/User/updateWithoutPassword/{id}",
     "HttpMethod": "PUT",
