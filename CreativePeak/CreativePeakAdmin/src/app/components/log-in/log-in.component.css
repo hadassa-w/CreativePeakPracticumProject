@@ -4,6 +4,7 @@
   align-items: center;
   min-height: 80vh;
   position: relative;
+  margin-top: 20px;
 }
 
 /* Background decorative icons */
@@ -203,7 +204,7 @@
 /* Login button styling */
 .login-button {
   width: 100%;
-  padding: 12px 20px;
+  padding: 25px 20px;
   border-radius: 100px;
   background-color: #512da8;
   font-weight: 600;

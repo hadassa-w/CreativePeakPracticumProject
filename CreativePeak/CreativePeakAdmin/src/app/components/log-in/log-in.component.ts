@@ -62,7 +62,7 @@ loginForm: FormGroup;
     const { username, password } = this.loginForm.value;
 
     try {
-      const response: any = await this.http.post('https://creativepeak-api.onrender.com/api/User/Admin', {
+      const response: any = await this.http.post('https://creativepeak-api.onrender.com/api/Auth/LoginAdmin', {
         UserName: username,
         Password: password
       }).toPromise();

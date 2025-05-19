@@ -9,7 +9,7 @@
                 </button>
 
                 <img [@motionAnimation] src="images/Cartoon_logo English.png" alt="logo" class="logo" routerLink="/"
-                    (click)="isLoggedIn && handleLogOut()" />
+                    (click)="handleLogOut()" />
             </div>
 
             <div class="nav-links">
@@ -25,7 +25,6 @@
             <div matTooltip="{{ isLoggedIn ? 'Account' : 'Sign in' }}" class="avatar-container">
                 <div class="avatar-button" [class.logged-in]="isLoggedIn" [class.logged-out]="!isLoggedIn"
                     (click)="handleClick($event)">
-                    <div *ngIf="isLoggedIn" class="online-badge"></div>
                     <ng-container *ngIf="isLoggedIn; else loginIcon">
                         {{ userName.charAt(0) }}
                     </ng-container>
@@ -84,16 +83,11 @@
                 </div>
                 <div class="user-info">
                     <div class="name">{{ userName }}</div>
-                    <div class="role">Designer</div>
+                    <div class="role">Main admin</div>
                 </div>
             </div>
 
             <div class="popover-content">
-                <button class="profile-button" (click)="navigateTo({name: 'Profile', path: '/profile'})">
-                    <mat-icon>manage_accounts</mat-icon>
-                    My Profile
-                </button>
-
                 <button class="logout-button" (click)="handleLogOut(); handleClose()">
                     <mat-icon>exit_to_app</mat-icon>
                     Log Out
@@ -109,9 +103,9 @@
                 </p>
 
                 <button mat-raised-button class="login-btn" color="accent" class="login-btn"
-                    (click)="navigateTo({name: 'Log In', path: '/login'}); handleClose()">
+                    (click)="navigateTo({name: 'Log In', path: '/logIn'}); handleClose()">
                     <mat-icon>login</mat-icon>
-                    <span>Log In</span>
+                    <span style="color: #673AB7;">Log In</span>
                 </button>
             </div>
         </ng-template>

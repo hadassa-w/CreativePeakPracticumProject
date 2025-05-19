@@ -22,22 +22,27 @@ export class WelcomeComponent {
 
   constructor(private router: Router, private detailsSiteService: DetailsSiteService) { }
 
-  ngOnInit(): void {
-    this.detailsSiteService.getUsers().subscribe(count => {
-      this.animateCount('portfolios', count);
-    });
+  async ngOnInit(): Promise<void> {
+    try {
+      await this.detailsSiteService.getUsers().subscribe(count => {
+        this.animateCount('users', count-1);
+      });
 
-    this.detailsSiteService.getUsers().subscribe(count => {
-      this.animateCount('users', count);
-    });
+      await this.detailsSiteService.getUsers().subscribe(count => {
+        this.animateCount('portfolios', count-1);
+      });
 
-    this.detailsSiteService.getImages().subscribe(data => {
-      this.animateCount('projects', data.length);
-    });
+      await this.detailsSiteService.getImages().subscribe(data => {
+        this.animateCount('projects', data.length);
+      });
 
-    this.detailsSiteService.getCategories().subscribe(data => {
-      this.animateCount('categories', data.length);
-    });
+      await this.detailsSiteService.getCategories().subscribe(data => {
+        this.animateCount('categories', data.length);
+      });
+
+    } catch (error) {
+      console.error('ERROR:', error);
+    }
   }
 
   navigate(path: string): void {
