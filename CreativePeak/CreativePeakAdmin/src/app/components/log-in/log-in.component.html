@@ -1,0 +1,78 @@
+<div class="outer-container">
+    <div class="background-icon left">
+        <mat-icon>palette</mat-icon>
+    </div>
+    <div class="background-icon right">
+        <mat-icon>palette</mat-icon>
+    </div>
+    <div class="content-box">
+        <div class="icon-header">
+            <div class="icon-circle">
+                <mat-icon>login</mat-icon>
+            </div>
+            <h2 class="gradient-title">Welcome Back!</h2>
+        </div>
+        <p class="subtitle">Please enter your credentials to access your creative portfolio</p>
+
+        <form [formGroup]="loginForm" (keyup.enter)="handleLogin()" class="login-form">
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Username - Email</mat-label>
+                <div matPrefix class="field-icon">
+                    <mat-icon>account_circle</mat-icon>
+                </div>
+                <input matInput formControlName="username" type="text">
+                @if(loginForm.get('username')?.touched && loginForm.get('username')?.hasError('required')){
+                <mat-error>
+                    Username is required
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Password</mat-label>
+                <div matPrefix class="field-icon">
+                    <mat-icon>lock</mat-icon>
+                </div>
+                <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'">
+                <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+                    <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                @if(loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')){
+                <mat-error>
+                    Password is required
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <div class="forgot-password">
+                <a>Forgot password?</a>
+            </div>
+
+            @if(generalError){
+            <div class="error-box">
+                <span class="warning-icon">⚠️</span>
+                <span>{{generalError}}</span>
+            </div>
+            }
+
+            <button mat-flat-button color="primary" class="login-button" [disabled]="loading || loginForm.invalid"
+                (click)="handleLogin()">
+                <mat-icon>login</mat-icon>
+                @if(loading){
+                <span>
+                    <mat-spinner diameter="20"></mat-spinner>
+                    Signing in...
+                </span>
+                }
+                @if(!loading){
+                <span>Sign In</span>
+                }
+            </button>
+
+            <div class="terms">
+                By signing in, you agree to our <span class="highlight">Terms of Service</span> and <span
+                    class="highlight">Privacy Policy</span>
+            </div>
+        </form>
+    </div>
+</div>

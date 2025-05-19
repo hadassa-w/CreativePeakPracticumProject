@@ -1,1 +1,51 @@
-<p>home works!</p>
+<div class="background">
+    <div class="admin-login-wrapper">
+
+        <div class="login-container">
+            <div class="header-decoration"></div>
+            <div class="logo-section">
+                <h1 class="title">CreativePeak Admin</h1>
+                <p class="subtitle">Management System</p>
+            </div>
+            <div class="features-section">
+                <div class="feature-card">
+                    <i class="material-icons">people</i>
+                    <div class="feature-text">
+                        <span class="feature-title">User Management</span>
+                        <span class="feature-description">Manage designers and clients</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <i class="material-icons">collections</i>
+                    <div class="feature-text">
+                        <span class="feature-title">Project Control</span>
+                        <span class="feature-description">Review and moderate content</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <i class="material-icons">insights</i>
+                    <div class="feature-text">
+                        <span class="feature-title">Analytics</span>
+                        <span class="feature-description">Track platform performance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <div class="footer">
+                <p>To log in, click Login and enter your login details.</p>
+            </div>
+            <button mat-raised-button class="action-button" (click)="navigate('/logIn')">
+                <mat-icon>login</mat-icon>
+                LogIn
+            </button>
+        </div>
+
+    </div>
+    <div class="footer">
+        <p>CreativePeak Admin System © {{ currentYear }} | All rights reserved</p>
+    </div>
+</div>

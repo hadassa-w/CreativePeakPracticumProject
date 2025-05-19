@@ -26,8 +26,6 @@ export class AuthService {
   }
 
   login(username: string, password: string): boolean {
-    // In a real app, this would call an API
-    // For demo purposes, just simulate a successful login
     this._isLoggedIn.next(true);
     this._userName.next(username);
     localStorage.setItem('userName', username);

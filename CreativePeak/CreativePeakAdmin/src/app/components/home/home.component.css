@@ -1,0 +1,228 @@
+.background{
+    background-color: rgba(255, 255, 255, 0.973);
+    margin-top: 70px;
+}
+
+.admin-login-wrapper {
+    border-radius: 1%;
+    padding: 40px;
+    margin-top: -50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    box-sizing: border-box;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+.header-decoration {
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(90deg, #4200b3, #673AB7);
+    border-radius: 2px;
+    margin-bottom: 20px;
+}
+
+.logo-section {
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #673AB7;
+    margin: 0 0 8px;
+    position: relative;
+    display: inline-block;
+}
+
+.title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: rgba(103, 58, 183, 0.05);
+    border-radius: 2px;
+}
+
+.subtitle {
+    color: #4200b3;
+    font-size: 18px;
+    font-weight: 500;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    margin: 0;
+}
+
+.features-section {
+    border-top: 1px solid rgba(103, 58, 183, 0.1);
+    padding-top: 20px;
+}
+
+.feature-card {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background-color: rgba(199, 170, 251, 0.25);
+}
+
+.feature-card:hover {
+    background-color: rgba(66, 0, 179, 0.05);
+    transform: translateX(5px);
+}
+
+.feature-card i {
+    color: #4200b3;
+    font-size: 28px;
+    margin-right: 16px;
+}
+
+.feature-text .feature-title {
+    display: block;
+    font-weight: 600;
+    color: #673AB7;
+    margin-bottom: 4px;
+    font-size: 20px;
+}
+
+.feature-text .feature-description {
+    display: block;
+    color: #673AB7;
+    font-size: 15px;
+}
+
+.action-section {
+    flex: 1 1 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 30px;
+    margin-top: 150px;
+    border-radius: 3px 3px 0 0;
+    background-color: rgba(126, 87, 194, 0.03);
+    border: 1px solid rgba(126, 87, 194, 0.1);
+}
+
+.action-button {
+    width: 100%;
+    max-width: 250px;
+    padding: 12px 20px;
+    border-radius: 100px;
+    background-color: white;
+    color: #673AB7;
+    border: 2px solid #673AB7;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    text-transform: none;
+    cursor: pointer;
+}
+
+.action-button mat-icon {
+    transition: transform 0.3s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(81, 45, 168, 0.15);
+    background-color: #673AB7;
+    color: white;
+}
+
+.action-button:hover mat-icon {
+    transform: scale(1.2);
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #673AB7;
+    font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .admin-login-wrapper {
+        flex-direction: column;
+        gap: 20px;
+        padding: 30px;
+    }
+
+    .login-container {
+        max-width: 100%;
+    }
+
+    .action-section {
+        margin-top: 30px;
+        width: 90%;
+        flex: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-login-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .action-section {
+        margin-top: 0;
+        /* ביטול ריווח מיותר */
+        width: 100%;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .action-button {
+        margin: 20px auto 10px auto;
+        /* קצת רווח, אבל לא מוגזם */
+    }
+
+    .title {
+        font-size: 28px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    .feature-card {
+        padding: 12px;
+    }
+
+    .feature-text .feature-title {
+        font-size: 18px;
+    }
+
+    .feature-text .feature-description {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .feature-card i {
+        font-size: 24px;
+    }
+
+    .action-button {
+        max-width: 200px;
+    }
+}

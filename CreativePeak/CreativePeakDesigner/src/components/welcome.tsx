@@ -319,7 +319,7 @@ function Welcome() {
                 </Typography>
             </TipBar>
             <Typography variant="body2" sx={{ color: "#666", mt: 3, textAlign: "center", fontSize: "14px" }}>
-                © All rights reserved {new Date().getFullYear()}.
+              © CreativePeak Designer System {new Date().getFullYear()} | All rights reserved.
             </Typography>
         </WelcomeContainer>
     );

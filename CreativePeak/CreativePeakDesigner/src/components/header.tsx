@@ -74,7 +74,7 @@ export default function Header() {
           component="img"
           src={Cartoon_logo}
           alt="logo"
-          sx={{ height: 60, mb: 2 }}
+          sx={{ height: 65, mb: 2 }}
         />
         <Typography variant="h6" sx={{ fontWeight: "bold", color: "#673AB7" }}>
           Menu
@@ -210,7 +210,7 @@ export default function Header() {
                     alt="logo"
                     onClick={() => { logout(); navigate("/") }}
                     sx={{
-                      height: { xs: 50, sm: 60 },
+                      height: { xs: 50, sm: 65 },
                       cursor: "pointer",
                       transition: "all 0.3s ease"
                     }}
