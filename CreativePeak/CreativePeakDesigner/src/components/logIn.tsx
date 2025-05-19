@@ -12,7 +12,6 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PaletteIcon from "@mui/icons-material/Palette";
 import { useAuth } from "../contexts/authContext";
 
-// עיצוב קונטיינר חיצוני - משופר
 const OuterContainer = styled(Box)({
   display: "flex",
   justifyContent: "center",
@@ -21,7 +20,6 @@ const OuterContainer = styled(Box)({
   position: "relative",
 });
 
-// עיצוב קונטיינר פנימי - משופר
 const ContentBox = styled(Paper)({
   backgroundColor: "#fcfaff",
   borderRadius: "16px",
@@ -43,7 +41,6 @@ const ContentBox = styled(Paper)({
   }
 });
 
-// כפתור מעוצב - משודרג
 const StyledButton = styled(Button)({
   textTransform: "none",
   fontSize: "16px",
@@ -68,7 +65,6 @@ const StyledButton = styled(Button)({
   }
 });
 
-// שדה טקסט מעוצב
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-root": {
     borderRadius: "12px",
@@ -93,7 +89,6 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-// חלק אייקון עליון
 const IconHeader = styled(Box)({
   position: "relative",
   marginBottom: "20px",
@@ -102,7 +97,6 @@ const IconHeader = styled(Box)({
   alignItems: "center",
 });
 
-// מעגל אייקון
 const IconCircle = styled(Box)({
   width: "80px",
   height: "80px",
@@ -134,7 +128,6 @@ const IconCircle = styled(Box)({
   },
 });
 
-// קו מפריד
 const Divider = styled(Box)({
   height: "1px",
   width: "80%",
@@ -154,7 +147,6 @@ const Divider = styled(Box)({
   },
 });
 
-// כותרת עם אפקט מודגש
 const GradientTitle = styled(Typography)({
   position: "relative",
   display: "inline-block",
@@ -228,7 +220,6 @@ function LogIn() {
     }
   };
 
-  // טיפול בלחיצה על Enter כדי להתחבר
   const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && username.trim() !== "" && password.trim() !== "") {
       handleLogin();
@@ -237,7 +228,6 @@ function LogIn() {
 
   return (
     <OuterContainer>
-      {/* אלמנטים עיצוביים ברקע */}
       <Box sx={{
         position: "absolute",
         top: "10%",
