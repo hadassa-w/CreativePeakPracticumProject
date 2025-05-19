@@ -122,6 +122,51 @@ namespace CreativePeak.API.Controllers
             });
         }
 
+        [HttpPost("LoginAdmin")]
+        public async Task<IActionResult> LoginAdmin([FromBody] LoginModel loginModel)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginModel.UserName);
+
+            if (user == null)
+            {
+                return Unauthorized("The user not found.");
+            }
+
+            bool isPasswordValid = passwordService.VerifyPassword(user.Password, loginModel.Password);
+
+            if (!isPasswordValid)
+            {
+                return Unauthorized("The username or password is incorrect.");
+            }
+
+            if(user.Role!="Main admin")
+            {
+                return Unauthorized("This user is not authorized to log in.");
+            }
+
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
+
+            var userNew = _mapper.Map<UserDTO>(user);
+
+            var accessToken = _tokenService.CreateAccessToken(user);
+            var refreshToken = _tokenService.CreateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            await _userService.UpdateAsync(user.Id, user);
+
+            return Ok(new
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                User = userNew
+            });
+        }
+
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] UserPostModel userPostModel)
         {

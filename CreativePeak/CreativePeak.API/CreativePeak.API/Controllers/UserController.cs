@@ -12,7 +12,7 @@ namespace CreativePeak.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -34,7 +34,7 @@ namespace CreativePeak.API.Controllers
         }
 
         // GET api/<UserController>/5
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -89,7 +89,7 @@ namespace CreativePeak.API.Controllers
             return NoContent();
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpPut("updateWithoutPassword/{id}")]
         public async Task<ActionResult> UpdateWithoutPassword(int id, [FromBody] UserWithoutPasswordPostModel user)
         {
@@ -123,7 +123,7 @@ namespace CreativePeak.API.Controllers
             return NoContent();
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpGet("Count")]
         public async Task<ActionResult> GetCount()
         {

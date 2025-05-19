@@ -33,6 +33,22 @@
   },
   {
     "ContainingType": "CreativePeak.API.Controllers.AuthController",
+    "Method": "LoginAdmin",
+    "RelativePath": "api/Auth/LoginAdmin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginModel",
+        "Type": "CreativePeak.Core.PostModels.LoginModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.AuthController",
     "Method": "Refresh",
     "RelativePath": "api/Auth/Refresh-token",
     "HttpMethod": "POST",
@@ -384,6 +400,22 @@
     "Method": "Delete",
     "RelativePath": "api/User/{id}",
     "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.UserController",
+    "Method": "GetAdmin",
+    "RelativePath": "api/User/Admin/{id}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
