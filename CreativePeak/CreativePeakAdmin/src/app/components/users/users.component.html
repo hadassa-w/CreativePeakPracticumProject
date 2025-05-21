@@ -1,92 +1,93 @@
-<div class="background">
-    <div class="admin-login-wrapper">
-        <div class="login-container">
-            <div class="header-decoration"></div>
-            <div class="logo-section">
-                <h1 class="title">CreativePeak Users</h1>
-                <p class="subtitle">User Management System</p>
-            </div>
-            <div class="search-filters">
-                <div class="search-box">
-                    <input style="width: 95%;" type="text" placeholder="Search users..." [(ngModel)]="searchTerm"
-                        (keyup)="applyFilters()">
-                    @if(searchTerm){
-                    <button class="clear-btn" (click)="searchTerm=''; applyFilters()">
-                        <i class="material-icons">close</i>
-                    </button>
-                    }
-                </div>
-
-                <div class="filter-controls">
-                    <div class="filter-group">
-                        <label>Last Created:</label>
-                        <button class="action-button" [class.selected]="filterLastCreated"
-                            (click)="toggleLastCreatedFilter()">
-                            <i class="material-icons">{{ filterLastCreated ? 'check_box' : 'check_box_outline_blank'
-                                }}</i>
-                            Sort by Latest
-                        </button>
-                    </div>
-
-                    <button class="reset-filters" (click)="clearFilters()">
-                        <i class="material-icons">restart_alt</i>
-                        Reset
-                    </button>
-                </div>
-            </div>
-
-            <div class="text">
-                <p>To add a new user, click the button below.</p>
-            </div>
-
-            <div class="users-section">
-                <div class="user-table-header">
-                    <div class="user-header-cell user-name">Name</div>
-                    <div class="user-header-cell user-email">Email</div>
-                    <div class="user-header-cell user-phone">Phone</div>
-                    <div class="user-header-cell user-address">Address</div>
-                    <div class="user-header-cell user-created-at">CreatedAt</div>
-                    <div class="user-header-cell user-updated-at">UpdatedAt</div>
-                </div>
-
-                @if(filteredUsers.length === 0){
-                <div class="no-users-found">
-                    <i class="material-icons">search_off</i>
-                    <p>No users found matching your criteria</p>
-                </div>
-                }
-                @for (user of filteredUsers; track user.id) {
-                <div class="user-item" (click)="setSelectedUser(user)" [class.selected]="selectedUser?.id === user.id">
-                    <div class="user-cell user-name">{{ user.fullName }}</div>
-                    <div class="user-cell user-email">{{ user.email }}</div>
-                    <div class="user-cell user-phone">{{ user.phone }}</div>
-                    <div class="user-cell user-address">{{ user.address }}</div>
-                    <div class="user-cell user-created-at">{{ user.createdAt | date:'dd/MM/yyyy' }}</div>
-                    <div class="user-cell user-updated-at">{{ user.updatedAt | date:'dd/MM/yyyy' }}</div>
-                </div>
-                }
-                @if (selectedUser) {
-                <div class="user-actions-global">
-                    <p>Selected: {{ selectedUser.fullName }}</p>
-                    <button class="action-icon-button" (click)="editUser(selectedUser.id,selectedUser)">
-                        <i class="material-icons" style="color: gray;">edit</i>
-                    </button>
-                    <button class="action-icon-button delete" (click)="confirmDeleteUser(selectedUser.id)">
-                        <i class="material-icons" style="color: #673AB7;">delete</i>
-                    </button>
-                </div>
-                }
-            </div>
-        </div>
-
-        <div class="action-section">
-            <div class="footer">
-                <p>To add a new user, click the button below.</p>
-            </div>
-            <button mat-raised-button class="action-button" (click)="navigate('/addUser')">
-                <mat-icon>person_add</mat-icon>
-                Add User
-            </button>
-        </div>
+<div class="users-page-container">
+  <div class="header-section">
+    <div class="title-container">
+      <h1 class="page-title">Users Management</h1>
+      <p class="page-subtitle">View, edit and manage system users</p>
     </div>
+    <button class="add-user-btn" (click)="addNewUser()">
+      <mat-icon>person_add</mat-icon>
+      Add New User
+    </button>
+  </div>
+
+  <div class="users-list-container">
+    <!-- Loading indicator -->
+    @if(isLoading) {
+      <div class="loading-container">
+        <div class="loading-spinner">
+          <i class="material-icons rotate">sync</i>
+          <span>Loading users...</span>
+        </div>
+      </div>
+    }
+
+    <!-- No users message -->
+    @if(!isLoading && users.length === 0) {
+      <div class="no-users-container">
+        <mat-icon class="no-users-icon">group_off</mat-icon>
+        <p class="no-users-message">No users found</p>
+        <button class="add-first-user-btn" (click)="addNewUser()">Add Your First User</button>
+      </div>
+    }
+
+    <!-- Users grid -->
+    <div class="users-grid">
+      @for(user of users; track user.id) {
+        <div class="user-card">
+          <div class="user-card-header">
+            <div class="user-avatar">
+              {{ user.fullName.charAt(0) }}
+            </div>
+            <div class="user-card-actions">
+              <button class="action-icon-btn edit" mat-icon-button matTooltip="Edit User" (click)="editUser(user.id)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button class="action-icon-btn delete" mat-icon-button matTooltip="Delete User" (click)="deleteUser(user.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          
+          <div class="user-card-content">
+            <h3 class="user-name">{{ user.fullName }}</h3>
+            
+            <div class="user-details">
+              <div class="detail-item">
+                <mat-icon class="detail-icon">email</mat-icon>
+                <span class="detail-text">{{ user.email }}</span>
+              </div>
+              
+              <div class="detail-item">
+                <mat-icon class="detail-icon">phone</mat-icon>
+                <span class="detail-text">{{ user.phone }}</span>
+              </div>
+              
+              <div class="detail-item">
+                <mat-icon class="detail-icon">location_on</mat-icon>
+                <span class="detail-text">{{ user.address }}</span>
+              </div>
+            </div>
+            
+            <div class="user-footer">
+              <div class="timestamp">
+                <span class="created-at">Created: {{ formatDate(user.createdAt) }}</span>
+                <span class="updated-at">Updated: {{ formatDate(user.updatedAt) }}</span>
+              </div>
+              
+              <div class="user-actions">
+                <button class="user-action-btn edit-btn" (click)="editUser(user.id)">
+                  <mat-icon>edit</mat-icon>
+                  Edit
+                </button>
+                <button class="user-action-btn delete-btn" (click)="deleteUser(user.id)">
+                  <mat-icon>delete</mat-icon>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
 </div>

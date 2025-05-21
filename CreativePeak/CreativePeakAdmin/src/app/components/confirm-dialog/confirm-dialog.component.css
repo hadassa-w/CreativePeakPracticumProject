@@ -1,0 +1,44 @@
+ .confirm-dialog {
+      padding: 16px;
+    }
+    
+    h2 {
+      color: #333;
+      font-size: 20px;
+      margin: 0 0 16px;
+    }
+    
+    p {
+      color: #555;
+      margin: 0 0 24px;
+      line-height: 1.5;
+    }
+    
+    [mat-dialog-actions] {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px 0;
+      gap: 12px;
+    }
+    
+    button {
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .cancel-btn {
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    
+    .confirm-btn {
+      background-color: #673AB7;
+      color: white;
+    }
+    
+    .confirm-btn.delete {
+      background-color: #F44336;
+    }

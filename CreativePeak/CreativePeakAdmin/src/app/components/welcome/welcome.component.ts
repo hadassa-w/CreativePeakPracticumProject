@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { DetailsSiteService } from '../../services/details-site/details-site.service';
+import { UsersService } from '../../services/users/users.service';
 
 @Component({
   selector: 'app-welcome',
@@ -20,23 +20,23 @@ export class WelcomeComponent {
   projects: number = 0;
   categories: number = 0;
 
-  constructor(private router: Router, private detailsSiteService: DetailsSiteService) { }
+  constructor(private router: Router, private userService: UsersService) { }
 
   async ngOnInit(): Promise<void> {
     try {
-      await this.detailsSiteService.getCountUsers().subscribe(count => {
+      await this.userService.getCountUsers().subscribe(count => {
         this.animateCount('users', count-1);
       });
 
-      await this.detailsSiteService.getCountUsers().subscribe(count => {
+      await this.userService.getCountUsers().subscribe(count => {
         this.animateCount('portfolios', count-1);
       });
 
-      await this.detailsSiteService.getImages().subscribe(data => {
+      await this.userService.getImages().subscribe(data => {
         this.animateCount('projects', data.length);
       });
 
-      await this.detailsSiteService.getCategories().subscribe(data => {
+      await this.userService.getCategories().subscribe(data => {
         this.animateCount('categories', data.length);
       });
 

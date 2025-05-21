@@ -1,0 +1,14 @@
+ <div class="confirm-dialog">
+      <h2 mat-dialog-title>{{ data.title }}</h2>
+      <div mat-dialog-content>
+        <p>{{ data.message }}</p>
+      </div>
+      <div mat-dialog-actions>
+        <button mat-button (click)="onCancelClick()" class="cancel-btn">
+          {{ data.cancelText }}
+        </button>
+        <button mat-button (click)="onConfirmClick()" class="confirm-btn" [ngClass]="{'delete': data.confirmText.toLowerCase() === 'delete'}">
+          {{ data.confirmText }}
+        </button>
+      </div>
+    </div>

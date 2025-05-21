@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { User } from '../../modules/user';
 import { UsersService } from '../../services/users/users.service';
-import { DetailsSiteService } from '../../services/details-site/details-site.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
@@ -33,7 +32,6 @@ export class AddEditUserComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private usersService: UsersService,
-    private detailsSiteService: DetailsSiteService,
     private snackBar: MatSnackBar
   ) {
     // Initialize form without password field - will add it later if needed
@@ -65,7 +63,7 @@ export class AddEditUserComponent implements OnInit {
     this.isLoading = true;
     try {
       // Since your getUserById doesn't return the user data directly, we need to fetch users
-      const users = await this.detailsSiteService.getUsers().toPromise();
+      const users = await this.usersService.getUsers().toPromise();
       const user = users?.find(u => u.id === userId);
       
       if (user) {
