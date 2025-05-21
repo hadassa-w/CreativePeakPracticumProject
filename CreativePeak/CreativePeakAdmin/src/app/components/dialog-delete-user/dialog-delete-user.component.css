@@ -1,0 +1,37 @@
+    .delete-dialog {
+      padding: 24px;
+      max-width: 400px;
+    }
+    .dialog-title {
+      color: #673AB7;
+      margin-top: 0;
+      font-size: 20px;
+    }
+    .dialog-content {
+      margin: 20px 0;
+    }
+    .warning-text {
+      color: #F44336;
+      font-size: 14px;
+    }
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    .cancel-button {
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: 1px solid #673AB7;
+      background: white;
+      color: #673AB7;
+      cursor: pointer;
+    }
+    .confirm-button {
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      background: #F44336;
+      color: white;
+      cursor: pointer;
+    }

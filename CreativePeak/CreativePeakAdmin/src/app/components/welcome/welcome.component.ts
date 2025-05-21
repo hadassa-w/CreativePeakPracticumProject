@@ -24,11 +24,11 @@ export class WelcomeComponent {
 
   async ngOnInit(): Promise<void> {
     try {
-      await this.detailsSiteService.getUsers().subscribe(count => {
+      await this.detailsSiteService.getCountUsers().subscribe(count => {
         this.animateCount('users', count-1);
       });
 
-      await this.detailsSiteService.getUsers().subscribe(count => {
+      await this.detailsSiteService.getCountUsers().subscribe(count => {
         this.animateCount('portfolios', count-1);
       });
 
