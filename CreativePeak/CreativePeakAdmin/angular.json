@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "le": {
+    "CreativePeakAdmin": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "le:build:production"
+              "buildTarget": "CreativePeakAdmin:build:production"
             },
             "development": {
-              "buildTarget": "le:build:development"
+              "buildTarget": "CreativePeakAdmin:build:development"
             }
           },
           "defaultConfiguration": "development"
