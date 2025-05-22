@@ -31,7 +31,7 @@ namespace CreativePeak.API.Controllers
                 messages = new[]
                 {
                     new { role = "system", content = "You are an assistant that writes short, clear, and creative project descriptions." },
-                    new { role = "user", content = $"Suggest a short and clear description for a project called: {projectName}" }
+                    new { role = "user", content = $"{projectName}" }
     }
                 };
 
