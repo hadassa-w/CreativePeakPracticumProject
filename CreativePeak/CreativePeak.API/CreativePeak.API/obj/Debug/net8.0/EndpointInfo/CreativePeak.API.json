@@ -535,6 +535,18 @@
         }
       }
     },
+    "/monthly-summary": {
+      "get": {
+        "tags": [
+          "Reports"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/S3Images/image-url": {
       "get": {
         "tags": [
@@ -660,29 +672,6 @@
         }
       },
       "delete": {
-        "tags": [
-          "User"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/User/Admin/{id}": {
-      "get": {
         "tags": [
           "User"
         ],

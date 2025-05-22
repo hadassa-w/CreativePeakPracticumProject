@@ -413,22 +413,6 @@
   },
   {
     "ContainingType": "CreativePeak.API.Controllers.UserController",
-    "Method": "GetAdmin",
-    "RelativePath": "api/User/Admin/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "CreativePeak.API.Controllers.UserController",
     "Method": "GetCount",
     "RelativePath": "api/User/Count",
     "HttpMethod": "GET",
@@ -456,6 +440,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.ReportsController",
+    "Method": "GetMonthlySummary",
+    "RelativePath": "monthly-summary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   }
 ]
