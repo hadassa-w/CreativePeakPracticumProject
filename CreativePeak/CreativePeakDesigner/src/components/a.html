@@ -1,0 +1,986 @@
+< !DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Creative Peak - Designer Portfolio</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
+            :root {
+                --primary: #673AB7;
+                --primary-light: #9c27b0;
+                --primary-dark: #7B1FA2;
+                --secondary: #EC407A;
+                --text-dark: #333;
+                --text-light: #666;
+                --white: #fff;
+                --bg-light: #f9f9ff;
+                --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+                --card-shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.15);
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+            }
+
+            body {
+                background-color: var(--bg-light);
+                color: var(--text-dark);
+                line-height: 1.6;
+            }
+
+            a {
+                text-decoration: none;
+                color: var(--primary);
+            }
+
+            /* Header */
+            header {
+                background: linear-gradient(145deg, var(--primary) 0%, var(--primary-light) 100%);
+                color: var(--white);
+                padding: 2rem 0;
+                text-align: center;
+            }
+
+            .header-content {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 2rem;
+            }
+
+            .avatar {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                background-color: var(--white);
+                color: var(--primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 3rem;
+                margin: 0 auto 1.5rem;
+                border: 4px solid white;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .site-title {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+            }
+
+            .site-subtitle {
+                font-size: 1.2rem;
+                opacity: 0.9;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            /* Main Container */
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 3rem 2rem;
+            }
+
+            /* Profile Section */
+            .profile-section {
+                background-color: var(--white);
+                border-radius: 20px;
+                padding: 2rem;
+                margin-bottom: 3rem;
+                box-shadow: var(--card-shadow);
+                transition: all 0.3s ease;
+            }
+
+            .profile-section:hover {
+                box-shadow: var(--card-shadow-hover);
+            }
+
+            .section-title {
+                font-size: 2rem;
+                font-weight: 700;
+                margin-bottom: 1.5rem;
+                color: var(--primary);
+                position: relative;
+                display: inline-block;
+                padding-bottom: 0.5rem;
+            }
+
+            .section-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(45deg, var(--primary) 30%, var(--primary-light) 90%);
+                border-radius: 2px;
+            }
+
+            .profile-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 2rem;
+            }
+
+            .profile-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .profile-icon {
+                background-color: rgba(103, 58, 183, 0.1);
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 1rem;
+                color: var(--primary);
+                font-size: 1.2rem;
+            }
+
+            .profile-label {
+                color: var(--text-light);
+                font-size: 0.9rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .profile-value {
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+
+            /* Portfolio Section */
+            .portfolio-section {
+                background-color: var(--white);
+                border-radius: 20px;
+                padding: 2rem;
+                box-shadow: var(--card-shadow);
+                transition: all 0.3s ease;
+                margin-bottom: 3rem;
+            }
+
+            .portfolio-section:hover {
+                box-shadow: var(--card-shadow-hover);
+            }
+
+            .portfolio-filter {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .filter-button {
+                background-color: transparent;
+                border: 2px solid var(--primary);
+                color: var(--primary);
+                padding: 0.5rem 1rem;
+                border-radius: 50px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .filter-button:hover,
+            .filter-button.active {
+                background-color: var(--primary);
+                color: white;
+            }
+
+            .category-title {
+                font-weight: 800;
+                background: linear-gradient(45deg, var(--primary) 30%, var(--primary-light) 90%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 1rem;
+                font-size: 1.8rem;
+                position: relative;
+                display: inline-block;
+                padding-bottom: 0.5rem;
+            }
+
+            .category-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 60px;
+                height: 3px;
+                background: linear-gradient(45deg, var(--primary) 30%, var(--primary-light) 90%);
+                border-radius: 2px;
+            }
+
+            .category-description {
+                font-style: italic;
+                color: var(--text-light);
+                margin-bottom: 1.5rem;
+                max-width: 700px;
+            }
+
+            .divider {
+                height: 1px;
+                background-color: #e0e0e0;
+                margin: 2rem 0;
+                width: 100px;
+            }
+
+            .project-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 3rem;
+            }
+
+            .project-card {
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                background-color: var(--white);
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .project-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            }
+
+            .project-image-container {
+                position: relative;
+                overflow: hidden;
+                height: 200px;
+                cursor: pointer;
+            }
+
+            .project-image-container::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.4) 100%);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .project-image-container:hover::after {
+                opacity: 1;
+            }
+
+            .project-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+
+            .project-image-container:hover .project-image {
+                transform: scale(1.1);
+            }
+
+            .project-content {
+                padding: 1.5rem;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .project-title {
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+                font-size: 1.2rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+            }
+
+            .project-description {
+                color: var(--text-light);
+                margin-bottom: 1rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                min-height: 40px;
+            }
+
+            .project-meta {
+                color: gray;
+                font-size: 0.8rem;
+                margin-top: auto;
+                margin-bottom: 1rem;
+            }
+
+            .meta-label {
+                font-weight: bold;
+            }
+
+            /* Modal */
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8);
+                align-items: center;
+                justify-content: center;
+            }
+
+            .modal-content {
+                position: relative;
+                max-width: 90%;
+                max-height: 90%;
+                margin: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .modal-image {
+                max-width: 100%;
+                max-height: 70vh;
+                object-fit: contain;
+                border-radius: 4px;
+            }
+
+            .modal-details {
+                margin-top: 1rem;
+                text-align: center;
+                color: white;
+                max-width: 600px;
+            }
+
+            .modal-title {
+                font-weight: bold;
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .modal-description {
+                font-size: 1rem;
+            }
+
+            .close-modal {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                font-size: 2rem;
+                color: white;
+                cursor: pointer;
+                background-color: rgba(0, 0, 0, 0.5);
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.3s;
+            }
+
+            .close-modal:hover {
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+
+            /* Contact Section */
+            .contact-section {
+                background-color: var(--white);
+                border-radius: 20px;
+                padding: 2rem;
+                box-shadow: var(--card-shadow);
+                transition: all 0.3s ease;
+            }
+
+            .contact-section:hover {
+                box-shadow: var(--card-shadow-hover);
+            }
+
+            .contact-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 2rem;
+            }
+
+            .contact-button {
+                display: inline-block;
+                margin-top: 2rem;
+                background: linear-gradient(45deg, var(--primary) 30%, var(--primary-light) 90%);
+                color: white;
+                padding: 0.8rem 2rem;
+                border-radius: 50px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 10px rgba(103, 58, 183, 0.3);
+            }
+
+            .contact-button:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 15px rgba(103, 58, 183, 0.4);
+            }
+
+            /* Footer */
+            footer {
+                background: linear-gradient(145deg, var(--primary) 0%, var(--primary-light) 100%);
+                color: var(--white);
+                text-align: center;
+                padding: 2rem 0;
+                margin-top: 3rem;
+            }
+
+            .footer-content {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 2rem;
+            }
+
+            .footer-text {
+                opacity: 0.9;
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+            }
+
+            .social-icons {
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+
+            .social-icon {
+                color: white;
+                background-color: rgba(255, 255, 255, 0.2);
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+            }
+
+            .social-icon:hover {
+                background-color: rgba(255, 255, 255, 0.4);
+                transform: translateY(-3px);
+            }
+
+            /* Empty State */
+            .empty-state {
+                text-align: center;
+                padding: 3rem 0;
+            }
+
+            .empty-icon {
+                font-size: 4rem;
+                color: #e0e0e0;
+                margin-bottom: 1rem;
+            }
+
+            .empty-title {
+                font-size: 1.5rem;
+                color: #9e9e9e;
+                margin-bottom: 0.5rem;
+            }
+
+            .empty-message {
+                color: #9e9e9e;
+                max-width: 400px;
+                margin: 0 auto 1.5rem;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .project-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                }
+
+                .profile-grid,
+                .contact-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .site-title {
+                    font-size: 2rem;
+                }
+
+                .section-title {
+                    font-size: 1.75rem;
+                }
+
+                .category-title {
+                    font-size: 1.5rem;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .avatar {
+                    width: 90px;
+                    height: 90px;
+                    font-size: 2.5rem;
+                }
+
+                .container,
+                .portfolio-section,
+                .profile-section,
+                .contact-section {
+                    padding: 1.5rem 1rem;
+                }
+
+                .project-grid {
+                    grid-template-columns: 1fr;
+                }
+            }        </style>
+    </head>
+
+    <body>
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="avatar">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h1 class="site-title">Creative Peak</h1>
+                <p class="site-subtitle">Transforming ideas into stunning visual experiences</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="container">
+            <!-- Designer Profile Section -->
+            <section class="profile-section" id="profile">
+                <h2 class="section-title">Designer Profile</h2>
+                <div class="profile-grid">
+                    <div class="profile-item">
+                        <div class="profile-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <p class="profile-label">Full Name</p>
+                            <p class="profile-value" id="designer-name">Sarah Johnson</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <p class="profile-label">Email</p>
+                            <p class="profile-value" id="designer-email">contact@creativepeak.com</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <p class="profile-label">Phone</p>
+                            <p class="profile-value" id="designer-phone">+972 50 123 4567</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div>
+                            <p class="profile-label">Website</p>
+                            <p class="profile-value" id="designer-website">www.creativepeak.com</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div>
+                            <p class="profile-label">Experience</p>
+                            <p class="profile-value" id="designer-experience">8 years</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-icon">
+                            <i class="fas fa-shekel-sign"></i>
+                        </div>
+                        <div>
+                            <p class="profile-label">Price Range</p>
+                            <p class="profile-value" id="designer-price">500₪ - 5000₪</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Portfolio Section -->
+            <section class="portfolio-section" id="portfolio">
+                <h2 class="section-title">Projects Gallery</h2>
+
+                <div class="portfolio-filter">
+                    <button class="filter-button active" data-filter="all">All Categories</button>
+                    <button class="filter-button" data-filter="branding">Branding</button>
+                    <button class="filter-button" data-filter="web-design">Web Design</button>
+                    <button class="filter-button" data-filter="print">Print Design</button>
+                </div>
+
+                <!-- Branding Category -->
+                <div class="portfolio-category" data-category="branding">
+                    <h3 class="category-title">Branding</h3>
+                    <p class="category-description">Complete visual identity solutions for businesses of all sizes, from
+                        logo design to full brand guidelines.</p>
+                    <div class="divider"></div>
+                    <div class="project-grid">
+                        <!-- Project 1 -->
+                        <div class="project-card">
+                            <div class="project-image-container" data-project="1">
+                                <img src="https://source.unsplash.com/random/600x400/?branding,logo" alt="Project 1"
+                                    class="project-image">
+                            </div>
+                            <div class="project-content">
+                                <h4 class="project-title">Evergreen Fashion Brand</h4>
+                                <p class="project-description">Complete branding package for a sustainable fashion
+                                    brand, including logo, color palette, and typography.</p>
+                                <div class="project-meta">
+                                    <p><span class="meta-label">Created at:</span> 15/04/2025</p>
+                                    <p><span class="meta-label">Last updated:</span> 30/04/2025</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 2 -->
+                        <div class="project-card">
+                            <div class="project-image-container" data-project="2">
+                                <img src="https://source.unsplash.com/random/600x400/?branding,identity" alt="Project 2"
+                                    class="project-image">
+                            </div>
+                            <div class="project-content">
+                                <h4 class="project-title">NovaTech Solutions</h4>
+                                <p class="project-description">Modern tech company rebranding with a focus on innovation
+                                    and cutting-edge technology.</p>
+                                <div class="project-meta">
+                                    <p><span class="meta-label">Created at:</span> 03/03/2025</p>
+                                    <p><span class="meta-label">Last updated:</span> 10/04/2025</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 3 -->
+                        <div class="project-card">
+                            <div class="project-image-container" data-project="3">
+                                <img src="https://source.unsplash.com/random/600x400/?branding,logo,design"
+                                    alt="Project 3" class="project-image">
+                            </div>
+                            <div class="project-content">
+                                <h4 class="project-title">Fresh Bites Cafe</h4>
+                                <p class="project-description">Brand identity for an organic cafe, featuring hand-drawn
+                                    illustrations and a nature-inspired color palette.</p>
+                                <div class="project-meta">
+                                    <p><span class="meta-label">Created at:</span> 22/02/2025</p>
+                                    <p><span class="meta-label">Last updated:</span> 15/03/2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Web Design Category -->
+                <div class="portfolio-category" data-category="web-design">
+                    <h3 class="category-title">Web Design</h3>
+                    <p class="category-description">User-centered web designs that combine aesthetics with
+                        functionality, creating seamless digital experiences.</p>
+                    <div class="divider"></div>
+                    <div class="project-grid">
+                        <!-- Project 4 -->
+                        <div class="project-card">
+                            <div class="project-image-container" data-project="4">
+                                <img src="https://source.unsplash.com/random/600x400/?website,design" alt="Project 4"
+                                    class="project-image">
+                            </div>
+                            <div class="project-content">
+                                <h4 class="project-title">Artisan Portfolio Site</h4>
+                                <p class="project-description">Custom portfolio website for a ceramics artist with an
+                                    emphasis on showcasing high-quality product photography.</p>
+                                <div class="project-meta">
+                                    <p><span class="meta-label">Created at:</span> 10/04/2025</p>
+                                    <p><span class="meta-label">Last updated:</span> 28/04/2025</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 5 -->
+                        <div class="project-card">
+                            <div class="project-image-container" data-project="5">
+                                <img src="https://source.unsplash.com/random/600x400/?ui,app" alt="Project 5"
+                                    class="project-image">
+                            </div>
+                            <div class="project-content">
+                                <h4 class="project-title">Wellness App UI</h4>
+                                <p class="project-description">User interface design for a mobile health and wellness
+                                    application with a calming color scheme.</p>
+                                <div class="project-meta">
+                                    <p><span class="meta-label">Created at:</span> 05/03/2025</p>
+                                    <p><span class="meta-label">Last updated:</span> 20/04/2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Print Design Category -->
+                <div class="portfolio-category" data-category="print">
+                    <h3 class="category-title">Print Design</h3>
+                    <p class="category-description">Elegant and impactful print materials from business cards to large
+                        format displays and packaging.</p>
+                    <div class="divider"></div>
+                    <div class="project-grid">
+                        <!-- Project 6 -->
+                        <div class="project-card">
+                            <div class="project-image-container" data-project="6">
+                                <img src="https://source.unsplash.com/random/600x400/?print,booklet" alt="Project 6"
+                                    class="project-image">
+                            </div>
+                            <div class="project-content">
+                                <h4 class="project-title">Cultural Festival Catalog</h4>
+                                <p class="project-description">A 32-page event catalog for an international arts
+                                    festival featuring custom illustrations and photography.</p>
+                                <div class="project-meta">
+                                    <p><span class="meta-label">Created at:</span> 18/01/2025</p>
+                                    <p><span class="meta-label">Last updated:</span> 05/02/2025</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 7 -->
+                        <div class="project-card">
+                            <div class="project-image-container" data-project="7">
+                                <img src="https://source.unsplash.com/random/600x400/?packaging,design" alt="Project 7"
+                                    class="project-image">
+                            </div>
+                            <div class="project-content">
+                                <h4 class="project-title">Artisanal Tea Packaging</h4>
+                                <p class="project-description">Eco-friendly packaging design for a premium tea brand,
+                                    incorporating traditional patterns with modern styling.</p>
+                                <div class="project-meta">
+                                    <p><span class="meta-label">Created at:</span> 08/02/2025</p>
+                                    <p><span class="meta-label">Last updated:</span> 25/03/2025</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 8 -->
+                        <div class="project-card">
+                            <div class="project-image-container" data-project="8">
+                                <img src="https://source.unsplash.com/random/600x400/?poster,design" alt="Project 8"
+                                    class="project-image">
+                            </div>
+                            <div class="project-content">
+                                <h4 class="project-title">Music Festival Posters</h4>
+                                <p class="project-description">Series of vibrant event posters for a summer music
+                                    festival, each featuring a unique color scheme and composition.</p>
+                                <div class="project-meta">
+                                    <p><span class="meta-label">Created at:</span> 15/03/2025</p>
+                                    <p><span class="meta-label">Last updated:</span> 08/04/2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State (Hidden by default) -->
+                <div class="empty-state" style="display: none;" id="empty-state">
+                    <i class="fas fa-images empty-icon"></i>
+                    <h3 class="empty-title">No projects found</h3>
+                    <p class="empty-message">No projects match your current filter selection. Try selecting a different
+                        category.</p>
+                    <button class="filter-button" onclick="resetFilters()">Show all projects</button>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="contact-section" id="contact">
+                <h2 class="section-title">Get In Touch</h2>
+                <p style="margin-bottom: 2rem;">Interested in working together? Contact me to discuss your project
+                    requirements.</p>
+
+                <div class="contact-grid">
+                    <div class="profile-item">
+                        <div class="profile-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <p class="profile-label">Email</p>
+                            <p class="profile-value" id="contact-email">contact@creativepeak.com</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <p class="profile-label">Phone</p>
+                            <p class="profile-value" id="contact-phone">+972 50 123 4567</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-item">
+                        <div class="profile-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div>
+                            <p class="profile-label">Website</p>
+                            <p class="profile-value" id="contact-website">www.creativepeak.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <a href="mailto:contact@creativepeak.com" class="contact-button">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <p class="footer-text">© 2025 Creative Peak. All rights reserved.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-behance"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-dribbble"></i></a>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Modal for Project Details -->
+        <div class="modal" id="project-modal">
+            <div class="modal-content">
+                <span class="close-modal" id="close-modal">&times;</span>
+                <img src="" alt="Project Image" class="modal-image" id="modal-image">
+                <div class="modal-details">
+                    <h3 class="modal-title" id="modal-title"></h3>
+                    <p class="modal-description" id="modal-description"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <script>
+            // Filter Projects
+            const filterButtons = document.querySelectorAll('.filter-button');
+            const portfolioCategories = document.querySelectorAll('.portfolio-category');
+            const emptyState = document.getElementById('empty-state');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const filterValue = button.getAttribute('data-filter');
+                    let hasVisibleProjects = false;
+
+                    if (filterValue === 'all') {
+                        // Show all categories
+                        portfolioCategories.forEach(category => {
+                            category.style.display = 'block';
+                            hasVisibleProjects = true;
+                        });
+                    } else {
+                        // Show only matched category
+                        portfolioCategories.forEach(category => {
+                            if (category.getAttribute('data-category') === filterValue) {
+                                category.style.display = 'block';
+                                hasVisibleProjects = true;
+                            } else {
+                                category.style.display = 'none';
+                            }
+                        });
+                    }
+
+                    // Show/hide empty state
+                    emptyState.style.display = hasVisibleProjects ? 'none' : 'block';
+                });
+            });
+
+            // Reset filters
+            function resetFilters() {
+                const allButton = document.querySelector('[data-filter="all"]');
+                allButton.click();
+            }
+
+            // Project Modal
+            const modal = document.getElementById('project-modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const closeModal = document.getElementById('close-modal');
+            const projectImages = document.querySelectorAll('.project-image-container');
+
+            projectImages.forEach(container => {
+                container.addEventListener('click', () => {
+                    const projectId = container.getAttribute('data-project');
+                    const projectCard = container.closest('.project-card');
+                    const image = container.querySelector('.project-image');
+                    const title = projectCard.querySelector('.project-title').textContent;
+                    const description = projectCard.querySelector('.project-description').textContent;
+
+                    modalImage.src = image.src;
+                    modalTitle.textContent = title;
+                    modalDescription.textContent = description;
+
+                    modal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+                });
+            });
+
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Re-enable scrolling
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Synchronize contact information
+            document.addEventListener('DOMContentLoaded', function () {
+                const designerEmail = document.getElementById('designer-email').textContent;
+                const designerPhone = document.getElementById('designer-phone').textContent;
+                const designerWebsite = document.getElementById('designer-website').textContent;
+
+                document.getElementById('contact-email').textContent = designerEmail;
+                document.getElementById('contact-phone').textContent = designerPhone;
+                document.getElementById('contact-website').textContent = designerWebsite;
+
+                // Update email button href
+                const contactButton = document.querySelector('.contact-button');
+                contactButton.href = `mailto:${designerEmail}`;
+            });
+        </script>
+    </body>
+
+    </html>

@@ -13,7 +13,6 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import StarIcon from "@mui/icons-material/Star";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import "../css/home.css";
 
