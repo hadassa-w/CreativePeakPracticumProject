@@ -54,8 +54,8 @@ export class HeaderComponent implements OnInit {
   loggedInNavItems: NavItem[] = [
     { name: 'Home', path: '/welcome', icon: 'home' },
     { name: 'Users', path: '/users', icon: 'people' },
-    { name: 'Projects', path: '/projects', icon: 'folder' },
-    { name: 'Categories', path: '/categories', icon: 'category' },
+    // { name: 'Projects', path: '/projects', icon: 'folder' },
+    // { name: 'Categories', path: '/categories', icon: 'category' },
     { name: 'Reports', path: '/reports', icon: 'insert_chart' },
     { name: 'Log Out', path: '/', icon: 'exit_to_app', action: () => this.handleLogOut() },
   ];
