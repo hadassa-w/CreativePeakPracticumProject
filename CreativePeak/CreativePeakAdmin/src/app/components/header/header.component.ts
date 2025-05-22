@@ -1,12 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { trigger, style, animate, transition } from '@angular/animations';
 import { AuthService } from '../../services/auth/auth.service';
-import { CommonModule } from '@angular/common'; // חובה בשביל *ngIf, *ngFor
-import { MatToolbarModule } from '@angular/material/toolbar'; // חובה בשביל mat-toolbar
-import { MatIconModule } from '@angular/material/icon'; // חובה בשביל mat-icon
-import { MatTooltipModule } from '@angular/material/tooltip'; // חובה בשביל matTooltip
+import { CommonModule } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 
 interface NavItem {
@@ -15,6 +14,7 @@ interface NavItem {
   icon?: string;
   action?: () => void;
 }
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -26,19 +26,8 @@ interface NavItem {
     MatButtonModule
   ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css',
-  animations: [
-    trigger('motionAnimation', [
-      transition(':hover', [
-        style({ transform: 'scale(1)' }),
-        animate('200ms ease', style({ transform: 'scale(1.05)' }))
-      ]),
-      transition(':active', [
-        style({ transform: 'scale(1.05)' }),
-        animate('200ms ease', style({ transform: 'scale(0.95)' }))
-      ])
-    ])
-  ]
+  styleUrls: ['./header.component.css'],
+  animations: []
 })
 export class HeaderComponent implements OnInit {
   private router = inject(Router);

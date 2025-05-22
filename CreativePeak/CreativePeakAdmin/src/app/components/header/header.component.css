@@ -1,3 +1,41 @@
+.mat-mdc-tooltip {
+  background-color: rgba(97, 97, 97, 0.9) !important;
+  color: white !important;
+  font-size: 12px !important;
+  border-radius: 4px !important;
+  max-width: 200px !important;
+  word-wrap: break-word !important;
+}
+
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  background-color: rgba(97, 97, 97, 0.9) !important;
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-tooltip {
+  background-color: rgba(97, 97, 97, 0.9) !important;
+  color: white !important;
+  font-size: 12px !important;
+  border-radius: 4px !important;
+}
+
+.mat-mdc-tooltip {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.custom-tooltip {
+  background-color: #673AB7 !important;
+  color: white !important;
+  font-size: 12px !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 12px rgba(103, 58, 183, 0.3) !important;
+}
+
+.custom-tooltip .mdc-tooltip__surface {
+  background-color: #673AB7 !important;
+  color: white !important;
+}
+
 .login-btn {
     display: flex;
     align-items: center;

@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'CreativePeakAdmin' title`, () => {
+  it(`should have the 'le' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('CreativePeakAdmin');
+    expect(app.title).toEqual('le');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, CreativePeakAdmin');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, le');
   });
 });

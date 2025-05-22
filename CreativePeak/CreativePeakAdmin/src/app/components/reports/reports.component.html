@@ -1,0 +1,156 @@
+<div class="reports-page-container">
+  <div class="header-section">
+    <div class="title-container">
+      <h1 class="page-title">Reports & Analytics</h1>
+      <p class="page-subtitle">Monthly growth statistics and insights</p>
+    </div>
+    <div class="header-actions">
+      <button class="refresh-btn" (click)="refreshReports()">
+        <mat-icon>refresh</mat-icon>
+        Refresh Data
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="summary-card-header">
+        <mat-icon class="summary-icon users">people</mat-icon>
+      </div>
+      <div class="summary-card-content">
+        <h3 class="summary-title">Total New Users</h3>
+        <p class="summary-value">{{ getTotalUsers() }}</p>
+        <span class="summary-subtitle">This period</span>
+      </div>
+    </div>
+    
+    <div class="summary-card">
+      <div class="summary-card-header">
+        <mat-icon class="summary-icon portfolios">folder</mat-icon>
+      </div>
+      <div class="summary-card-content">
+        <h3 class="summary-title">Total New Portfolios</h3>
+        <p class="summary-value">{{ getTotalPortfolios() }}</p>
+        <span class="summary-subtitle">This period</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="chart-section">
+    <!-- Loading indicator -->
+    @if(isLoading) {
+      <div class="loading-container">
+        <div class="loading-spinner">
+          <i class="material-icons rotate">sync</i>
+          <span>Loading reports...</span>
+        </div>
+      </div>
+    }
+    
+    <!-- No data message -->
+    @if(!isLoading && reportData.length === 0) {
+      <div class="no-data-container">
+        <mat-icon class="no-data-icon">analytics</mat-icon>
+        <p class="no-data-message">No report data available</p>
+        <button class="refresh-data-btn" (click)="refreshReports()">
+          <mat-icon>refresh</mat-icon>
+          Try Again
+        </button>
+      </div>
+    }
+    
+    <!-- Chart Display -->
+    @if(!isLoading && reportData.length > 0) {
+      <div class="chart-container">
+        <div class="chart-header">
+          <h2 class="chart-title">Monthly Growth Statistics</h2>
+          <div class="chart-controls">
+            <button 
+              class="chart-type-btn" 
+              [class.active]="chartType === 'bar'"
+              (click)="changeChartType('bar')">
+              <mat-icon>bar_chart</mat-icon>
+              Bar Chart
+            </button>
+            <button 
+              class="chart-type-btn" 
+              [class.active]="chartType === 'line'"
+              (click)="changeChartType('line')">
+              <mat-icon>timeline</mat-icon>
+              Line Chart
+            </button>
+          </div>
+        </div>
+        
+        <div class="chart-wrapper">
+          <canvas baseChart
+                  [data]="chartData"
+                  [labels]="chartData.labels"
+                  [type]="chartType"
+                  [options]="chartOptions">
+          </canvas>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Data Table -->
+  @if(!isLoading && reportData.length > 0) {
+    <div class="data-table-section">
+      <div class="table-header">
+        <h3 class="table-title">Detailed Monthly Data</h3>
+      </div>
+      <div class="data-table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>New Users</th>
+              <th>New Portfolios</th>
+              <th>Growth Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(data of reportData; track data.month; let i = $index) {
+              <tr class="table-row">
+                <td class="month-cell">{{ data.month }}</td>
+                <td class="users-cell">
+                  <div class="cell-content">
+                    <mat-icon class="cell-icon">people</mat-icon>
+                    {{ data.newUsers }}
+                  </div>
+                </td>
+                <td class="portfolios-cell">
+                  <div class="cell-content">
+                    <mat-icon class="cell-icon">folder</mat-icon>
+                    {{ data.newPortfolios }}
+                  </div>
+                </td>
+                <td class="growth-cell">
+                  @if(i > 0) {
+                    <span class="growth-indicator" 
+                          [class.positive]="(data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios)"
+                          [class.negative]="(data.newUsers + data.newPortfolios) < (reportData[i-1].newUsers + reportData[i-1].newPortfolios)">
+                      <mat-icon>
+                        {{ (data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios) ? 'trending_up' : 'trending_down' }}
+                      </mat-icon>
+                      {{ (data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios) ? '+' : '' }}
+                      {{ ((data.newUsers + data.newPortfolios) - (reportData[i-1].newUsers + reportData[i-1].newPortfolios)) }}
+                    </span>
+                  } @else {
+                    <span class="growth-indicator neutral">
+                      <mat-icon>remove</mat-icon>
+                      N/A
+                    </span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>

@@ -20,7 +20,7 @@ import { MatError } from '@angular/material/form-field'; // לא חובה להו
     MatProgressSpinnerModule,
     MatButtonModule,
     MatError,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.css'

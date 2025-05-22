@@ -22,7 +22,7 @@
                 </div>
                 <input matInput formControlName="username" type="text">
                 @if(loginForm.get('username')?.touched && loginForm.get('username')?.hasError('required')){
-                <mat-error>
+                <mat-error class="error-animate">
                     Username is required
                 </mat-error>
                 }
@@ -38,7 +38,7 @@
                     <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 @if(loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')){
-                <mat-error>
+                <mat-error class="error-animate">
                     Password is required
                 </mat-error>
                 }
@@ -58,15 +58,17 @@
             <button mat-flat-button color="primary" class="login-button" [disabled]="loading || loginForm.invalid"
                 (click)="handleLogin()">
                 <mat-icon>login</mat-icon>
-                @if(loading){
-                <span>
-                    <mat-spinner diameter="20"></mat-spinner>
-                    Signing in...
+                <span class="login-content">
+                    @if (loading) {
+                    <span class="loader-text">
+                        <div class="loader"></div>
+                        Signing in...
+                    </span>
+                    }
+                    @if (!loading) {
+                    Sign In
+                    }
                 </span>
-                }
-                @if(!loading){
-                <span>Sign In</span>
-                }
             </button>
 
             <div class="terms">

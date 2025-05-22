@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "CreativePeakAdmin": {
+    "le": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/creative-peak-admin",
+            "outputPath": "dist/le",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -27,7 +27,6 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/rose-red.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -37,13 +36,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1MB",
-                  "maximumError": "2MB"
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "10kB",
-                  "maximumError": "15kB"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
               ],
               "outputHashing": "all"
@@ -60,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "CreativePeakAdmin:build:production"
+              "buildTarget": "le:build:production"
             },
             "development": {
-              "buildTarget": "CreativePeakAdmin:build:development"
+              "buildTarget": "le:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +85,6 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/rose-red.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -96,6 +94,6 @@
     }
   },
   "cli": {
-    "analytics": "f4acfa46-f743-4288-98ac-349421f910f3"
+    "analytics": false
   }
 }

@@ -16,9 +16,9 @@ import StarIcon from "@mui/icons-material/Star";
 import { useNavigate } from "react-router-dom";
 import "../css/home.css";
 
-// עטיפת הדף - משופרת עם צבע רקע מעודן
+// עיצוב
 const HomeWrapper = styled(Container)({
-    backgroundColor: "#fcfaff", // רקע בהיר עם גוון סגול עדין
+    backgroundColor: "#fcfaff",
     borderRadius: "16px",
     boxShadow: "0 10px 40px rgba(81, 45, 168, 0.1)",
     padding: "40px",
@@ -53,7 +53,7 @@ const InfoSection = styled(Box)({
     gap: "30px",
 });
 
-// כרטיס מידע - משודרג
+// כרטיס מידע
 const InfoCard = styled(Paper)({
     padding: "30px",
     borderRadius: "16px",
@@ -99,7 +99,7 @@ const FeatureCard = styled(Box)({
     }
 });
 
-// כפתור מעוצב - משודרג
+// כפתור מעוצב
 const StyledButton = styled(Button)({
     textTransform: "none",
     fontSize: "17px",

@@ -8,21 +8,23 @@
                     <mat-icon>menu</mat-icon>
                 </button>
 
-                <img [@motionAnimation] src="images/Cartoon_logo English.png" alt="logo" class="logo" routerLink="/"
+                <img src="images/Cartoon_logo English.png" alt="logo" class="logo hover-scale" routerLink="/"
                     (click)="handleLogOut()" />
             </div>
 
             <div class="nav-links">
                 <ng-container *ngFor="let item of navItems">
                     <button mat-button matTooltip="{{ item.name }}" matTooltipPosition="below"
-                        [class.active]="isActive(item.path)" class="nav-button" (click)="navigateTo(item)">
+                        matTooltipClass="custom-tooltip" [class.active]="isActive(item.path)" class="nav-button"
+                        (click)="navigateTo(item)">
                         <mat-icon class="icon">{{ item.icon }}</mat-icon>
                         <span class="label">{{ item.name }}</span>
                     </button>
                 </ng-container>
             </div>
 
-            <div matTooltip="{{ isLoggedIn ? 'Account' : 'Sign in' }}" class="avatar-container">
+            <div matTooltip="{{ isLoggedIn ? 'Account' : 'Sign in' }}" matTooltipClass="custom-tooltip"
+                class="avatar-container">
                 <div class="avatar-button" [class.logged-in]="isLoggedIn" [class.logged-out]="!isLoggedIn"
                     (click)="handleClick($event)">
                     <ng-container *ngIf="isLoggedIn; else loginIcon">
