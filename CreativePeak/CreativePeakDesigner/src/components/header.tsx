@@ -16,7 +16,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { useAuth } from "../contexts/authContext";
 import { motion } from "framer-motion";
 import HomeIcon from '@mui/icons-material/Home';
-import UploadProfolio from "./HTML";
+import UploadProfolio from "./uploadingPortfolio";
 
 const drawerWidth = 280;
 
