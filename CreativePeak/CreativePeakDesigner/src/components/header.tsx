@@ -124,7 +124,7 @@ export default function Header() {
                   backgroundColor: "rgba(103, 58, 183, 0.08)",
                   color: "#673AB7"
                 },
-                }}
+              }}
             >
               <Box sx={{
                 mr: 2,
@@ -155,7 +155,12 @@ export default function Header() {
       </List>
 
       <Box sx={{ flexGrow: 1 }} />
-            <UploadProfolio></UploadProfolio>
+
+      {isLoggedIn && (
+        <Box sx={{ ml: 2 }}>
+          <UploadProfolio />
+        </Box>
+      )}
 
       <Box sx={{ p: 3, mt: "auto" }}>
         <Typography variant="caption" sx={{ color: "text.secondary" }}>
@@ -278,7 +283,8 @@ export default function Header() {
                   );
                 })}
               </Box>
-            <UploadProfolio></UploadProfolio>
+
+              {isLoggedIn && <Box sx={{ display: { xs: "none", sm: "block" } }}><UploadProfolio /></Box>}
 
               <Tooltip title={isLoggedIn ? "Account" : "Sign in"}>
                 <Badge
@@ -473,4 +479,3 @@ export default function Header() {
     </>
   );
 }
-
