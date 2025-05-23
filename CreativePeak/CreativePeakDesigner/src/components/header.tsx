@@ -16,6 +16,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { useAuth } from "../contexts/authContext";
 import { motion } from "framer-motion";
 import HomeIcon from '@mui/icons-material/Home';
+import UploadProfolio from "./HTML";
 
 const drawerWidth = 280;
 
@@ -154,6 +155,7 @@ export default function Header() {
       </List>
 
       <Box sx={{ flexGrow: 1 }} />
+            <UploadProfolio></UploadProfolio>
 
       <Box sx={{ p: 3, mt: "auto" }}>
         <Typography variant="caption" sx={{ color: "text.secondary" }}>
@@ -276,6 +278,7 @@ export default function Header() {
                   );
                 })}
               </Box>
+            <UploadProfolio></UploadProfolio>
 
               <Tooltip title={isLoggedIn ? "Account" : "Sign in"}>
                 <Badge

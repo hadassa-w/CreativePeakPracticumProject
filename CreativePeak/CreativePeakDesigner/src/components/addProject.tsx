@@ -462,14 +462,15 @@ const AddImageForm = () => {
       await new Promise(resolve => setTimeout(resolve, 1500)); // Simulating API call
 
       // Generate a description based on the project name
-      const response = await axios.post("https://creativepeak-api.onrender.com/api/Ai/AI-description", watchFileName, {
+      const response = await axios.post("https://creativepeak-api.onrender.com/api/Ai/AI-description", 
+        `Suggest a short and clear description for a project called: ${watchFileName}`, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
 
       // Randomly select one of the suggestions
-      const randomDescription =response.data;
+      const randomDescription = response.data;
       setAiDescription(randomDescription);
     } catch (err) {
       console.error("Error generating AI description", err);

@@ -204,7 +204,7 @@ function ImageGallery() {
       axios.get(`https://creativepeak-api.onrender.com/api/Category`),
     ])
       .then(([imagesResponse, categoriesResponse]) => {
-        const filteredImages = imagesResponse.data.filter((image: Image) => image.user.id === userId)
+        const filteredImages = imagesResponse.data.filter((image: Image) => image.user.id == userId)
         const filteredCategories = categoriesResponse.data.filter((category: Category) => category.userId == userId)
 
         setImages(filteredImages)
@@ -352,7 +352,7 @@ function ImageGallery() {
             alignItems: { xs: "flex-start", sm: "center" },
             justifyContent: "space-between",
             mb: 2,
-            gap: { xs: 2, sm: 0 },
+            gap: { xs: 2, sm: 1 },
           }}
         >
           <Typography
@@ -371,11 +371,13 @@ function ImageGallery() {
             <ImageIcon fontSize="large" sx={{ color: "#9C27B0", marginRight: "10px" }} /> Projects Gallery
           </Typography>
 
-          <Link to="/addProject" style={{ textDecoration: "none" }}>
-            <AddButton variant="contained">
-              <Add /> Add project
-            </AddButton>
-          </Link>
+          <Box sx={{ display: "flex", gap: 1, flexDirection: { xs: "column", sm: "row" } }}>
+            <Link to="/addProject" style={{ textDecoration: "none" }}>
+              <AddButton variant="contained">
+                <Add /> Add project
+              </AddButton>
+            </Link>
+          </Box>
         </Box>
 
         {/* Search and Filter Section */}

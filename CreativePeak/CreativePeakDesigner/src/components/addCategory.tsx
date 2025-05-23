@@ -291,7 +291,7 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
       // Making the actual API call to the AI service
       const response = await axios.post(
         "https://creativepeak-api.onrender.com/api/Ai/AI-description", 
-        watchCategoryName, 
+               `Suggest a short and clear description for a category called: ${watchCategoryName}`, 
         {
           headers: {
             'Content-Type': 'application/json'

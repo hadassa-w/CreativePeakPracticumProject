@@ -10,9 +10,9 @@ namespace CreativePeak.API.Controllers
     public class AiController : ControllerBase
     {
         [HttpPost("AI-description")]
-        public async Task<IActionResult> GenerateDescription([FromBody] string projectName)
+        public async Task<IActionResult> GenerateDescription([FromBody] string description)
         {
-            if (string.IsNullOrWhiteSpace(projectName))
+            if (string.IsNullOrWhiteSpace(description))
                 return BadRequest("Project name is required.");
 
             var apiKey = Environment.GetEnvironmentVariable("OpenAIResponse");
@@ -31,7 +31,7 @@ namespace CreativePeak.API.Controllers
                 messages = new[]
                 {
                     new { role = "system", content = "You are an assistant that writes short, clear, and creative project descriptions." },
-                    new { role = "user", content = $"{projectName}" }
+                    new { role = "user", content = $"{description}" }
     }
                 };
 
