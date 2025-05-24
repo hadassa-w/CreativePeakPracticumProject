@@ -32,12 +32,12 @@ function App() {
       <Header />
       <Box component="main" sx={{ p: 3 }}>
         <Routes>
-          {/* ציבוריים */}
+          {/* publics routes */}
           <Route path="/" element={<Home />} />
           <Route path="/logIn" element={<LogIn />} />
           <Route path="/register" element={<Register />} />
 
-          {/* מוגנים */}
+          {/* Protected routes */}
           {protectedRoutes.map(({ path, component: Component }) => (
             <Route
               key={path}
