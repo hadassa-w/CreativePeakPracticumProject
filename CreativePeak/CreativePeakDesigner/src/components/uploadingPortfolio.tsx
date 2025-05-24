@@ -30,6 +30,7 @@ const UploadProfolio = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState("")
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
+    const [description, setDescription] = useState<string>('');
     const userId = Number.parseInt(localStorage.getItem("userId") || "0", 10) || null
 
     useEffect(() => {
@@ -52,6 +53,32 @@ const UploadProfolio = () => {
             })
     }, [userId])
 
+    const getAIDescription = async (userInfo: DesignerDetails) => {
+        try {
+            const prompt = `Write a professional and engaging bio description for a graphic designer named ${userInfo.fullName}.
+        They have ${userInfo.yearsExperience || 0} years of experience.
+        Create a compelling 2-3 sentence description that highlights their creativity, professionalism, and passion for design.
+        Make it sound personal and authentic.`;
+
+            const response = await axios.post(
+                'https://creativepeak-api.onrender.com/api/Ai/AI-description',
+                prompt,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            setDescription(response.data);
+        } catch (error) {
+            console.error("Error getting AI description:", error);
+            setSnackbarMessage("❌ Error Fallback description. Please try again later.");
+            setSnackbarSeverity("error");
+            setSnackbarOpen(true);
+        }
+    };
+
     const generatePortfolioHTML = async () => {
         setIsGeneratingPortfolio(true)
 
@@ -59,6 +86,7 @@ const UploadProfolio = () => {
             // Get user information
             const userResponse = await axios.get(`https://creativepeak-api.onrender.com/api/DesignerDetails`)
             const userInfo = userResponse.data.find((designerDetails: DesignerDetails) => designerDetails.userId == userId);
+            if (!description) await getAIDescription(userInfo);
 
             // Create the HTML content with enhanced modal functionality
             const htmlContent = `
@@ -152,7 +180,7 @@ const UploadProfolio = () => {
         .profile-description {
             font-size: 1.2em;
             color: #777;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto 30px;
             line-height: 1.8;
         }
@@ -830,8 +858,7 @@ const UploadProfolio = () => {
                 <h1 class="profile-name">${userInfo.fullName || 'Professional Graphic Designer'}</h1>
                 <p class="profile-title">Creative Designer & Visual Artist</p>
                 <p class="profile-description">
-                    Passionate about creating stunning visual experiences that capture attention and communicate effectively. 
-                    Specializing in modern design trends and innovative creative solutions.
+                    ${description}
                 </p>
                 
                 <div class="contact-info">
@@ -943,6 +970,10 @@ const UploadProfolio = () => {
             <p class="footer-text">Professional Portfolio - ${userInfo.fullName || 'Graphic Designer'}</p>
             <p style="color: #9C27B0; font-weight: 600; margin: 10px 0;">
                 Creating Visual Excellence Through Design
+            </p>
+                        <p>Creating with 
+            <a href="https://creativepeak-designer.onrender.com" target="_blank" style="color: #9C27B0; text-decoration: none; font-weight: 600;">
+            CreativePeak Designer</a>
             </p>
             <p class="generated-date">Generated on: ${new Date().toLocaleDateString('en-US', {
                 weekday: 'long',
