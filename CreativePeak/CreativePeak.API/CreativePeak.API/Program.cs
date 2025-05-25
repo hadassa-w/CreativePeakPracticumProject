@@ -53,26 +53,14 @@ builder.Services.AddControllers()
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyPolicy", policy =>
+    options.AddPolicy("AllowLocalhost", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins("http://localhost:5173", "http://localhost:4200")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("MyPolicy", policy =>
-//    {
-//        policy.WithOrigins("http://localhost:5173")
-//              .AllowAnyHeader()
-//              .AllowAnyMethod()
-//              .AllowCredentials(); // חשוב אם את שולחת Authorization headers
-//    });
-//});
-
-//builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -135,13 +123,6 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<PasswordService>();
 
 
-
-//app.UseCors("MyPolicy");
-//builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
-//{
-//    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-//}));
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -177,7 +158,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
     c.RoutePrefix = string.Empty;
 });
-app.UseCors("MyPolicy");
+app.UseCors("AllowLocalhost");
 
 if (app.Environment.IsDevelopment())
 {
