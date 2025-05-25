@@ -88,6 +88,8 @@ namespace CreativePeak.Data.Migrations
                     YearsExperience = table.Column<int>(type: "int", nullable: false),
                     PriceRangeMin = table.Column<int>(type: "int", nullable: false),
                     PriceRangeMax = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)

@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
-using CreativePeak.Core;
 using CreativePeak.Core.DTOs;
 using CreativePeak.Core.IRepositories;
 using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
 using CreativePeak.Core.PostModels;
 using CreativePeak.Data;
-using CreativePeak.Data.Repositories;
 using CreativePeak.Service;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -40,47 +37,6 @@ namespace CreativePeak.API.Controllers
             _mapper = mapper;
             _context = dataContext;
         }
-
-        //[HttpPost("Login")]
-        //public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
-        //{
-        //    // מחפש את המשתמש בבסיס הנתונים
-        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginModel.UserName);
-
-        //    if (user == null)
-        //    {
-        //        return Unauthorized("The user not found.");
-        //    }
-
-        //    // בדיקת הסיסמה
-        //    bool isPasswordValid = passwordService.VerifyPassword(user.Password, loginModel.Password);
-
-        //    //return Ok(user);
-
-        //    if (user != null)
-        //    {
-        //        var claims = new List<Claim>()
-        //        {
-        //            new Claim(ClaimTypes.Name, user.FullName),
-        //            new Claim(ClaimTypes.Role, user.Role) // נניח שיש למודל User תכונה Role
-        //        };
-
-        //        var userNew = _mapper.Map<UserDTO>(user);
-
-        //        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));  // גישה ישירה עם key
-        //        var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-        //        var tokenOptions = new JwtSecurityToken(
-        //            issuer: _configuration["JWT:Issuer"],
-        //            audience: _configuration["JWT:Audience"],
-        //            claims: claims,
-        //            expires: DateTime.UtcNow.AddMinutes(6),  // השתמש ב-UTC כדי לשמור על התאמה בכל אזורי הזמן
-        //            signingCredentials: signinCredentials
-        //        );
-        //        var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-        //        return Ok(new { Token = tokenString, User = userNew });
-        //    }
-        //    return Unauthorized();
-        //}
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
@@ -139,7 +95,7 @@ namespace CreativePeak.API.Controllers
                 return Unauthorized("The username or password is incorrect.");
             }
 
-            if(user.Role!="Main admin")
+            if (user.Role != "Main admin")
             {
                 return Unauthorized("This user is not authorized to log in.");
             }

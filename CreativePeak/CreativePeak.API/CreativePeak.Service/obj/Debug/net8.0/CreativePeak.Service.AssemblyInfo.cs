@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CreativePeak.Service")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3360d0ceca9cecf7feb50ed7eab87a164662bf18")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+310cdc8561e5be05ac112d0e0eb24e45904499fe")]
 [assembly: System.Reflection.AssemblyProductAttribute("CreativePeak.Service")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CreativePeak.Service")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

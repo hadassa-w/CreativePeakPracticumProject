@@ -35,6 +35,8 @@ namespace CreativePeak.Core.Models
         [Required(ErrorMessage = "Price range max is required.")]
         [Range(0, int.MaxValue, ErrorMessage = "Price range max must be greater than Price range min.")]
         public int PriceRangeMax { get; set; }
+        [Required(ErrorMessage = "Description is required.")]
+        public string Description { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
