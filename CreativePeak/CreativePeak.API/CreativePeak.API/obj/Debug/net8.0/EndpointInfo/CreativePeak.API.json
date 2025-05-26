@@ -799,6 +799,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
           "userId": {
             "type": "integer",
             "format": "int32"
