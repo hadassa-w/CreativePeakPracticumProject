@@ -56,10 +56,10 @@ namespace CreativePeak.API.Controllers
                 YearsExperience = designerDetails.YearsExperience,
                 PriceRangeMin = designerDetails.PriceRangeMin,
                 PriceRangeMax = designerDetails.PriceRangeMax,
-                Description=designerDetails.Description,
+                Description = designerDetails.Description,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                UserId = designerDetails.UserId // הוסף את ה-UserId כאן
+                UserId = designerDetails.UserId
             };
 
             // ודא שהמשתמש קיים לפני הוספת הפרטים

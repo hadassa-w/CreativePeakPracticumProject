@@ -19,7 +19,7 @@ namespace CreativePeak.Core
         }
         public DesignerDetails MappingDesignerDetailsDTO(DesignerDetails designerDetails)
         {
-            return new DesignerDetails { Id = designerDetails.Id, FullName = designerDetails.FullName, AddressSite = designerDetails.AddressSite, Email = designerDetails.Email, Phone = designerDetails.Phone, YearsExperience = designerDetails.YearsExperience, PriceRangeMin = designerDetails.PriceRangeMin, PriceRangeMax = designerDetails.PriceRangeMax, CreatedAt = designerDetails.CreatedAt, UpdatedAt = designerDetails.UpdatedAt };
+            return new DesignerDetails { Id = designerDetails.Id, FullName = designerDetails.FullName, AddressSite = designerDetails.AddressSite, Email = designerDetails.Email, Phone = designerDetails.Phone, YearsExperience = designerDetails.YearsExperience, PriceRangeMin = designerDetails.PriceRangeMin, PriceRangeMax = designerDetails.PriceRangeMax, Description = designerDetails.Description, CreatedAt = designerDetails.CreatedAt, UpdatedAt = designerDetails.UpdatedAt };
         }
         public Category MappingCategoryDTO(Category category)
         {
