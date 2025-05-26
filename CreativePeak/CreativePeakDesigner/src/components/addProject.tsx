@@ -220,16 +220,7 @@ const AiSuggestionButton = styled(Button)(() => ({
 }))
 
 const AddImageForm = () => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors, isValid },
-    setValue,
-  } = useForm<Project>({
-    mode: "onChange",
-  })
+  const { register, handleSubmit, setValue, watch, reset, trigger, formState: { errors, isValid } } = useForm<Project>({ mode: "onChange" });
 
   const [newLoading, setNewLoading] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -462,7 +453,7 @@ const AddImageForm = () => {
       await new Promise(resolve => setTimeout(resolve, 1500)); // Simulating API call
 
       // Generate a description based on the project name
-      const response = await axios.post("https://creativepeak-api.onrender.com/api/Ai/AI-description", 
+      const response = await axios.post("https://creativepeak-api.onrender.com/api/Ai/AI-description",
         `Suggest a short and clear description for a project called: ${watchFileName}`, {
         headers: {
           'Content-Type': 'application/json'
@@ -484,8 +475,9 @@ const AddImageForm = () => {
   };
 
   // Function to apply the AI suggestion to the description field
-  const applyAiDescription = () => {
+  const applyAiDescription = async () => {
     setValue("description", aiDescription);
+    await trigger("description");
     setAiDescriptionOpen(false);
     setSnackbarMsg("✓ AI description applied");
     setSnackbarSeverity("success");

@@ -7,5 +7,6 @@ export default interface DesignerDetails {
     yearsExperience: number;
     priceRangeMin: number;
     priceRangeMax: number;
+    description: string;
     userId: number;
 }

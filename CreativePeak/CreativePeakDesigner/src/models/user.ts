@@ -4,4 +4,5 @@ export default interface User {
     email: string;
     phone: string;
     address: string;
+    isActive: boolean;
 }

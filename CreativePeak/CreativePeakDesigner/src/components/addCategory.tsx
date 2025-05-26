@@ -153,20 +153,13 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
   const finalCategoryToEdit = categoryToEdit || categoryToEditFromRoute;
   const { userId } = useAuth()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isDirty, isValid },
-    reset,
-    watch,
-    setValue,
-  } = useForm<Category>({
+  const { register, handleSubmit, setValue, watch, reset, trigger, formState: { errors, isDirty, isValid } } = useForm<Category>({
     mode: "onChange",
     defaultValues: {
       categoryName: finalCategoryToEdit?.categoryName || "",
       description: finalCategoryToEdit?.description || "",
     },
-  })
+  });
 
   const [loading, setLoading] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
@@ -284,14 +277,15 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
       return;
     }
 
+    await trigger("description");
     setAiDescriptionLoading(true);
     setAiDescriptionOpen(true);
 
     try {
       // Making the actual API call to the AI service
       const response = await axios.post(
-        "https://creativepeak-api.onrender.com/api/Ai/AI-description", 
-               `Suggest a short and clear description for a category called: ${watchCategoryName}`, 
+        "https://creativepeak-api.onrender.com/api/Ai/AI-description",
+        `Suggest a short and clear description for a category called: ${watchCategoryName}`,
         {
           headers: {
             'Content-Type': 'application/json'
@@ -305,6 +299,8 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
       setSnackbarMsg("❌ Failed to generate description. Please try again.");
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
+      await trigger("description");
+
       setAiDescriptionOpen(false);
     } finally {
       setAiDescriptionLoading(false);
@@ -312,8 +308,9 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
   };
 
   // Function to apply the AI suggestion to the description field
-  const applyAiDescription = () => {
+  const applyAiDescription = async () => {
     setValue("description", aiDescription);
+    await trigger("description");
     setAiDescriptionOpen(false);
     setSnackbarMsg("✓ AI description applied");
     setSnackbarSeverity("success");

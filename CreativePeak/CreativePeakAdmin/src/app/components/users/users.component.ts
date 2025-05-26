@@ -39,7 +39,7 @@ export class UsersComponent implements OnInit {
     this.isLoading = true;
     this.usersService.getUsers().subscribe(
       data => {
-        this.users = data;
+        this.users = data.filter(user => user.fullName !== 'Main admin');
         this.isLoading = false;
       },
       error => {
@@ -71,11 +71,18 @@ export class UsersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        const user = this.users.find(u => u.id === userId);
+        if (user?.fullName === 'MAIN ADMIN') {
+          this.snackBar.open('Cannot delete MAIN ADMIN', 'Close', { duration: 3000 });
+          return;
+        }
+
         this.isLoading = true;
         this.usersService.deleteUser(userId)
           .then(() => {
             this.snackBar.open('User deleted successfully', 'Close', { duration: 3000 });
             this.loadUsers();
+            this.isLoading = false;
           })
           .catch((error) => {
             console.error('Error deleting user:', error);

@@ -1,4 +1,4 @@
-import { Button, TextField, Box, Typography, IconButton, InputAdornment, CircularProgress, Paper } from "@mui/material";
+import { Button, TextField, Box, Typography, IconButton, InputAdornment, CircularProgress, Paper, LinearProgress } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/system";
@@ -16,6 +16,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LoginIcon from "@mui/icons-material/Login";
 import PaletteIcon from "@mui/icons-material/Palette";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 // עיצוב קונטיינר חיצוני - משופר
 const OuterContainer = styled(Box)({
@@ -157,6 +159,23 @@ const GradientTitle = styled(Typography)({
   }
 });
 
+// קומפוננטה לבדיקת חוזק סיסמה
+const PasswordStrengthIndicator = styled(Box)({
+  marginTop: "12px",
+  padding: "16px",
+  backgroundColor: "rgba(126, 87, 194, 0.05)",
+  borderRadius: "12px",
+  border: "1px solid rgba(126, 87, 194, 0.1)",
+});
+
+interface PasswordStrength {
+  hasMinLength: boolean;
+  hasUppercase: boolean;
+  hasLowercase: boolean;
+  hasNumber: boolean;
+  score: number;
+}
+
 function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -175,12 +194,50 @@ function Register() {
 
   const [fieldErrors, setFieldErrors] = useState<{ fullname?: string; email?: string; password?: string; phone?: string; address?: string }>({});
 
+  // פונקציה לבדיקת חוזק סיסמה
+  const checkPasswordStrength = (password: string): PasswordStrength => {
+    const hasMinLength = password.length >= 6;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+
+    const score = [hasMinLength, hasUppercase, hasLowercase, hasNumber].filter(Boolean).length;
+
+    return {
+      hasMinLength,
+      hasUppercase,
+      hasLowercase,
+      hasNumber,
+      score
+    };
+  };
+
+  const passwordStrength = checkPasswordStrength(formData.password);
+
+// color
+  const getStrengthColor = (score: number) => {
+    if (score <= 1) return "#f44336"; // אדום
+    if (score === 2) return "#ff9800"; // כתום
+    if (score === 3) return "#ffc107"; // צהוב
+    return "#4caf50"; // ירוק
+  };
+
+  const getStrengthText = (score: number) => {
+    if (score <= 1) return "Very Weak";
+    if (score === 2) return "Weak";
+    if (score === 3) return "Medium";
+    return "Strong";
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
     if (fieldErrors[name as keyof typeof fieldErrors]) {
-      if (name === "password" && value.length < 6) return;
+      if (name === "password") {
+        const strength = checkPasswordStrength(value);
+        if (strength.score < 4) return;
+      }
       if (name === "phone" && value.length < 9) return;
       if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) return;
       setFieldErrors((prev) => ({ ...prev, [name]: undefined }));
@@ -209,8 +266,8 @@ function Register() {
     if (!formData.password.trim()) {
       newFieldErrors.password = "Password is required";
       hasError = true;
-    } else if (formData.password.length < 6) {
-      newFieldErrors.password = "Password must be at least 6 characters";
+    } else if (passwordStrength.score < 4) {
+      newFieldErrors.password = "Password must be strong (contain uppercase, lowercase, numbers and be at least 6 characters)";
       hasError = true;
     }
     if (!formData.phone.trim()) {
@@ -253,7 +310,8 @@ function Register() {
       formData.fullname.trim() !== "" &&
       formData.email.trim() !== "" &&
       formData.password.trim() !== "" &&
-      formData.phone.trim() !== ""
+      formData.phone.trim() !== "" &&
+      passwordStrength.score === 4
     );
   };
 
@@ -414,8 +472,101 @@ function Register() {
                 </InputAdornment>
               ),
             }}
-            sx={{ mb: 2 }}
+            sx={{ mb: 1 }}
           />
+
+          {/* אינדיקטור חוזק סיסמה */}
+          {formData.password && (
+            <PasswordStrengthIndicator>
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+                <Typography variant="body2" sx={{ fontWeight: "600", color: "#512da8" }}>
+                  Password Strength:
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: "600",
+                    color: getStrengthColor(passwordStrength.score)
+                  }}
+                >
+                  {getStrengthText(passwordStrength.score)}
+                </Typography>
+              </Box>
+
+              <LinearProgress
+                variant="determinate"
+                value={(passwordStrength.score / 4) * 100}
+                sx={{
+                  height: 8,
+                  borderRadius: 4,
+                  mb: 2,
+                  backgroundColor: "rgba(126, 87, 194, 0.1)",
+                  "& .MuiLinearProgress-bar": {
+                    backgroundColor: getStrengthColor(passwordStrength.score),
+                    borderRadius: 4,
+                  },
+                }}
+              />
+
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  {passwordStrength.hasMinLength ? (
+                    <CheckCircleIcon sx={{ fontSize: 16, color: "#4caf50" }} />
+                  ) : (
+                    <CancelIcon sx={{ fontSize: 16, color: "#f44336" }} />
+                  )}
+                  <Typography variant="body2" sx={{
+                    color: passwordStrength.hasMinLength ? "#4caf50" : "#f44336",
+                    fontSize: "13px"
+                  }}>
+                    At least 6 characters
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  {passwordStrength.hasUppercase ? (
+                    <CheckCircleIcon sx={{ fontSize: 16, color: "#4caf50" }} />
+                  ) : (
+                    <CancelIcon sx={{ fontSize: 16, color: "#f44336" }} />
+                  )}
+                  <Typography variant="body2" sx={{
+                    color: passwordStrength.hasUppercase ? "#4caf50" : "#f44336",
+                    fontSize: "13px"
+                  }}>
+                    Contains uppercase letters (A-Z)
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  {passwordStrength.hasLowercase ? (
+                    <CheckCircleIcon sx={{ fontSize: 16, color: "#4caf50" }} />
+                  ) : (
+                    <CancelIcon sx={{ fontSize: 16, color: "#f44336" }} />
+                  )}
+                  <Typography variant="body2" sx={{
+                    color: passwordStrength.hasLowercase ? "#4caf50" : "#f44336",
+                    fontSize: "13px"
+                  }}>
+                    Contains lowercase letters (a-z)
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  {passwordStrength.hasNumber ? (
+                    <CheckCircleIcon sx={{ fontSize: 16, color: "#4caf50" }} />
+                  ) : (
+                    <CancelIcon sx={{ fontSize: 16, color: "#f44336" }} />
+                  )}
+                  <Typography variant="body2" sx={{
+                    color: passwordStrength.hasNumber ? "#4caf50" : "#f44336",
+                    fontSize: "13px"
+                  }}>
+                    Contains numbers (0-9)
+                  </Typography>
+                </Box>
+              </Box>
+            </PasswordStrengthIndicator>
+          )}
         </Box>
 
         {error && (
@@ -457,10 +608,10 @@ function Register() {
           )}
         </StyledButton>
 
-        <Box sx={{ 
-          height: "1px", 
-          width: "80%", 
-          backgroundColor: "rgba(126, 87, 194, 0.15)", 
+        <Box sx={{
+          height: "1px",
+          width: "80%",
+          backgroundColor: "rgba(126, 87, 194, 0.15)",
           margin: "25px auto",
           position: "relative",
           "&::after": {
