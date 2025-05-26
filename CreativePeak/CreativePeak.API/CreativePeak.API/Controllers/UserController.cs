@@ -54,6 +54,7 @@ namespace CreativePeak.API.Controllers
                 Password = passwordService.HashPassword(user.Password),
                 Phone = user.Phone,
                 Address = user.Address,
+                IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 Role = "Graphic designer"
@@ -103,6 +104,27 @@ namespace CreativePeak.API.Controllers
             existingUser.Email = user.Email;
             existingUser.Phone = user.Phone;
             existingUser.Address = user.Address;
+            existingUser.UpdatedAt = DateTime.UtcNow;
+
+            await _userService.UpdateAsync(id, existingUser);
+            return NoContent();
+        }
+
+        //[AllowAnonymous]
+        [HttpPut("updateAdmin/{id}")]
+        public async Task<ActionResult> UpdateMainAdmin(int id, [FromBody] UserMainAdminPostModel user)
+        {
+            var existingUser = await _userService.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            existingUser.FullName = user.FullName;
+            existingUser.Email = user.Email;
+            existingUser.Phone = user.Phone;
+            existingUser.Address = user.Address;
+            existingUser.IsActive = user.IsActive;
             existingUser.UpdatedAt = DateTime.UtcNow;
 
             await _userService.UpdateAsync(id, existingUser);
