@@ -15,7 +15,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   templateUrl: './add-edit-user.component.html',
   styleUrl: './add-edit-user.component.css'
@@ -26,7 +26,9 @@ export class AddEditUserComponent implements OnInit {
   userId: number | null = null;
   isLoading: boolean = false;
   submitAttempted: boolean = false;
-  
+  showPassword: boolean = false;
+  passwordStrength: string = '';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -39,7 +41,8 @@ export class AddEditUserComponent implements OnInit {
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-\(\)]{8,15}$/)]],
-      address: ['', Validators.required]
+      address: ['', Validators.required],
+      isActive: [true], // Default active
     });
   }
 
@@ -52,9 +55,14 @@ export class AddEditUserComponent implements OnInit {
       } else {
         // Add password field only when creating a new user
         this.userForm.addControl('password', this.fb.control('', [
-          Validators.required, 
+          Validators.required,
           Validators.minLength(6)
         ]));
+        
+        // Listen to password changes for strength indicator
+        this.userForm.get('password')?.valueChanges.subscribe(value => {
+          this.checkPasswordStrength(value);
+        });
       }
     });
   }
@@ -62,19 +70,19 @@ export class AddEditUserComponent implements OnInit {
   async loadUserData(userId: number): Promise<void> {
     this.isLoading = true;
     try {
-      // Since your getUserById doesn't return the user data directly, we need to fetch users
       const users = await this.usersService.getUsers().toPromise();
       const user = users?.find(u => u.id === userId);
-      
+
       if (user) {
         this.userForm.patchValue({
           fullName: user.fullName,
           email: user.email,
           phone: user.phone,
-          address: user.address
+          address: user.address,
+          isActive: user.isActive
         });
       } else {
-        this.snackBar.open('User not found', 'Close', { duration: 3000 });
+        this.snackBar.open('User not found', 'Close', { duration: 3000 },);
         this.router.navigate(['/users']);
       }
     } catch (error) {
@@ -85,9 +93,49 @@ export class AddEditUserComponent implements OnInit {
     }
   }
 
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  checkPasswordStrength(password: string): void {
+    if (!password) {
+      this.passwordStrength = '';
+      return;
+    }
+
+    let strength = 0;
+    const checks = {
+      hasLower: /[a-z]/.test(password),
+      hasUpper: /[A-Z]/.test(password),
+      hasNumber: /\d/.test(password),
+      hasMinLength: password.length >= 6,
+      hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
+
+    // Count passed checks
+    strength = Object.values(checks).filter(Boolean).length;
+
+    if (strength < 2 || !checks.hasMinLength) {
+      this.passwordStrength = 'weak';
+    } else if (strength < 4) {
+      this.passwordStrength = 'medium';
+    } else {
+      this.passwordStrength = 'strong';
+    }
+  }
+
+  getPasswordStrengthText(): string {
+    switch (this.passwordStrength) {
+      case 'weak': return 'Weak - Add uppercase, numbers, or special characters';
+      case 'medium': return 'Medium - Good, but could be stronger';
+      case 'strong': return 'Strong - Excellent password!';
+      default: return '';
+    }
+  }
+
   async onSubmit(): Promise<void> {
     this.submitAttempted = true;
-    
+
     if (this.userForm.invalid) {
       // Trigger validation on all fields
       Object.keys(this.userForm.controls).forEach(key => {
@@ -98,7 +146,7 @@ export class AddEditUserComponent implements OnInit {
     }
 
     this.isLoading = true;
-    
+
     try {
       if (this.isEditMode && this.userId) {
         // For edit mode - use User object (without password)
@@ -108,29 +156,31 @@ export class AddEditUserComponent implements OnInit {
           email: this.userForm.value.email,
           phone: this.userForm.value.phone,
           address: this.userForm.value.address,
-          createdAt: new Date(), // This should be preserved from the original user, but using current date as fallback
+          isActive: this.userForm.value.isActive,
+          createdAt: new Date(), // This should be preserved from the original user
           updatedAt: new Date()
         };
-        
-        await this.usersService.updateUser(this.userId, userData);
+
+        await this.usersService.updateUser_Main(this.userId, userData);
         this.snackBar.open('User updated successfully', 'Close', { duration: 3000 });
       } else {
         // For create mode - use CreateUser object (with password)
         const createUserData = {
-          id:0,
+          id: 0,
           fullName: this.userForm.value.fullName,
           email: this.userForm.value.email,
           phone: this.userForm.value.phone,
           address: this.userForm.value.address,
           password: this.userForm.value.password,
+          isActive: this.userForm.value.isActive,
           createdAt: new Date(),
           updatedAt: new Date()
         };
-        
+
         await this.usersService.createUser(createUserData);
         this.snackBar.open('User created successfully', 'Close', { duration: 3000 });
       }
-      
+
       this.router.navigate(['/users']);
     } catch (error) {
       console.error('Error saving user:', error);
@@ -142,7 +192,7 @@ export class AddEditUserComponent implements OnInit {
 
   getFieldError(fieldName: string): string {
     const control = this.userForm.get(fieldName);
-    
+
     if (control?.errors && (control.touched || this.submitAttempted)) {
       if (control.errors['required']) {
         return `${this.formatFieldName(fieldName)} is required`;
@@ -161,7 +211,7 @@ export class AddEditUserComponent implements OnInit {
         return 'Please enter a valid phone number';
       }
     }
-    
+
     return '';
   }
 

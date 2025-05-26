@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Add this import
 import {
   Typography, Box, Button, TextField, CircularProgress, Container,
   Card, Avatar, Divider, InputAdornment, Dialog, DialogTitle,
@@ -23,7 +24,9 @@ function DesignerDetailsForm() {
   const [generatingDescription, setGeneratingDescription] = useState(false);
   const [designerDetails, setDesignerDetails] = useState<DesignerDetails | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isFirstVisit, setIsFirstVisit] = useState(false); // Track if it's first visit
   const { userId } = useAuth();
+  const navigate = useNavigate(); // Add navigate hook
 
   // AI Description Dialog states
   const [aiDescriptionOpen, setAiDescriptionOpen] = useState(false);
@@ -113,11 +116,15 @@ function DesignerDetailsForm() {
           Object.keys(filteredData).forEach(key =>
             setValue(key as keyof DesignerDetails, filteredData[key as keyof DesignerDetails])
           );
+          setIsFirstVisit(false); // User has existing data, not first visit
+        } else {
+          setIsFirstVisit(true); // No data found, this is first visit
         }
       })
       .catch(error => {
         console.error("Error fetching designer details", error);
         showSnackbar("Error loading designer details", "error");
+        setIsFirstVisit(true); // On error, treat as first visit
       })
       .finally(() => setInitialLoading(false));
   }, [userId, setValue]);
@@ -132,13 +139,13 @@ function DesignerDetailsForm() {
           `https://creativepeak-api.onrender.com/api/DesignerDetails/${designerDetails.id}`,
           designerData
         );
-
       } else {
         await axios.post(
           "https://creativepeak-api.onrender.com/api/DesignerDetails",
           designerData
         );
       }
+      
       showSnackbar("Designer details saved successfully! 🎉", "success");
 
       // Refresh data after saving
@@ -146,6 +153,14 @@ function DesignerDetailsForm() {
       const updatedData = updatedResponse.data.find((d: DesignerDetails) => d.userId == userId);
       setDesignerDetails(updatedData);
       setIsEditing(false);
+
+      // Navigate to HOME if it's first visit, otherwise stay on current page
+      if (isFirstVisit) {
+        setTimeout(() => {
+          navigate('/'); // Navigate to HOME page after first time setup
+        }, 1500); // Small delay to let user see the success message
+      }
+      
     } catch (error) {
       console.error("Error submitting data:", error);
       showSnackbar("Failed to save designer details", "error");
@@ -227,7 +242,7 @@ function DesignerDetailsForm() {
                   <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     {!designerDetails && (
                       <Typography variant="h6" sx={{ textAlign: "center", mb: 1, color: "#673AB7" }}>
-                        Please enter your business information
+                        {isFirstVisit ? "Welcome! Please enter your business information" : "Please enter your business information"}
                       </Typography>
                     )}
 
@@ -479,9 +494,16 @@ function DesignerDetailsForm() {
                           textTransform: "none"
                         }}
                       >
-                        {saving ? "Saving..." : "Save Changes"}
+                        {saving ? "Saving..." : (isFirstVisit ? "Save & Continue" : "Save Changes")}
                       </Button>
                     </Box>
+
+                    {/* Show message for first visit */}
+                    {isFirstVisit && (
+                      <Typography variant="body2" sx={{ textAlign: "center", color: "#666", mt: 1 }}>
+                        After saving your details, you'll be redirected to the home page.
+                      </Typography>
+                    )}
                   </Box>
                 </form>
               ) : (

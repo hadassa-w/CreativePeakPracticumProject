@@ -1,3 +1,24 @@
+.user-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.user-status.active {
+  color: #4CAF50; /* ירוק */
+}
+
+.user-status.inactive {
+  color: #F44336; /* אדום */
+}
+
+.status-icon {
+  font-size: 18px;
+}
+
 .users-page-container {
   padding: 25px;
   max-width: 1200px;

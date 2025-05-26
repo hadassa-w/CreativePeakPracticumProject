@@ -83,6 +83,11 @@
   margin-bottom: 12px;
 }
 
+.form-field.password-field,
+.form-field.status-field {
+  grid-column: span 2;
+}
+
 .form-field label {
   font-weight: 500;
   color: #673AB7;
@@ -113,6 +118,172 @@
   color: #F44336;
   font-size: 12px;
   margin-top: 4px;
+}
+
+/* Password field styles */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding-right: 50px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #673AB7;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.password-toggle:hover {
+  background-color: rgba(103, 58, 183, 0.1);
+}
+
+.password-toggle i {
+  font-size: 20px;
+}
+
+/* Password strength indicator */
+.password-strength {
+  margin-top: 8px;
+}
+
+.strength-indicator {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.strength-bar {
+  height: 4px;
+  flex: 1;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.strength-indicator.weak .strength-bar:first-child {
+  background-color: #F44336;
+}
+
+.strength-indicator.medium .strength-bar:nth-child(-n+2) {
+  background-color: #FF9800;
+}
+
+.strength-indicator.strong .strength-bar {
+  background-color: #4CAF50;
+}
+
+.strength-text {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.strength-text.weak {
+  color: #F44336;
+}
+
+.strength-text.medium {
+  color: #FF9800;
+}
+
+.strength-text.strong {
+  color: #4CAF50;
+}
+
+/* Status toggle styles */
+.status-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 160px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 20px;
+  transition: 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 32px;
+  width: 32px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(120px);
+}
+
+.toggle-text {
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  z-index: 1;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+  border: 1px solid rgba(244, 67, 54, 0.2);
+}
+
+.status-indicator.active {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+  border-color: rgba(76, 175, 80, 0.2);
+}
+
+.status-indicator i {
+  font-size: 18px;
 }
 
 .form-actions {
@@ -176,6 +347,44 @@
   border-radius: 3px 3px 0 0;
   background-color: rgba(126, 87, 194, 0.03);
   border: 1px solid rgba(126, 87, 194, 0.1);
+}
+
+.user-preview {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.user-preview h3 {
+  color: #673AB7;
+  margin: 0 0 15px 0;
+  font-size: 18px;
+}
+
+.preview-item {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.preview-item strong {
+  color: #673AB7;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #F44336;
+}
+
+.status-badge.active {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
 }
 
 .action-section .action-button {
@@ -269,6 +478,11 @@
   .form-section {
     grid-template-columns: 1fr;
   }
+
+  .form-field.password-field,
+  .form-field.status-field {
+    grid-column: span 1;
+  }
 }
 
 @media (max-width: 768px) {
@@ -286,6 +500,20 @@
 
   .user-form {
     padding: 16px;
+  }
+
+  .toggle-switch {
+    width: 140px;
+    height: 36px;
+  }
+
+  .slider:before {
+    height: 28px;
+    width: 28px;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(100px);
   }
 }
 
@@ -306,5 +534,19 @@
   .form-actions .action-button {
     width: 100%;
     justify-content: center;
+  }
+
+  .toggle-switch {
+    width: 120px;
+    height: 32px;
+  }
+
+  .slider:before {
+    height: 24px;
+    width: 24px;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(84px);
   }
 }

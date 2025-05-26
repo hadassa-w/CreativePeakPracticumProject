@@ -13,80 +13,86 @@
   <div class="users-list-container">
     <!-- Loading indicator -->
     @if(isLoading) {
-      <div class="loading-container">
-        <div class="loading-spinner">
-          <i class="material-icons rotate">sync</i>
-          <span>Loading users...</span>
-        </div>
+    <div class="loading-container">
+      <div class="loading-spinner">
+        <i class="material-icons rotate">sync</i>
+        <span>Loading users...</span>
       </div>
+    </div>
     }
 
     <!-- No users message -->
     @if(!isLoading && users.length === 0) {
-      <div class="no-users-container">
-        <mat-icon class="no-users-icon">group_off</mat-icon>
-        <p class="no-users-message">No users found</p>
-        <button class="add-first-user-btn" (click)="addNewUser()">Add Your First User</button>
-      </div>
+    <div class="no-users-container">
+      <mat-icon class="no-users-icon">group_off</mat-icon>
+      <p class="no-users-message">No users found</p>
+      <button class="add-first-user-btn" (click)="addNewUser()">Add Your First User</button>
+    </div>
     }
 
     <!-- Users grid -->
     <div class="users-grid">
       @for(user of users; track user.id) {
-        <div class="user-card">
-          <div class="user-card-header">
-            <div class="user-avatar">
-              {{ user.fullName.charAt(0) }}
+      <div class="user-card">
+        <div class="user-card-header">
+          <div class="user-avatar">
+            {{ user.fullName.charAt(0) }}
+          </div>
+          <div class="user-card-actions">
+            <button class="action-icon-btn edit" mat-icon-button matTooltip="Edit User" (click)="editUser(user.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button class="action-icon-btn delete" mat-icon-button matTooltip="Delete User"
+              (click)="deleteUser(user.id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="user-card-content">
+          <h3 class="user-name">{{ user.fullName }}</h3>
+
+          <div class="user-status" [ngClass]="{ 'active': user.isActive, 'inactive': !user.isActive }">
+            <mat-icon class="status-icon">{{ user.isActive ? 'check_circle' : 'cancel' }}</mat-icon>
+            <span>{{ user.isActive ? 'Active' : 'Inactive' }}</span>
+          </div>
+
+          <div class="user-details">
+            <div class="detail-item">
+              <mat-icon class="detail-icon">email</mat-icon>
+              <span class="detail-text">{{ user.email }}</span>
             </div>
-            <div class="user-card-actions">
-              <button class="action-icon-btn edit" mat-icon-button matTooltip="Edit User" (click)="editUser(user.id)">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button class="action-icon-btn delete" mat-icon-button matTooltip="Delete User" (click)="deleteUser(user.id)">
-                <mat-icon>delete</mat-icon>
-              </button>
+
+            <div class="detail-item">
+              <mat-icon class="detail-icon">phone</mat-icon>
+              <span class="detail-text">{{ user.phone }}</span>
+            </div>
+
+            <div class="detail-item">
+              <mat-icon class="detail-icon">location_on</mat-icon>
+              <span class="detail-text">{{ user.address }}</span>
             </div>
           </div>
-          
-          <div class="user-card-content">
-            <h3 class="user-name">{{ user.fullName }}</h3>
-            
-            <div class="user-details">
-              <div class="detail-item">
-                <mat-icon class="detail-icon">email</mat-icon>
-                <span class="detail-text">{{ user.email }}</span>
-              </div>
-              
-              <div class="detail-item">
-                <mat-icon class="detail-icon">phone</mat-icon>
-                <span class="detail-text">{{ user.phone }}</span>
-              </div>
-              
-              <div class="detail-item">
-                <mat-icon class="detail-icon">location_on</mat-icon>
-                <span class="detail-text">{{ user.address }}</span>
-              </div>
+
+          <div class="user-footer">
+            <div class="timestamp">
+              <span class="created-at">Created: {{ formatDate(user.createdAt) }}</span>
+              <span class="updated-at">Updated: {{ formatDate(user.updatedAt) }}</span>
             </div>
-            
-            <div class="user-footer">
-              <div class="timestamp">
-                <span class="created-at">Created: {{ formatDate(user.createdAt) }}</span>
-                <span class="updated-at">Updated: {{ formatDate(user.updatedAt) }}</span>
-              </div>
-              
-              <div class="user-actions">
-                <button class="user-action-btn edit-btn" (click)="editUser(user.id)">
-                  <mat-icon>edit</mat-icon>
-                  Edit
-                </button>
-                <button class="user-action-btn delete-btn" (click)="deleteUser(user.id)">
-                  <mat-icon>delete</mat-icon>
-                  Delete
-                </button>
-              </div>
+
+            <div class="user-actions">
+              <button class="user-action-btn edit-btn" (click)="editUser(user.id)">
+                <mat-icon>edit</mat-icon>
+                Edit
+              </button>
+              <button class="user-action-btn delete-btn" (click)="deleteUser(user.id)">
+                <mat-icon>delete</mat-icon>
+                Delete
+              </button>
             </div>
           </div>
         </div>
+      </div>
       }
     </div>
   </div>

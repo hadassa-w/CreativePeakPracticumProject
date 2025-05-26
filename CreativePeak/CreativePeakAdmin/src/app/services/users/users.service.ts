@@ -36,6 +36,12 @@ export class UsersService {
     );
   }
 
+  async updateUser_Main(userId: number, user: User): Promise<void> {
+    await firstValueFrom(
+      this.http.put<User>(`https://creativepeak-api.onrender.com/api/User/updateAdmin/${userId}`, user)
+    );
+  }
+
   async deleteUser(userId: number): Promise<void> {
     await firstValueFrom(
       this.http.delete<void>(`https://creativepeak-api.onrender.com/api/User/${userId}`)
