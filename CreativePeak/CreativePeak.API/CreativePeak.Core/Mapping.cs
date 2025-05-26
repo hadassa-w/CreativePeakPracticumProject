@@ -11,7 +11,7 @@ namespace CreativePeak.Core
     {
         public User MappingUserDTO(User user)
         {
-            return new User { Id = user.Id, FullName = user.FullName, Email = user.Email, Password = user.Password, Phone = user.Phone, Address = user.Address, CreatedAt = user.CreatedAt, UpdatedAt = user.UpdatedAt };
+            return new User { Id = user.Id, FullName = user.FullName, Email = user.Email, Password = user.Password, Phone = user.Phone, Address = user.Address, IsActive = user.IsActive, CreatedAt = user.CreatedAt, UpdatedAt = user.UpdatedAt };
         }
         public Image MappingImageDTO(Image image)
         {
