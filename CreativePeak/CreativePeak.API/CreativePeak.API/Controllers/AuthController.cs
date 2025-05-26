@@ -55,6 +55,11 @@ namespace CreativePeak.API.Controllers
                 return Unauthorized("The username or password is incorrect.");
             }
 
+            if (!user.IsActive)
+            {
+                return Unauthorized("The username is invalid.");
+            }
+
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, user.Email),
