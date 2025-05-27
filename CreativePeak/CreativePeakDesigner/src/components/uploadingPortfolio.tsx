@@ -79,8 +79,10 @@ const UploadProfolio = () => {
             )
             const userInfo = userResponse.data.find((designerDetails: DesignerDetails) => designerDetails.userId == userId);
 
-            // Create the HTML content with enhanced modal functionality
-            const htmlContent = `
+            let htmlContent = ``
+            if (userInfo) {
+                // Create the HTML content with enhanced modal functionality
+                htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -906,13 +908,13 @@ const UploadProfolio = () => {
 
             <!-- Portfolio Content -->
             ${categories.map(category => {
-                const categoryImages = images
-                    .filter(img => img.category.id === category.id)
-                    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+                    const categoryImages = images
+                        .filter(img => img.category.id === category.id)
+                        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
-                if (categoryImages.length === 0) return '';
+                    if (categoryImages.length === 0) return '';
 
-                return `
+                    return `
                 <div class="category-section" id="category-${category.id}">
                     <h2 class="category-title">${category.categoryName}</h2>
                     ${category.description ? `<p class="category-description">${category.description}</p>` : ''}
@@ -938,15 +940,15 @@ const UploadProfolio = () => {
                                     ${image.description ? `<p class="project-description">${image.description}</p>` : ''}
                                     <div class="project-meta">
                                         <span class="project-date">Created: ${new Date(image.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                })}</span>
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    })}</span>
                                         <span class="project-date">Updated: ${new Date(image.updatedAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                })}</span>
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    })}</span>
                                     </div>
                                 </div>
                             </div>
@@ -954,7 +956,7 @@ const UploadProfolio = () => {
                     </div>
                 </div>
                 `;
-            }).join('')}
+                }).join('')}
 
             <!-- Footer -->
             <div class="footer">
@@ -967,11 +969,11 @@ const UploadProfolio = () => {
                 CreativePeak Designer</a>
                 </p>
                 <p class="generated-date">Generated on: ${new Date().toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            })}</p>
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })}</p>
             </div>
         </div>
 
@@ -1215,23 +1217,30 @@ const UploadProfolio = () => {
     </body>
     </html>import React, { useState } from 'react';
 `;
+            }
 
-            // Create and trigger download
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${userInfo.fullName || 'portfolio'}_portfolio.html`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+            if (htmlContent) {
+                // Create and trigger download
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${userInfo.fullName || 'portfolio'}_portfolio.html`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
 
-            // Show success message
-            setSnackbarMessage("🎉 Portfolio generated and downloaded successfully!");
-            setSnackbarSeverity("success");
-            setSnackbarOpen(true);
-
+                // Show success message
+                setSnackbarMessage("🎉 Portfolio generated and downloaded successfully!");
+                setSnackbarSeverity("success");
+                setSnackbarOpen(true);
+            }
+            else {
+                setSnackbarMessage("❌ No graphic designer details or images were found to create the portfolio.");
+                setSnackbarSeverity("error");
+                setSnackbarOpen(true);
+            }
         } catch (error) {
             console.error("Error generating portfolio:", error);
             setSnackbarMessage("❌ Error generating portfolio. Please try again.");

@@ -203,7 +203,6 @@ function LogIn() {
       });
 
       const token = response.data.accessToken;
-      // const refreshToken = response.data.refreshToken;
       const userId = response.data.user.id;
       const fullName = response.data.user.fullName;
 
