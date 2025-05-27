@@ -1,33 +1,33 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import axios from "axios";
+// import axios from "axios";
 
 type AuthContextType = {
   isLoggedIn: boolean;
   token: string | null;
-  refreshToken: string | null;
+  // refreshToken: string | null;
   userName: string | null;
   userId: number | null;
-  login: (token: string, refreshToken: string, userName: string, userId: number) => void;
+  login: (token: string, userName: string, userId: number) => void;
   logout: () => void;
   isLoading: boolean;
-  refreshAuthToken: () => void; // פונקציה לריענון הטוקן
+  // refreshAuthToken: () => void; // פונקציה לריענון הטוקן
 };
 
 const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   token: null,
-  refreshToken: null,
+  // refreshToken: null,
   userName: null,
   userId: null,
   login: () => { },
   logout: () => { },
   isLoading: true,
-  refreshAuthToken: () => { }, // ברירת מחדל
+  // refreshAuthToken: () => { }, // ברירת מחדל
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  // const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,46 +35,46 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   // פונקציה לריענון טוקן
-  const refreshAuthToken = async () => {
-    const storedToken = localStorage.getItem("token");
-    const storedRefreshToken = localStorage.getItem("refreshToken");
+  // const refreshAuthToken = async () => {
+  //   const storedToken = localStorage.getItem("token");
+  //   const storedRefreshToken = localStorage.getItem("refreshToken");
   
-    if (!storedToken || !storedRefreshToken) return;
+  //   if (!storedToken || !storedRefreshToken) return;
   
-    try {
-      const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Refresh-token", {
-        accessToken: storedToken,
-        refreshToken: storedRefreshToken,
-      });
+  //   try {
+  //     const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Refresh-token", {
+  //       accessToken: storedToken,
+  //       refreshToken: storedRefreshToken,
+  //     });
   
-      const newAccessToken = response.data.accessToken;
-      const newRefreshToken = response.data.refreshToken;
+  //     const newAccessToken = response.data.accessToken;
+  //     const newRefreshToken = response.data.refreshToken;
   
-      // const expirationTime = Date.now() + 15 * 60 * 1000; // 15 דקות קדימה
+  //     // const expirationTime = Date.now() + 15 * 60 * 1000; // 15 דקות קדימה
   
-      localStorage.setItem("token", newAccessToken);
-      localStorage.setItem("refreshToken", newRefreshToken);
-      // localStorage.setItem("tokenExpirationTime", expirationTime.toString());
+  //     localStorage.setItem("token", newAccessToken);
+  //     localStorage.setItem("refreshToken", newRefreshToken);
+  //     // localStorage.setItem("tokenExpirationTime", expirationTime.toString());
   
-      setToken(newAccessToken);
-      setRefreshToken(newRefreshToken);
-    } catch (error) {
-      console.error("❌ Error refreshing token:", error);
-      // logout(); // אם רוצים לנתק את המשתמש
-    }
-  };
+  //     setToken(newAccessToken);
+  //     setRefreshToken(newRefreshToken);
+  //   } catch (error) {
+  //     console.error("❌ Error refreshing token:", error);
+  //     // logout(); // אם רוצים לנתק את המשתמש
+  //   }
+  // };
   
   useEffect(() => {
     // שחזור הנתונים מ-localStorage
     const storedToken = localStorage.getItem("token");
-    const storedRefreshToken = localStorage.getItem("refreshToken");
+    // const storedRefreshToken = localStorage.getItem("refreshToken");
     const storedUserName = localStorage.getItem("userName");
     const storedUserIdStr = localStorage.getItem("userId");
 
-    if (storedToken && storedRefreshToken && storedUserName && storedUserIdStr) {
+    if (storedToken && storedUserName && storedUserIdStr) {
       const storedUserId = parseInt(storedUserIdStr, 10);
       setToken(storedToken);
-      setRefreshToken(storedRefreshToken);
+      // setRefreshToken(storedRefreshToken);
       setUserName(storedUserName);
       setUserId(storedUserId);
       setIsLoggedIn(true);
@@ -83,13 +83,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false); // סימון שטעינת הנתונים הסתיימה
   }, []);
 
-  const login = (token: string, refreshToken: string, userName: string, userId: number) => {
+  const login = (token: string, userName: string, userId: number) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("refreshToken", refreshToken);
+    // localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("userName", userName);
     localStorage.setItem("userId", userId.toString());
     setToken(token);
-    setRefreshToken(refreshToken);
+    // setRefreshToken(refreshToken);
     setUserName(userName);
     setUserId(userId);
     setIsLoggedIn(true);
@@ -97,12 +97,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
+    // localStorage.removeItem("refreshToken");
     localStorage.removeItem("userName");
     localStorage.removeItem("userId");
     localStorage.removeItem("userId");
     setToken(null);
-    setRefreshToken(null);
+    // setRefreshToken(null);
     setUserName(null);
     setUserId(null);
     setIsLoggedIn(false);
@@ -115,13 +115,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         isLoggedIn,
         token,
-        refreshToken,
+        // refreshToken,
         userName,
         userId,
         login,
         logout,
         isLoading,
-        refreshAuthToken,
+        // refreshAuthToken,
       }}
     >
       {children}

@@ -14,6 +14,7 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Amazon.S3;
 using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
 
 Env.Load();
 
@@ -157,7 +158,8 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["JWT:Issuer"],
             ValidAudience = builder.Configuration["JWT:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+            RoleClaimType = ClaimTypes.Role
         };
     });
 

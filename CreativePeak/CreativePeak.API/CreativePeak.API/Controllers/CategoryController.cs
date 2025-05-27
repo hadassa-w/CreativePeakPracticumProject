@@ -4,6 +4,7 @@ using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
 using CreativePeak.Core.PostModels;
 using CreativePeak.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.Mime.MediaTypeNames;
@@ -12,7 +13,7 @@ namespace CreativePeak.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

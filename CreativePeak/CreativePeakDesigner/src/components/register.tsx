@@ -288,7 +288,7 @@ function Register() {
       const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Register", formData);
 
       if (response.status === 200 && response.data.token) {
-        login(response.data.token, response.data.refreshToken, response.data.user.fullName, response.data.user.id);
+        login(response.data.token, response.data.user.fullName, response.data.user.id);
         navigate("/designerDetails");
       } else {
         setError("Registration failed. Please check your details.");

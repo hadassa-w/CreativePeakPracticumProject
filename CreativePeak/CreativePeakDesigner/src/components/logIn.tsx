@@ -203,11 +203,11 @@ function LogIn() {
       });
 
       const token = response.data.accessToken;
-      const refreshToken = response.data.refreshToken;
+      // const refreshToken = response.data.refreshToken;
       const userId = response.data.user.id;
       const fullName = response.data.user.fullName;
 
-      login(token, refreshToken, fullName, userId);
+      login(token, fullName, userId);
 
       setFieldErrors({});
       setGeneralError("");

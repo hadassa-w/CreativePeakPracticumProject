@@ -67,9 +67,6 @@
                         <label for="address">Address</label>
                         <input type="text" id="address" formControlName="address"
                             [class.error-input]="hasError('address')" placeholder="Enter user's address">
-                        @if(hasError('address')){
-                        <div class="error-message">{{ getFieldError('address') }}</div>
-                        }
                     </div>
 
                     <div class="form-field status-field">

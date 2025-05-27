@@ -129,37 +129,6 @@
         }
       }
     },
-    "/api/Auth/Refresh-token": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenRequestModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenRequestModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenRequestModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Category": {
       "get": {
         "tags": [
@@ -535,7 +504,7 @@
         }
       }
     },
-    "/monthly-summary": {
+    "/api/Reports/monthly-summary": {
       "get": {
         "tags": [
           "Reports"
@@ -602,6 +571,18 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/User/Count": {
+      "get": {
+        "tags": [
+          "User"
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -735,11 +716,41 @@
         }
       }
     },
-    "/api/User/Count": {
-      "get": {
+    "/api/User/updateAdmin/{id}": {
+      "put": {
         "tags": [
           "User"
         ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserMainAdminPostModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserMainAdminPostModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserMainAdminPostModel"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -850,16 +861,27 @@
         },
         "additionalProperties": false
       },
-      "TokenRequestModel": {
+      "UserMainAdminPostModel": {
         "type": "object",
         "properties": {
-          "accessToken": {
+          "fullName": {
             "type": "string",
             "nullable": true
           },
-          "refreshToken": {
+          "email": {
             "type": "string",
             "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

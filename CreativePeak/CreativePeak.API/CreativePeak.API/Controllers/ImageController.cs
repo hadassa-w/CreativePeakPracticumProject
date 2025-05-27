@@ -9,12 +9,13 @@ using CreativePeak.Core.PostModels;
 using CreativePeak.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CreativePeak.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ImageController : Controller
     {
         private readonly IAmazonS3 _amazonS3;

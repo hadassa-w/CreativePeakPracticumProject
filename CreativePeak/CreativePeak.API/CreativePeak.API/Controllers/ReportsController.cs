@@ -1,10 +1,14 @@
 ﻿using CreativePeak.Core.DTOs;
 using CreativePeak.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CreativePeak.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
     public class ReportsController : Controller
     {
         DataContext _context;
@@ -14,6 +18,7 @@ namespace CreativePeak.API.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Main admin")]
         [HttpGet("monthly-summary")]
         public async Task<IActionResult> GetMonthlySummary()
         {

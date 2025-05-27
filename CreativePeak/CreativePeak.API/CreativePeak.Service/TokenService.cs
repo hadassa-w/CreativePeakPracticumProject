@@ -39,7 +39,7 @@ namespace CreativePeak.Service
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                //expires: DateTime.UtcNow.AddMinutes(15), // Access Token תקף ל-15 דקות
+                expires: DateTime.UtcNow.AddMonths(1),
                 signingCredentials: creds
             );
 

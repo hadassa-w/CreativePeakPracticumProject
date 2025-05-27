@@ -6,7 +6,6 @@ using CreativePeak.Core.Models;
 using CreativePeak.Core.PostModels;
 using CreativePeak.Data;
 using CreativePeak.Service;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -70,15 +69,15 @@ namespace CreativePeak.API.Controllers
             var userNew = _mapper.Map<UserDTO>(user);
 
             var accessToken = _tokenService.CreateAccessToken(user);
-            var refreshToken = _tokenService.CreateRefreshToken();
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            //var refreshToken = _tokenService.CreateRefreshToken();
+            //user.RefreshToken = refreshToken;
+            //user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
             await _userService.UpdateAsync(user.Id, user);
 
             return Ok(new
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken,
+                //RefreshToken = refreshToken,
                 User = userNew
             });
         }
@@ -110,20 +109,21 @@ namespace CreativePeak.API.Controllers
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.FullName),
                 new Claim(ClaimTypes.Role, user.Role)
+
             };
 
             var userNew = _mapper.Map<UserDTO>(user);
 
             var accessToken = _tokenService.CreateAccessToken(user);
-            var refreshToken = _tokenService.CreateRefreshToken();
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            //var refreshToken = _tokenService.CreateRefreshToken();
+            //user.RefreshToken = refreshToken;
+            //user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
             await _userService.UpdateAsync(user.Id, user);
 
             return Ok(new
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken,
+                //RefreshToken = refreshToken,
                 User = userNew
             });
         }
@@ -164,7 +164,7 @@ namespace CreativePeak.API.Controllers
                     issuer: _configuration["JWT:Issuer"],
                     audience: _configuration["JWT:Audience"],
                     claims: claims,
-                    //expires: DateTime.UtcNow.AddMinutes(6),
+                    expires: DateTime.UtcNow.AddMonths(1),
                     signingCredentials: signinCredentials
                 );
 
@@ -176,33 +176,33 @@ namespace CreativePeak.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-        [AllowAnonymous]
-        [HttpPost("Refresh-token")]
-        public async Task<IActionResult> Refresh([FromBody] TokenRequestModel model)
-        {
-            var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
-            var email = principal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            //var email = principal.Identity?.Name;
-            //var user = await _userService.GetByEmailAsync(email);
-            var user = await _authRepository.GetByCondition(u => u.Email == email);
+        //[AllowAnonymous]
+        //[HttpPost("Refresh-token")]
+        //public async Task<IActionResult> Refresh([FromBody] TokenRequestModel model)
+        //{
+        //    var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
+        //    var email = principal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+        //    //var email = principal.Identity?.Name;
+        //    //var user = await _userService.GetByEmailAsync(email);
+        //    var user = await _authRepository.GetByCondition(u => u.Email == email);
 
-            if (user is null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiry <= DateTime.UtcNow)
-            {
-                return Unauthorized("Invalid refresh token.");
-            }
+        //    if (user is null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiry <= DateTime.UtcNow)
+        //    {
+        //        return Unauthorized("Invalid refresh token.");
+        //    }
 
-            var newAccessToken = _tokenService.CreateAccessToken(user);
-            var newRefreshToken = _tokenService.CreateRefreshToken();
+        //    var newAccessToken = _tokenService.CreateAccessToken(user);
+        //    var newRefreshToken = _tokenService.CreateRefreshToken();
 
-            user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
-            await _userService.UpdateAsync(user.Id, user);
+        //    user.RefreshToken = newRefreshToken;
+        //    user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+        //    await _userService.UpdateAsync(user.Id, user);
 
-            return Ok(new
-            {
-                AccessToken = newAccessToken,
-                RefreshToken = newRefreshToken
-            });
-        }
+        //    return Ok(new
+        //    {
+        //        AccessToken = newAccessToken,
+        //        RefreshToken = newRefreshToken
+        //    });
+        //}
     }
 }

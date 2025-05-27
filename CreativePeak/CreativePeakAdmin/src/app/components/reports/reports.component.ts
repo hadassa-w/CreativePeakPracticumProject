@@ -103,7 +103,7 @@ export class ReportsComponent implements OnInit {
         {
           data: portfolioData,
           label: 'New Portfolios',
-          backgroundColor: 'rgba(126, 87, 194, 0.8)',
+          backgroundColor: 'rgba(141, 112, 191, 0.8)',
           borderColor: '#7E57C2',
           borderWidth: 2,
           borderRadius: 4,

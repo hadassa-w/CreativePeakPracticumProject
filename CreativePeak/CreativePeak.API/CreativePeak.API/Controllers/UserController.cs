@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CreativePeak.Core.IServices;
@@ -12,7 +11,7 @@ namespace CreativePeak.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -25,12 +24,20 @@ namespace CreativePeak.API.Controllers
         }
 
         // GET: api/<UserController>
+        [Authorize(Roles = "Main admin")]
         [HttpGet]
         public async Task<ActionResult> Get()
         {
             var list = await _userService.GetAllAsync();
             var listDTO = _mapper.Map<IEnumerable<UserDTO>>(list);
             return Ok(listDTO);
+        }
+
+        [HttpGet("Count")]
+        public async Task<ActionResult> GetCount()
+        {
+            var user = await _userService.GetAllAsync();
+            return Ok(user.Count());
         }
 
         // GET api/<UserController>/5
@@ -111,6 +118,7 @@ namespace CreativePeak.API.Controllers
         }
 
         //[AllowAnonymous]
+        [Authorize(Roles = "Main admin")]
         [HttpPut("updateAdmin/{id}")]
         public async Task<ActionResult> UpdateMainAdmin(int id, [FromBody] UserMainAdminPostModel user)
         {
@@ -143,14 +151,6 @@ namespace CreativePeak.API.Controllers
             }
             _userService.Delete(user);
             return NoContent();
-        }
-
-        //[AllowAnonymous]
-        [HttpGet("Count")]
-        public async Task<ActionResult> GetCount()
-        {
-            var user = await _userService.GetAllAsync();
-            return Ok(user.Count());
         }
     }
 }

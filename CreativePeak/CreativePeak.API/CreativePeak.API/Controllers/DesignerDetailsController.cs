@@ -5,6 +5,7 @@ using CreativePeak.Core.IServices;
 using CreativePeak.Core.Models;
 using CreativePeak.Core.PostModels;
 using CreativePeak.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,7 @@ namespace CreativePeak.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class DesignerDetailsController : Controller
     {
         private readonly IDesignerDetailsService _designerDetailsService;

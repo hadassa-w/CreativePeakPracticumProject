@@ -41,7 +41,7 @@ export class AddEditUserComponent implements OnInit {
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-\(\)]{8,15}$/)]],
-      address: ['', Validators.required],
+      address: [''],
       isActive: [true], // Default active
     });
   }
