@@ -25,10 +25,11 @@ export class AuthService {
     return this._userName.value;
   }
 
-  login(username: string, password: string): boolean {
+  login(username: string, accessToken: string): boolean {
     this._isLoggedIn.next(true);
     this._userName.next(username);
     localStorage.setItem('userName', username);
+    localStorage.setItem('token', accessToken);
     return true;
   }
 
@@ -36,5 +37,6 @@ export class AuthService {
     this._isLoggedIn.next(false);
     this._userName.next('');
     localStorage.removeItem('userName');
+    localStorage.removeItem('token');
   }
 }

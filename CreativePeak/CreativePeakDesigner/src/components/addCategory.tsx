@@ -151,7 +151,7 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
   const location = useLocation();
   const categoryToEditFromRoute = location.state?.category || null;
   const finalCategoryToEdit = categoryToEdit || categoryToEditFromRoute;
-  const { userId } = useAuth()
+  const { userId, token } = useAuth()
 
   const { register, handleSubmit, setValue, watch, reset, trigger, formState: { errors, isDirty, isValid } } = useForm<Category>({
     mode: "onChange",
@@ -182,7 +182,13 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
   useEffect(() => {
     const fetchUserCategories = async () => {
       try {
-        const response = await axios.get(`https://creativepeak-api.onrender.com/api/Category`)
+        const response = await axios.get(`https://creativepeak-api.onrender.com/api/Category`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         const uCategories = response.data.filter((category: Category) => category.userId == userId)
         setUserCategories(uCategories);
       } catch (error) {
@@ -230,10 +236,22 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
 
     try {
       if (finalCategoryToEdit) {
-        await axios.put(`https://creativepeak-api.onrender.com/api/Category/${finalCategoryToEdit.id}`, dataToSubmit)
+        await axios.put(`https://creativepeak-api.onrender.com/api/Category/${finalCategoryToEdit.id}`, dataToSubmit,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         setSnackbarMsg("🎉 Category updated successfully!")
       } else {
-        await axios.post("https://creativepeak-api.onrender.com/api/Category", dataToSubmit)
+        await axios.post("https://creativepeak-api.onrender.com/api/Category", dataToSubmit,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         setSnackbarMsg("🎉 Category added successfully!")
       }
 
@@ -288,7 +306,8 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
         `Suggest a short and clear description for a category called: ${watchCategoryName}`,
         {
           headers: {
-            'Content-Type': 'application/json'
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
           }
         }
       );

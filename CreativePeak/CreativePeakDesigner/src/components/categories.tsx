@@ -178,7 +178,7 @@ const CategoriesList = () => {
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
 
     const navigate = useNavigate()
-    const { userId } = useAuth()
+    const { userId, token } = useAuth()
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
     const isTablet = useMediaQuery(theme.breakpoints.down("md"))
@@ -189,13 +189,25 @@ const CategoriesList = () => {
             setLoading(true)
             try {
                 // Fetch categories
-                const categoriesResponse = await axios.get(`https://creativepeak-api.onrender.com/api/Category`)
+                const categoriesResponse = await axios.get(`https://creativepeak-api.onrender.com/api/Category`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
                 const userCategories = categoriesResponse.data.filter((category: Category) => category.userId == userId)
                 setCategories(userCategories)
                 setFilteredCategories(userCategories)
 
                 // Fetch images to count per category
-                const imagesResponse = await axios.get("https://creativepeak-api.onrender.com/api/Image")
+                const imagesResponse = await axios.get("https://creativepeak-api.onrender.com/api/Image",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
                 const userImages = imagesResponse.data.filter((image: Image) => image.user.id === userId)
 
                 // Count images per category
@@ -247,7 +259,13 @@ const CategoriesList = () => {
         setDeleteDialogOpen(false)
 
         try {
-            await axios.delete(`https://creativepeak-api.onrender.com/api/Category/${categoryToDelete.id}`)
+            await axios.delete(`https://creativepeak-api.onrender.com/api/Category/${categoryToDelete.id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
 
             setCategories((prevCategories) => prevCategories.filter((category) => category.id !== categoryToDelete.id))
             setFilteredCategories((prevCategories) =>
@@ -259,12 +277,24 @@ const CategoriesList = () => {
             setSnackbarOpen(true)
 
             // Delete associated images
-            const response = await axios.get("https://creativepeak-api.onrender.com/api/Image")
+            const response = await axios.get("https://creativepeak-api.onrender.com/api/Image",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
             const imagesToDelete = response.data.filter((image: Image) => image.category.id == categoryToDelete.id)
 
             await Promise.all(
                 imagesToDelete.map((image: Image) =>
-                    axios.delete(`https://creativepeak-api.onrender.com/api/Image/${image.id}`),
+                    axios.delete(`https://creativepeak-api.onrender.com/api/Image/${image.id}`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    ),
                 ),
             )
         } catch (error) {

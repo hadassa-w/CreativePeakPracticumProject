@@ -5,6 +5,7 @@ import DesignerDetails from "../models/designerDetails";
 import axios from "axios";
 import Image from "../models/image";
 import AutoSnackbar from "./snackbar";
+import { useAuth } from "../contexts/authContext";
 
 const StyledButton = styled(Button)({
     textTransform: "none",
@@ -30,12 +31,24 @@ const UploadProfolio = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState("")
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
-    const userId = Number.parseInt(localStorage.getItem("userId") || "0", 10) || null
+    const { userId, token } = useAuth()
 
     useEffect(() => {
         Promise.all([
-            axios.get(`https://creativepeak-api.onrender.com/api/Image`),
-            axios.get(`https://creativepeak-api.onrender.com/api/Category`),
+            axios.get(`https://creativepeak-api.onrender.com/api/Image`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            ),
+            axios.get(`https://creativepeak-api.onrender.com/api/Category`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            ),
         ])
             .then(([imagesResponse, categoriesResponse]) => {
                 const filteredImages = imagesResponse.data.filter((image: Image) => image.user.id == userId)
@@ -57,7 +70,13 @@ const UploadProfolio = () => {
 
         try {
             // Get user information
-            const userResponse = await axios.get(`https://creativepeak-api.onrender.com/api/DesignerDetails`)
+            const userResponse = await axios.get(`https://creativepeak-api.onrender.com/api/DesignerDetails`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
             const userInfo = userResponse.data.find((designerDetails: DesignerDetails) => designerDetails.userId == userId);
 
             // Create the HTML content with enhanced modal functionality
@@ -887,13 +906,13 @@ const UploadProfolio = () => {
 
             <!-- Portfolio Content -->
             ${categories.map(category => {
-                    const categoryImages = images
-                        .filter(img => img.category.id === category.id)
-                        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+                const categoryImages = images
+                    .filter(img => img.category.id === category.id)
+                    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
-                    if (categoryImages.length === 0) return '';
+                if (categoryImages.length === 0) return '';
 
-                    return `
+                return `
                 <div class="category-section" id="category-${category.id}">
                     <h2 class="category-title">${category.categoryName}</h2>
                     ${category.description ? `<p class="category-description">${category.description}</p>` : ''}
@@ -919,15 +938,15 @@ const UploadProfolio = () => {
                                     ${image.description ? `<p class="project-description">${image.description}</p>` : ''}
                                     <div class="project-meta">
                                         <span class="project-date">Created: ${new Date(image.createdAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    })}</span>
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                })}</span>
                                         <span class="project-date">Updated: ${new Date(image.updatedAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    })}</span>
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                })}</span>
                                     </div>
                                 </div>
                             </div>
@@ -935,7 +954,7 @@ const UploadProfolio = () => {
                     </div>
                 </div>
                 `;
-                }).join('')}
+            }).join('')}
 
             <!-- Footer -->
             <div class="footer">
@@ -948,11 +967,11 @@ const UploadProfolio = () => {
                 CreativePeak Designer</a>
                 </p>
                 <p class="generated-date">Generated on: ${new Date().toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                })}</p>
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            })}</p>
             </div>
         </div>
 

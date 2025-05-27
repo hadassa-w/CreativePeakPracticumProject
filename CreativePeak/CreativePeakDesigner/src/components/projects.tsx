@@ -31,6 +31,7 @@ import CloseIcon from "@mui/icons-material/Close"
 import type Image from "../models/image"
 import type Category from "../models/category"
 import AutoSnackbar from "./snackbar"
+import { useAuth } from "../contexts/authContext"
 
 // Styled Components
 const StyledButton = styled(Button)({
@@ -193,15 +194,27 @@ function ImageGallery() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [imageToDelete, setImageToDelete] = useState<Image | null>(null)
 
-  const userId = Number.parseInt(localStorage.getItem("userId") || "0", 10) || null
+  const { userId, token } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
     setLoading(true)
 
     Promise.all([
-      axios.get(`https://creativepeak-api.onrender.com/api/Image`),
-      axios.get(`https://creativepeak-api.onrender.com/api/Category`),
+      axios.get(`https://creativepeak-api.onrender.com/api/Image`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ),
+      axios.get(`https://creativepeak-api.onrender.com/api/Category`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      ),
     ])
       .then(([imagesResponse, categoriesResponse]) => {
         const filteredImages = imagesResponse.data.filter((image: Image) => image.user.id == userId)
@@ -238,7 +251,13 @@ function ImageGallery() {
     setDeleteDialogOpen(false)
 
     axios
-      .delete(`https://creativepeak-api.onrender.com/api/Image/${imageToDelete.id}`)
+      .delete(`https://creativepeak-api.onrender.com/api/Image/${imageToDelete.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then(() => {
         setImages((prevImages) => prevImages.filter((image) => image.id !== imageToDelete.id))
         setSnackbarMessage("🎉 Project deleted successfully!")

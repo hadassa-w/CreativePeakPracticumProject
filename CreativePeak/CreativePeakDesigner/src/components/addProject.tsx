@@ -228,7 +228,7 @@ const AddImageForm = () => {
   const [isUploading, setIsUploading] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const [userImages, setUserImages] = useState<Project[]>([])
-  const { userId } = useAuth()
+  const { userId, token } = useAuth()
   const location = useLocation()
   const image = location.state?.image || null
   const navigate = useNavigate()
@@ -255,7 +255,13 @@ const AddImageForm = () => {
   const fetchCategories = async () => {
     try {
       setLoading(false);
-      const response = await axios.get(`https://creativepeak-api.onrender.com/api/Category`)
+      const response = await axios.get(`https://creativepeak-api.onrender.com/api/Category`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       const filterCategory = response.data.filter((category: Category) => category.userId == userId)
       setCategories(filterCategory)
     } catch (err) {
@@ -271,8 +277,19 @@ const AddImageForm = () => {
     const fetchData = async () => {
       try {
         const [catRes, imgRes] = await Promise.all([
-          axios.get(`https://creativepeak-api.onrender.com/api/Category`),
-          axios.get(`https://creativepeak-api.onrender.com/api/Image`),
+          axios.get(`https://creativepeak-api.onrender.com/api/Category`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+          ),
+          axios.get(`https://creativepeak-api.onrender.com/api/Image`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          ),
         ])
         const filterCategory = catRes.data.filter((category: Category) => category.userId == userId)
         const filterImages = imgRes.data.filter((image: Image) => image.user.id == userId)
@@ -330,8 +347,12 @@ const AddImageForm = () => {
     try {
       const uniqueFileName = `${Date.now()}-${file.name}`;
       const response = await axios.get('https://creativepeak-api.onrender.com/api/S3Images/image-url', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: { fileName: uniqueFileName }
-      });
+      }
+      );
       const presignedUrl = response.data.url;
 
       await axios.put(presignedUrl, file, {
@@ -390,10 +411,22 @@ const AddImageForm = () => {
       };
 
       if (image) {
-        await axios.put(`https://creativepeak-api.onrender.com/api/Image/${image.id}`, dataToSubmit);
+        await axios.put(`https://creativepeak-api.onrender.com/api/Image/${image.id}`, dataToSubmit,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setSnackbarMsg("🎉 Project updated successfully!");
       } else {
-        await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit);
+        await axios.post("https://creativepeak-api.onrender.com/api/Image", dataToSubmit,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setSnackbarMsg("🎉 Project added successfully!");
       }
 
@@ -456,7 +489,8 @@ const AddImageForm = () => {
       const response = await axios.post("https://creativepeak-api.onrender.com/api/Ai/AI-description",
         `Suggest a short and clear description for a project called: ${watchFileName}`, {
         headers: {
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         }
       })
 

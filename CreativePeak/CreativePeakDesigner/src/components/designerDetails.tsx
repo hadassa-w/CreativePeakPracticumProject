@@ -25,7 +25,7 @@ function DesignerDetailsForm() {
   const [designerDetails, setDesignerDetails] = useState<DesignerDetails | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isFirstVisit, setIsFirstVisit] = useState(false); // Track if it's first visit
-  const { userId } = useAuth();
+  const { userId, token } = useAuth();
   const navigate = useNavigate(); // Add navigate hook
 
   // AI Description Dialog states
@@ -82,6 +82,7 @@ function DesignerDetailsForm() {
         prompt,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         }
@@ -108,7 +109,13 @@ function DesignerDetailsForm() {
   };
 
   useEffect(() => {
-    axios.get("https://creativepeak-api.onrender.com/api/DesignerDetails")
+    axios.get("https://creativepeak-api.onrender.com/api/DesignerDetails",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then(response => {
         const filteredData = response.data.find((d: DesignerDetails) => d.userId === userId);
         if (filteredData) {
@@ -137,19 +144,35 @@ function DesignerDetailsForm() {
       if (designerDetails) {
         await axios.put(
           `https://creativepeak-api.onrender.com/api/DesignerDetails/${designerDetails.id}`,
-          designerData
+          designerData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
       } else {
         await axios.post(
           "https://creativepeak-api.onrender.com/api/DesignerDetails",
-          designerData
+          designerData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
       }
-      
+
       showSnackbar("Designer details saved successfully! 🎉", "success");
 
       // Refresh data after saving
-      const updatedResponse = await axios.get("https://creativepeak-api.onrender.com/api/DesignerDetails");
+      const updatedResponse = await axios.get("https://creativepeak-api.onrender.com/api/DesignerDetails",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const updatedData = updatedResponse.data.find((d: DesignerDetails) => d.userId == userId);
       setDesignerDetails(updatedData);
       setIsEditing(false);
@@ -160,7 +183,7 @@ function DesignerDetailsForm() {
           navigate('/'); // Navigate to HOME page after first time setup
         }, 1500); // Small delay to let user see the success message
       }
-      
+
     } catch (error) {
       console.error("Error submitting data:", error);
       showSnackbar("Failed to save designer details", "error");

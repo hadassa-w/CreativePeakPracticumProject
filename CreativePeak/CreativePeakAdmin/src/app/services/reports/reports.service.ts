@@ -11,6 +11,6 @@ export class ReportsService {
   constructor(private http: HttpClient) {}
 
   getMonthlyReport(): Observable<ReportData[]> {
-    return this.http.get<ReportData[]>('https://creativepeak-api.onrender.com/monthly-summary');
+    return this.http.get<ReportData[]>('https://creativepeak-api.onrender.com/api/Reports/monthly-summary');
   }
 }

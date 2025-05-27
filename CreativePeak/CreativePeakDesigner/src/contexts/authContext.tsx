@@ -38,24 +38,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // const refreshAuthToken = async () => {
   //   const storedToken = localStorage.getItem("token");
   //   const storedRefreshToken = localStorage.getItem("refreshToken");
-  
+
   //   if (!storedToken || !storedRefreshToken) return;
-  
+
   //   try {
   //     const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Refresh-token", {
   //       accessToken: storedToken,
   //       refreshToken: storedRefreshToken,
   //     });
-  
+
   //     const newAccessToken = response.data.accessToken;
   //     const newRefreshToken = response.data.refreshToken;
-  
+
   //     // const expirationTime = Date.now() + 15 * 60 * 1000; // 15 דקות קדימה
-  
+
   //     localStorage.setItem("token", newAccessToken);
   //     localStorage.setItem("refreshToken", newRefreshToken);
   //     // localStorage.setItem("tokenExpirationTime", expirationTime.toString());
-  
+
   //     setToken(newAccessToken);
   //     setRefreshToken(newRefreshToken);
   //   } catch (error) {
@@ -63,24 +63,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   //     // logout(); // אם רוצים לנתק את המשתמש
   //   }
   // };
-  
+
+  const isTokenExpired = (token: string): boolean => {
+    try {
+      const payloadBase64 = token.split(".")[1];
+      const payload = JSON.parse(atob(payloadBase64));
+      const expiry = payload.exp;
+
+      // exp הוא ב-seconds מאז epoch
+      return Date.now() >= expiry * 1000;
+    } catch (error) {
+      console.error("Failed to decode token:", error);
+      return true; // אם יש שגיאה, עדיף להניח שהטוקן לא תקף
+    }
+  };
+
   useEffect(() => {
-    // שחזור הנתונים מ-localStorage
     const storedToken = localStorage.getItem("token");
     // const storedRefreshToken = localStorage.getItem("refreshToken");
     const storedUserName = localStorage.getItem("userName");
     const storedUserIdStr = localStorage.getItem("userId");
 
     if (storedToken && storedUserName && storedUserIdStr) {
-      const storedUserId = parseInt(storedUserIdStr, 10);
-      setToken(storedToken);
-      // setRefreshToken(storedRefreshToken);
-      setUserName(storedUserName);
-      setUserId(storedUserId);
-      setIsLoggedIn(true);
+      const tokenExpired = isTokenExpired(storedToken);
+
+      if (tokenExpired) {
+        logout(); // או אפילו redirect לדף login
+      } else {
+        const storedUserId = parseInt(storedUserIdStr, 10);
+        setToken(storedToken);
+        // setRefreshToken(storedRefreshToken);
+        setUserName(storedUserName);
+        setUserId(storedUserId);
+        setIsLoggedIn(true);
+      }
     }
 
-    setIsLoading(false); // סימון שטעינת הנתונים הסתיימה
+    setIsLoading(false);
   }, []);
 
   const login = (token: string, userName: string, userId: number) => {
