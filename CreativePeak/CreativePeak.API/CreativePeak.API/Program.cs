@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Amazon.S3;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 Env.Load();
 
@@ -33,6 +34,7 @@ builder.Configuration["AWS:Region"] = Environment.GetEnvironmentVariable("AWS_RE
 builder.Configuration["AWS:BucketName"] = Environment.GetEnvironmentVariable("AWS_BUCKET_NAME");
 builder.Configuration["ConnectionStrings:MyDatabase"] = Environment.GetEnvironmentVariable("ConnectionStrings_CreativePeak");
 builder.Configuration["OpenAIResponse:ApiKey"] = Environment.GetEnvironmentVariable("OpenAIResponse");
+builder.Configuration["Gmail:GmailKey"] = Environment.GetEnvironmentVariable("Gmail_key");
 
 // Add services to the container.
 
@@ -163,6 +165,9 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 

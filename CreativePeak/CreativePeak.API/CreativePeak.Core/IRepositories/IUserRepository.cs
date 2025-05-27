@@ -16,5 +16,9 @@ namespace CreativePeak.Core.IRepositories
         User Update(User user);
         void Delete(User user);
 
+
+        Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByPasswordResetTokenAsync(string token);
+        Task UpdateAsync(User user);
     }
 }

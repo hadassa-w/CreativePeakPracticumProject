@@ -15,5 +15,9 @@ namespace CreativePeak.Core.IServices
         Task<User?> UpdateAsync(int id, User user);
         void Delete(User user);
 
+
+        Task<bool> ForgotPasswordAsync(string email);
+        Task<bool> ResetPasswordAsync(string token, string newPassword);
+        Task<User?> GetUserByEmailAsync(string email);
     }
 }

@@ -6,6 +6,7 @@ using CreativePeak.Core.Models;
 using CreativePeak.Core.PostModels;
 using CreativePeak.Data;
 using CreativePeak.Service;
+//using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -204,5 +205,43 @@ namespace CreativePeak.API.Controllers
         //        RefreshToken = newRefreshToken
         //    });
         //}
+
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email))
+            {
+                return BadRequest(new { message = "Email is required" });
+            }
+
+            var result = await _userService.ForgotPasswordAsync(request.Email);
+
+            if (result)
+            {
+                return Ok(new { message = "If the email exists in the system, a reset link has been sent to you." });
+            }
+
+            return BadRequest(new { message = "An error occurred while sending the email." });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Token) || string.IsNullOrWhiteSpace(request.NewPassword))
+            {
+                return BadRequest(new { message = "Token and new password are required" });
+            }
+
+            var result = await _userService.ResetPasswordAsync(request.Token, request.NewPassword);
+
+            if (result)
+            {
+                return Ok(new { message = "Password was reset successfully." });
+            }
+
+            return BadRequest(new { message = "Invalid or expired token." });
+        }
+
     }
 }

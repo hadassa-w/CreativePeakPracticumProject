@@ -28,6 +28,10 @@ namespace CreativePeak.Core.Models
         public string Address { get; set; }
         public string Role { get; set; }
         public bool IsActive { get; set; }
+
+        // שדות לאיפוס סיסמה
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpiry { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

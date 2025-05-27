@@ -170,3 +170,8 @@ C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויק
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\libman.json
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\AWSSDK.Extensions.NETCore.Setup.dll
 C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.Bcl.Memory.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\user1\Documents\תכנות\שיעורים\שנה ב תשפה\פרויקטים\פרקטיקום\CreativePeakProject\CreativePeak\CreativePeak.API\CreativePeak.API\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll

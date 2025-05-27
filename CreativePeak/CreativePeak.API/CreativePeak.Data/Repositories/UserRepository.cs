@@ -51,5 +51,30 @@ namespace CreativePeak.Data.Repositories
             return user;
         }
 
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return null;
+
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        }
+
+        public async Task<User?> GetByPasswordResetTokenAsync(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+                return null;
+
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.PasswordResetToken == token &&
+                                         u.PasswordResetTokenExpiry > DateTime.UtcNow);
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

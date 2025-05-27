@@ -17,6 +17,22 @@
   },
   {
     "ContainingType": "CreativePeak.API.Controllers.AuthController",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/Auth/forgot-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CreativePeak.Core.Models.ForgotPasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/Auth/Login",
     "HttpMethod": "POST",
@@ -58,6 +74,22 @@
       {
         "Name": "userPostModel",
         "Type": "CreativePeak.Core.PostModels.UserPostModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.AuthController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/Auth/reset-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CreativePeak.Core.Models.ResetPasswordRequest",
         "IsRequired": true
       }
     ],
@@ -452,6 +484,22 @@
       {
         "Name": "user",
         "Type": "CreativePeak.Core.PostModels.UserWithoutPasswordPostModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.ForgotPasswordController",
+    "Method": "ForgotPassword",
+    "RelativePath": "ForgotPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CreativePeak.Core.Models.ForgotPasswordRequest",
         "IsRequired": true
       }
     ],
