@@ -84,6 +84,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const newLogin = () => {
+    localStorage.removeItem("userEmail");
     setIsLoggedIn(true);
   };
 

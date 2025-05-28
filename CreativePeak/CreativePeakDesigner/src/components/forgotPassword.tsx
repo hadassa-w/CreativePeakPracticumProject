@@ -230,8 +230,6 @@ export default function ForgotPassword() {
                 email,
                 "password": tempPassword
             });
-
-            console.log(response);
             
             const token = response.data.accessToken;
             const user = response.data.user;

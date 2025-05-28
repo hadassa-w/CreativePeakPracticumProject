@@ -205,7 +205,6 @@ export default function ChangePassword() {
     };
 
     const handleChangePassword = async () => {
-        console.log(userEmail, password, confirmPassword);
         if (!validatePasswords()) {
             return;
         }
