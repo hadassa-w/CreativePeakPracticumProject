@@ -181,7 +181,7 @@ function Register() {
   const { login } = useAuth();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const [generalError, setGeneralError] = useState<string>(""); // שונה מ-error ל-generalError
   const [loading, setLoading] = useState<boolean>(false);
 
   const [formData, setFormData] = useState({
@@ -246,7 +246,7 @@ function Register() {
 
   const handleRegister = async () => {
     setLoading(true);
-    setError("");
+    setGeneralError(""); // נקה הודעת שגיאה כללית
     setFieldErrors({});
 
     let newFieldErrors: { fullname?: string; email?: string; password?: string; phone?: string } = {};
@@ -288,17 +288,24 @@ function Register() {
       const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/Register", formData);
 
       if (response.status === 200 && response.data.token) {
-        login(response.data.token, response.data.user.fullName, response.data.user.id);
+        login(response.data.token, response.data.user);
         navigate("/designerDetails");
       } else {
-        setError("Registration failed. Please check your details.");
+        setGeneralError("Registration failed. Please check your details.");
       }
     } catch (error: any) {
       if (error.response?.status === 400) {
         console.error("Error:", error.response.data.message);
-        setFieldErrors((prev) => ({ ...prev, email: error.response.data.message }));
+        // אם השגיאה קשורה לאימייל קיים, הצג אותה כהודעת שגיאה כללית
+        if (error.response.data.message.toLowerCase().includes("email") || 
+            error.response.data.message.toLowerCase().includes("exist")) {
+          setGeneralError(error.response.data.message);
+        } else {
+          // אם זה שגיאה אחרת, הצג בשדה המתאים
+          setFieldErrors((prev) => ({ ...prev, email: error.response.data.message }));
+        }
       } else {
-        setError("Registration failed. Try again.");
+        setGeneralError("Registration failed. Try again.");
       }
     }
 
@@ -569,9 +576,11 @@ function Register() {
           )}
         </Box>
 
-        {error && (
+        {/* הודעת שגיאה כללית - בדומה לקומפוננטת Login */}
+        {generalError && (
           <Box sx={{
             p: 2,
+            mt:"10px",
             mb: 3,
             backgroundColor: "rgba(244, 67, 54, 0.05)",
             borderRadius: "8px",
@@ -579,7 +588,7 @@ function Register() {
           }}>
             <Typography color="error" variant="body2" sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1 }}>
               <Box component="span" sx={{ fontSize: "20px" }}>⚠️</Box>
-              {error}
+              {generalError}
             </Typography>
           </Box>
         )}

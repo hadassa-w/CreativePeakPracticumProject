@@ -203,10 +203,9 @@ function LogIn() {
       });
 
       const token = response.data.accessToken;
-      const userId = response.data.user.id;
-      const fullName = response.data.user.fullName;
+      const user = response.data.user;
 
-      login(token, fullName, userId);
+      login(token, user);
 
       setFieldErrors({});
       setGeneralError("");
@@ -328,6 +327,7 @@ function LogIn() {
                 textDecoration: "underline",
               }
             }}
+            onClick={() => navigate("/forgotPassword")}
           >
             Forgot password?
           </Typography>

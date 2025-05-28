@@ -14,6 +14,8 @@ import CategoriesList from "./components/categories";
 import EditUserForm from "./components/user";
 import ScrollToTop from "./components/scrollToTop";
 import ProtectedPath from "./components/protectedPath";
+import ForgotPassword from "./components/forgotPassword";
+import ChangePassword from "./components/changePassword";
 
 function App() {
   const protectedRoutes = [
@@ -36,6 +38,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/logIn" element={<LogIn />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/changePassword" element={<ChangePassword />} />
 
           {/* Protected routes */}
           {protectedRoutes.map(({ path, component: Component }) => (

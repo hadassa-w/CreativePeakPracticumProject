@@ -1,11 +1,15 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import User from "../models/user";
 
 type AuthContextType = {
   isLoggedIn: boolean;
   token: string | null;
   userName: string | null;
+  userEmail: string | null;
   userId: number | null;
-  login: (token: string, userName: string, userId: number) => void;
+  toLogin: (token: string, user: User) => void;
+  newLogin: () => void;
+  login: (token: string, user: User) => void;
   logout: () => void;
   isLoading: boolean;
 };
@@ -14,7 +18,10 @@ const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   token: null,
   userName: null,
+  userEmail: null,
   userId: null,
+  toLogin: () => { },
+  newLogin: () => { },
   login: () => { },
   logout: () => { },
   isLoading: true,
@@ -23,6 +30,7 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,9 +51,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUserName = localStorage.getItem("userName");
+    const storedUserEmail = localStorage.getItem("userEmail");
     const storedUserIdStr = localStorage.getItem("userId");
 
-    if (storedToken && storedUserName && storedUserIdStr) {
+    if (storedToken && storedUserName && storedUserIdStr && storedUserEmail) {
       const tokenExpired = isTokenExpired(storedToken);
 
       if (tokenExpired) {
@@ -54,6 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const storedUserId = parseInt(storedUserIdStr, 10);
         setToken(storedToken);
         setUserName(storedUserName);
+        setUserEmail(storedUserEmail);
         setUserId(storedUserId);
         setIsLoggedIn(true);
       }
@@ -62,12 +72,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false);
   }, []);
 
-  const login = (token: string, userName: string, userId: number) => {
+  const toLogin = (token: string, user: User) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("userName", userName);
-    localStorage.setItem("userId", userId.toString());
+    localStorage.setItem("userName", user.fullName);
+    localStorage.setItem("userEmail", user.email);
+    localStorage.setItem("userId", user.id.toString());
     setToken(token);
     setUserName(userName);
+    setUserEmail(userEmail);
+    setUserId(userId);
+  };
+
+  const newLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const login = (token: string, user: User) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("userName", user.fullName);
+    localStorage.setItem("userEmail", user.email);
+    localStorage.setItem("userId", user.id.toString());
+    setToken(token);
+    setUserName(userName);
+    setUserEmail(userEmail);
     setUserId(userId);
     setIsLoggedIn(true);
   };
@@ -75,10 +102,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("userEmail");
     localStorage.removeItem("userId");
     setToken(null);
     setUserName(null);
+    setUserEmail(null);
     setUserId(null);
     setIsLoggedIn(false);
   };
@@ -89,7 +117,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoggedIn,
         token,
         userName,
+        userEmail,
         userId,
+        toLogin,
+        newLogin,
         login,
         logout,
         isLoading,
