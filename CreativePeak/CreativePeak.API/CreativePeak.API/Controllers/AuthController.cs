@@ -6,7 +6,6 @@ using CreativePeak.Core.Models;
 using CreativePeak.Core.PostModels;
 using CreativePeak.Data;
 using CreativePeak.Service;
-//using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -177,35 +176,6 @@ namespace CreativePeak.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-        //[AllowAnonymous]
-        //[HttpPost("Refresh-token")]
-        //public async Task<IActionResult> Refresh([FromBody] TokenRequestModel model)
-        //{
-        //    var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
-        //    var email = principal?.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        //    //var email = principal.Identity?.Name;
-        //    //var user = await _userService.GetByEmailAsync(email);
-        //    var user = await _authRepository.GetByCondition(u => u.Email == email);
-
-        //    if (user is null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiry <= DateTime.UtcNow)
-        //    {
-        //        return Unauthorized("Invalid refresh token.");
-        //    }
-
-        //    var newAccessToken = _tokenService.CreateAccessToken(user);
-        //    var newRefreshToken = _tokenService.CreateRefreshToken();
-
-        //    user.RefreshToken = newRefreshToken;
-        //    user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
-        //    await _userService.UpdateAsync(user.Id, user);
-
-        //    return Ok(new
-        //    {
-        //        AccessToken = newAccessToken,
-        //        RefreshToken = newRefreshToken
-        //    });
-        //}
-
 
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
@@ -216,7 +186,6 @@ namespace CreativePeak.API.Controllers
             }
 
             var result = await _userService.ForgotPasswordAsync(request.Email);
-
             if (result)
             {
                 return Ok(new { message = "If the email exists in the system, a reset link has been sent to you." });
@@ -225,23 +194,66 @@ namespace CreativePeak.API.Controllers
             return BadRequest(new { message = "An error occurred while sending the email." });
         }
 
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Token) || string.IsNullOrWhiteSpace(request.NewPassword))
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
             {
-                return BadRequest(new { message = "Token and new password are required" });
+                return BadRequest(new { message = "Email and password are required" });
             }
 
-            var result = await _userService.ResetPasswordAsync(request.Token, request.NewPassword);
 
-            if (result)
+            var user = await _userService.AuthenticateAsync(request.Email, request.Password);
+            if (user == null)
             {
-                return Ok(new { message = "Password was reset successfully." });
+                return BadRequest(new { message = "Invalid email or password" });
             }
 
-            return BadRequest(new { message = "Invalid or expired token." });
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim(ClaimTypes.Role, user.Role)
+            };
+
+            var userNew = _mapper.Map<UserDTO>(user);
+
+            var accessToken = _tokenService.CreateAccessToken(user);
+            //var refreshToken = _tokenService.CreateRefreshToken();
+            //user.RefreshToken = refreshToken;
+            //user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            await _userService.UpdateAsync(user.Id, user);
+
+            return Ok(new
+            {
+                AccessToken = accessToken,
+                //RefreshToken = refreshToken,
+                User = userNew
+            });
         }
 
+        // 2. אנדפוינט לשינוי סיסמה (מבטל את הסיסמה הזמנית)
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.NewPassword))
+            {
+                return BadRequest(new { message = "Email and new password are required" });
+            }
+
+            // בדיקת תקינות הסיסמה החדשה (לפי הדרישות שלך)
+            if (request.NewPassword.Length < 6)
+            {
+                return BadRequest(new { message = "Password must be at least 6 characters long" });
+            }
+
+            var result = await _userService.ChangePasswordAsync(request.Email, request.NewPassword);
+            if (result)
+            {
+                return Ok(new { message = "Password was changed successfully. Temporary password is no longer valid." });
+            }
+
+            return BadRequest(new { message = "User not found or password change failed." });
+        }
     }
 }

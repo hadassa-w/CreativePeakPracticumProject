@@ -18,7 +18,12 @@ namespace CreativePeak.Core.IRepositories
 
 
         Task<User?> GetByEmailAsync(string email);
-        Task<User?> GetByPasswordResetTokenAsync(string token);
+
         Task UpdateAsync(User user);
+
+        Task CleanExpiredTemporaryPasswordsAsync();
+  //Task<User?> GetByEmailAsync(string email);
+  //      Task<User?> GetByPasswordResetTokenAsync(string token);
+  //      Task UpdateAsync(User user);
     }
 }

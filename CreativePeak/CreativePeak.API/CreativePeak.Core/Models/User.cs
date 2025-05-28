@@ -29,9 +29,6 @@ namespace CreativePeak.Core.Models
         public string Role { get; set; }
         public bool IsActive { get; set; }
 
-        // שדות לאיפוס סיסמה
-        public string? PasswordResetToken { get; set; }
-        public DateTime? PasswordResetTokenExpiry { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
@@ -40,7 +37,7 @@ namespace CreativePeak.Core.Models
         public List<Category> Categories { get; set; }
         public List<Image> Images { get; set; }
 
-        public string? RefreshToken { get; set; }
-        public DateTime? RefreshTokenExpiry { get; set; }
+        public string? TempPassword { get; set; }
+        public DateTime? TempPasswordExpiry { get; set; }
     }
 }

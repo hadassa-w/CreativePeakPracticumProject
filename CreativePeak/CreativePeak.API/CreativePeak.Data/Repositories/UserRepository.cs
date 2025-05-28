@@ -21,6 +21,7 @@ namespace CreativePeak.Data.Repositories
             _context = dataContext;
             _dbSet = _context.Set<User>();
         }
+
         public User Add(User user)
         {
             _dbSet.Add(user);
@@ -51,7 +52,6 @@ namespace CreativePeak.Data.Repositories
             return user;
         }
 
-
         public async Task<User?> GetByEmailAsync(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -61,20 +61,33 @@ namespace CreativePeak.Data.Repositories
                 .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         }
 
-        public async Task<User?> GetByPasswordResetTokenAsync(string token)
-        {
-            if (string.IsNullOrWhiteSpace(token))
-                return null;
-
-            return await _context.Users
-                .FirstOrDefaultAsync(u => u.PasswordResetToken == token &&
-                                         u.PasswordResetTokenExpiry > DateTime.UtcNow);
-        }
+        // הסרת המתודה לחיפוש לפי טוקן - לא נדרש יותר
+        // GetByPasswordResetTokenAsync - מוסר
 
         public async Task UpdateAsync(User user)
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+        }
+
+        // מתודה חדשה לניקוי סיסמאות זמניות שפג תוקפן
+        public async Task CleanExpiredTemporaryPasswordsAsync()
+        {
+            var expiredUsers = await _context.Users
+                .Where(u => u.TempPasswordExpiry.HasValue &&
+                           u.TempPasswordExpiry.Value <= DateTime.UtcNow)
+                .ToListAsync();
+
+            foreach (var user in expiredUsers)
+            {
+                user.TempPassword = null;
+                user.TempPasswordExpiry = null;
+            }
+
+            if (expiredUsers.Any())
+            {
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

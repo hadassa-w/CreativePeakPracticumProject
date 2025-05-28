@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CreativePeak.Core.Models
 {
-    public class TokenRequestModel
+    public class AuthenticateRequest
     {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
-
 }

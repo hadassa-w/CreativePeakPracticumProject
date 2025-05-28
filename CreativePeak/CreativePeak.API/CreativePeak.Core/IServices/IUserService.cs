@@ -17,7 +17,18 @@ namespace CreativePeak.Core.IServices
 
 
         Task<bool> ForgotPasswordAsync(string email);
-        Task<bool> ResetPasswordAsync(string token, string newPassword);
+        Task<User?> AuthenticateAsync(string email, string password);
+
+        Task<bool> ChangePasswordAsync(string email, string newPassword);
+
         Task<User?> GetUserByEmailAsync(string email);
+
+        string GenerateTemporaryPassword();
+
+        Task SendTemporaryPasswordEmailAsync(string email, string temporaryPassword, string firstName);
+
+        //Task<bool> ForgotPasswordAsync(string email);
+        //Task<bool> ResetPasswordAsync(string token, string newPassword);
+        //Task<User?> GetUserByEmailAsync(string email);
     }
 }

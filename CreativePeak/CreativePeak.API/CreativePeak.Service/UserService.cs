@@ -83,11 +83,11 @@ namespace CreativePeak.Service
 
                 // יצירת סיסמה זמנית
                 var temporaryPassword = GenerateTemporaryPassword();
-
+                Console.WriteLine(temporaryPassword);
                 // עדכון המשתמש עם הסיסמה הזמנית (מוצפנת)
-                user.Password = _passwordService.HashPassword(temporaryPassword);
-                user.PasswordResetToken = null; // ניקוי טוקן ישן אם קיים
-                user.PasswordResetTokenExpiry = null;
+                // השארת הסיסמה הישנה כגיבוי עד שהמשתמש יחליף אותה
+                user.TempPassword = _passwordService.HashPassword(temporaryPassword);
+                user.TempPasswordExpiry = DateTime.UtcNow.AddHours(24); // תוקף של 24 שעות
                 user.UpdatedAt = DateTime.UtcNow;
 
                 await _userRepository.UpdateAsync(user);
@@ -105,20 +105,64 @@ namespace CreativePeak.Service
             }
         }
 
-        public async Task<bool> ResetPasswordAsync(string token, string newPassword)
+        // פונקציה חדשה להתחברות עם סיסמה זמנית או רגילה
+        public async Task<User?> AuthenticateAsync(string email, string password)
         {
             try
             {
-                var user = await _userRepository.GetByPasswordResetTokenAsync(token);
+                var user = await _userRepository.GetByEmailAsync(email);
+                if (user == null)
+                {
+                    return null;
+                }
+
+                    Console.WriteLine(user.TempPassword);
+                    Console.WriteLine(password);
+                // בדיקה אם הסיסמה הרגילה נכונה
+                if (_passwordService.VerifyPassword(user.Password, password))
+                {
+                    return user;
+                }
+
+                // בדיקה אם יש סיסמה זמנית בתוקף
+                if (!string.IsNullOrEmpty(user.TempPassword) &&
+                    user.TempPasswordExpiry.HasValue &&
+                    user.TempPasswordExpiry.Value > DateTime.UtcNow)
+                {
+                    // בדיקה אם הסיסמה הזמנית נכונה
+                    if (_passwordService.VerifyPassword(user.TempPassword, password))
+                    {
+                        return user;
+                    }
+                }
+
+                return null; // שתי הסיסמאות לא נכונות
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in AuthenticateAsync: {ex.Message}");
+                return null;
+            }
+        }
+
+        // פונקציה לשינוי סיסמה (מבטלת את הסיסמה הזמנית)
+        public async Task<bool> ChangePasswordAsync(string email, string newPassword)
+        {
+            try
+            {
+                var user = await _userRepository.GetByEmailAsync(email);
                 if (user == null)
                 {
                     return false;
                 }
 
-                // עדכון הסיסמה
+                // עדכון הסיסמה הרגילה
                 user.Password = _passwordService.HashPassword(newPassword);
-                user.PasswordResetToken = null;
-                user.PasswordResetTokenExpiry = null;
+
+                // ביטול הסיסמה הזמנית
+                user.TempPassword = null;
+                user.TempPasswordExpiry = null;
+                user.UpdatedAt = DateTime.UtcNow;
 
                 await _userRepository.UpdateAsync(user);
 
@@ -126,7 +170,7 @@ namespace CreativePeak.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in ResetPasswordAsync: {ex.Message}");
+                Console.WriteLine($"Error in ChangePasswordAsync: {ex.Message}");
                 return false;
             }
         }
@@ -136,16 +180,34 @@ namespace CreativePeak.Service
             return await _userRepository.GetByEmailAsync(email);
         }
 
-        private string GenerateTemporaryPassword()
+        public string GenerateTemporaryPassword()
         {
-            // יצירת סיסמה זמנית באורך 8 תווים עם אותיות וספרות
-            const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+            const string upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+            const string lower = "abcdefghijkmnpqrstuvwxyz";
+            const string digits = "23456789";
+            const string special = "!@#$%^&*";
+
             var random = new Random();
-            return new string(Enumerable.Repeat(chars, 8)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            var passwordChars = new List<char>
+            {
+                upper[random.Next(upper.Length)],
+                lower[random.Next(lower.Length)],
+                digits[random.Next(digits.Length)],
+                special[random.Next(special.Length)]
+            };
+
+            // השארת 4 תווים נוספים באופן רנדומלי מתוך כל התווים
+            string allChars = upper + lower + digits + special;
+            for (int i = 0; i < 4; i++)
+            {
+                passwordChars.Add(allChars[random.Next(allChars.Length)]);
+            }
+
+            // ערבוב הסיסמה כדי שהתווים לא יהיו תמיד באותו סדר
+            return new string(passwordChars.OrderBy(x => random.Next()).ToArray());
         }
 
-        private async Task SendTemporaryPasswordEmailAsync(string email, string temporaryPassword, string firstName)
+        public async Task SendTemporaryPasswordEmailAsync(string email, string temporaryPassword, string firstName)
         {
             try
             {
@@ -172,9 +234,10 @@ namespace CreativePeak.Service
                     </div>
                     <p><strong>Instructions:</strong></p>
                     <ul>
-                        <li>Use this temporary password to log in to your account.</li>
-                        <li>After logging in, we recommend you change your password to a new one.</li>
-                        <li>This temporary password will remain valid until you change it.</li>
+                        <li>Use this temporary password to log in to your account (valid for 24 hours).</li>
+                        <li>After logging in, we strongly recommend you change your password to a new one.</li>
+                        <li>You can use either your old password or this temporary password to log in.</li>
+                        <li>Once you change your password, this temporary password will no longer work.</li>
                     </ul>
                     <p><strong>Security Notice:</strong> If you did not request a password reset, please contact our support team immediately.</p>
                     <br/>

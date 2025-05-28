@@ -17,6 +17,38 @@
   },
   {
     "ContainingType": "CreativePeak.API.Controllers.AuthController",
+    "Method": "Authenticate",
+    "RelativePath": "api/Auth/authenticate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CreativePeak.Core.Models.AuthenticateRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.AuthController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/Auth/change-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CreativePeak.Core.Models.ChangePasswordRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CreativePeak.API.Controllers.AuthController",
     "Method": "ForgotPassword",
     "RelativePath": "api/Auth/forgot-password",
     "HttpMethod": "POST",
@@ -74,22 +106,6 @@
       {
         "Name": "userPostModel",
         "Type": "CreativePeak.Core.PostModels.UserPostModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "CreativePeak.API.Controllers.AuthController",
-    "Method": "ResetPassword",
-    "RelativePath": "api/Auth/reset-password",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "CreativePeak.Core.Models.ResetPasswordRequest",
         "IsRequired": true
       }
     ],
@@ -484,22 +500,6 @@
       {
         "Name": "user",
         "Type": "CreativePeak.Core.PostModels.UserWithoutPasswordPostModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "CreativePeak.API.Controllers.ForgotPasswordController",
-    "Method": "ForgotPassword",
-    "RelativePath": "ForgotPassword",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "CreativePeak.Core.Models.ForgotPasswordRequest",
         "IsRequired": true
       }
     ],
