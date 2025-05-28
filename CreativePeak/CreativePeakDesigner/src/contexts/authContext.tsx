@@ -51,10 +51,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUserName = localStorage.getItem("userName");
-    const storedUserEmail = localStorage.getItem("userEmail");
     const storedUserIdStr = localStorage.getItem("userId");
 
-    if (storedToken && storedUserName && storedUserIdStr && storedUserEmail) {
+    if (storedToken && storedUserName && storedUserIdStr) {
       const tokenExpired = isTokenExpired(storedToken);
 
       if (tokenExpired) {
@@ -63,9 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const storedUserId = parseInt(storedUserIdStr, 10);
         setToken(storedToken);
         setUserName(storedUserName);
-        setUserEmail(storedUserEmail);
         setUserId(storedUserId);
-        setIsLoggedIn(true);
       }
     }
 
@@ -77,10 +74,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("userName", user.fullName);
     localStorage.setItem("userEmail", user.email);
     localStorage.setItem("userId", user.id.toString());
+
     setToken(token);
-    setUserName(userName);
-    setUserEmail(userEmail);
-    setUserId(userId);
+    setUserName(user.fullName);
+    setUserEmail(user.email);
+    setUserId(user.id);
   };
 
   const newLogin = () => {

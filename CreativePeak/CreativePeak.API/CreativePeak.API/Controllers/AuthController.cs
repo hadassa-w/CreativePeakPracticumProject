@@ -170,6 +170,7 @@ namespace CreativePeak.API.Controllers
                 );
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+                await _userService.SendWelcomeEmailAsync(user.Email, user.FullName);
                 return Ok(new { Token = tokenString, User = userNew });
             }
             catch (Exception ex)

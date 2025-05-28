@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CreativePeak.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateWebDB : Migration
+    public partial class Create_WebDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

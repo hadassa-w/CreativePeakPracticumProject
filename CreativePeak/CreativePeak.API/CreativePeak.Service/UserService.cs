@@ -224,28 +224,257 @@ namespace CreativePeak.Service
                     mailMessage.Subject = "Temporary Password - CreativePeak";
 
                     mailMessage.Body = $@"
-                <html>
-                <body>
-                    <h2>Password Reset - CreativePeak Team</h2>
-                    <p>Hello {firstName},</p>
-                    <p>We received a request to reset your password. Here is your temporary password:</p>
-                    <div style='background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0; text-align: center;'>
-                        <strong style='font-size: 24px; color: #512da8; font-family: monospace;'>{temporaryPassword}</strong>
-                    </div>
-                    <p><strong>Instructions:</strong></p>
-                    <ul>
-                        <li>Use this temporary password to log in to your account (valid for 24 hours).</li>
-                        <li>After logging in, we strongly recommend you change your password to a new one.</li>
-                        <li>You can use either your old password or this temporary password to log in.</li>
-                        <li>Once you change your password, this temporary password will no longer work.</li>
-                    </ul>
-                    <p><strong>Security Notice:</strong> If you did not request a password reset, please contact our support team immediately.</p>
-                    <br/>
-                    <p>Best regards,<br/>Creative Peak Team</p>
-                </body>
-                </html>";
+                    <!DOCTYPE html>
+                    <html lang='en'>
+                    <head>
+                        <meta charset='UTF-8'>
+                        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                        <title>Password Reset</title>
+                        <style>
+                            body {{
+                                font-family: Arial, sans-serif;
+                                background-color: #f9f9f9;
+                                margin: 0;
+                                padding: 0;
+                            }}
+                            .email-container {{
+                                max-width: 600px;
+                                margin: 30px auto;
+                                background-color: white;
+                                border-radius: 8px;
+                                box-shadow: 0 0 8px rgba(0,0,0,0.1);
+                                overflow: hidden;
+                            }}
+                            header {{
+                                background-color: #512da8;
+                                color: white;
+                                text-align: center;
+                                padding: 30px 20px;
+                            }}
+                            header .lock-icon {{
+                                font-size: 40px;
+                                margin-bottom: 10px;
+                            }}
+                            main {{
+                                padding: 25px 20px;
+                                color: #333;
+                            }}
+                            .temporary-password {{
+                                background-color: #f5f5f5;
+                                padding: 15px;
+                                border-radius: 5px;
+                                margin: 10px 0;
+                                text-align: center;
+                                font-size: 24px;
+                                font-family: monospace;
+                                color: #512da8;
+                                font-weight: bold;
+                            }}
+                            ul {{
+                                margin-left: 20px;
+                            }}
+                            footer {{
+                                background-color: #f0f0f0;
+                                text-align: center;
+                                padding: 20px;
+                                font-size: 14px;
+                                color: #666;
+                            }}
+                        </style>
+                    </head>
+                    <body>
+                        <div class='email-container'>
+                            <header>
+                                <div class='lock-icon' aria-hidden='true'>🔒</div>
+                                <h1>Password Reset Requested</h1>
+                                <p>CreativePeak - Your Design Hub</p>
+                            </header>
+                            <main>
+                                <p>Hello {firstName},</p>
+                                <p>We have received a request to reset your password. Below you will find your temporary password. Please use it to log in and change your password immediately for security reasons.</p>
+                                <div class='temporary-password' aria-live='polite' aria-atomic='true'>{temporaryPassword}</div>
+                                <p><strong>Important Instructions</strong></p>
+                                <ul>
+                                    <li>Use the temporary password above only once to log in.</li>
+                                    <li>Change your password immediately after login to secure your account.</li>
+                                    <li>If you did not request this reset, please contact our support team immediately.</li>
+                                    <li>Keep your password confidential and do not share it with anyone.</li>
+                                </ul>
+                                <p><strong>Security Notice:</strong> This temporary password will expire within 24 hours. After that, you will need to request a new password reset if necessary.</p>
+                            </main>
+                            <footer>
+                                <p>Best regards,<br/>The CreativePeak Team</p>
+                                <p>CreativePeak - Inspiring creativity, one design at a time.</p>
+                            </footer>
+                        </div>
+                    </body>
+                    </html>";
 
                     mailMessage.IsBodyHtml = true;
+
+                    await client.SendMailAsync(mailMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending email: {ex.Message}");
+                throw;
+            }
+        }
+        public async Task SendWelcomeEmailAsync(string email, string firstName)
+        {
+            try
+            {
+                var gmailKey = Environment.GetEnvironmentVariable("Gmail_key");
+
+                using (var client = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    client.EnableSsl = true;
+                    client.Credentials = new NetworkCredential("wh.33681@gmail.com", gmailKey);
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("wh.33681@gmail.com", "CreativePeak"),
+                        Subject = "Welcome to CreativePeak!",
+                        IsBodyHtml = true,
+                        Body = $@"
+                        <!DOCTYPE html>
+                        <html lang='en' dir='ltr'>
+                        <head>
+                            <meta charset='UTF-8'>
+                            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                            <title>Welcome to CreativePeak</title>
+                            <style>
+                                body {{
+                                    font-family: Arial, sans-serif;
+                                    direction: ltr;
+                                    background-color: #f6f6f6;
+                                    margin: 0;
+                                    padding: 0;
+                                }}
+                                .email-container {{
+                                    max-width: 600px;
+                                    margin: auto;
+                                    background-color: #ffffff;
+                                    padding: 40px;
+                                    border-radius: 10px;
+                                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                                }}
+                                .header {{
+                                    background-color: #512da8;
+                                    color: white;
+                                    padding: 20px;
+                                    border-radius: 10px 10px 0 0;
+                                    text-align: center;
+                                }}
+                                .logo {{
+                                    font-size: 24px;
+                                    font-weight: bold;
+                                }}
+                                .welcome-title {{
+                                    font-size: 28px;
+                                    margin-top: 10px;
+                                }}
+                                .content {{
+                                    padding: 30px;
+                                }}
+                                .greeting {{
+                                    font-size: 20px;
+                                    font-weight: bold;
+                                    margin-bottom: 15px;
+                                }}
+                                .excitement {{
+                                    font-size: 18px;
+                                    color: #512da8;
+                                    margin-bottom: 20px;
+                                }}
+                                .main-text {{
+                                    font-size: 16px;
+                                    margin-bottom: 20px;
+                                    line-height: 1.6;
+                                }}
+                                .tips-section {{
+                                    margin-top: 20px;
+                                }}
+                                .tips-title {{
+                                    font-weight: bold;
+                                    font-size: 16px;
+                                    margin-bottom: 10px;
+                                }}
+                                .tips-list {{
+                                    padding-left: 20px;
+                                }}
+                                .tips-list li {{
+                                    margin-bottom: 8px;
+                                }}
+                                .divider {{
+                                    border-top: 1px solid #ddd;
+                                    margin: 30px 0;
+                                }}
+                                .support-section {{
+                                    font-size: 16px;
+                                    color: #333;
+                                }}
+                                .footer {{
+                                    text-align: center;
+                                    margin-top: 30px;
+                                }}
+                                .signature {{
+                                    font-size: 16px;
+                                    font-weight: bold;
+                                }}
+                                .team-name {{
+                                    font-size: 14px;
+                                    color: #888;
+                                }}
+                            </style>
+                        </head>
+                        <body>
+                            <div class='email-container'>
+                                <div class='header'>
+                                    <div class='logo'>CreativePeak</div>
+                                    <div class='welcome-title'>Welcome!</div>
+                                </div>
+        
+                                <div class='content'>
+                                    <div class='greeting'>Hello {firstName},</div>
+            
+                                    <div class='excitement'>
+                                        <strong>We're excited to have you join us! 🎉</strong><br/>
+                                        CreativePeak is your space to showcase, discover, and grow as a creative professional.
+                                    </div>
+            
+                                    <div class='main-text'>
+                                        Here you can connect with creators, stay updated with the latest trends, and present your work to a wide audience of professionals.
+                                    </div>
+            
+                                    <div class='tips-section'>
+                                        <div class='tips-title'>A few tips to get started:</div>
+                                        <ul class='tips-list'>
+                                            <li>Explore inspiring projects and connect with other creatives</li>
+                                            <li>Update your profile so others can get to know you better</li>
+                                            <li>Start uploading your projects and creations</li>
+                                        </ul>
+                                    </div>
+            
+                                    <div class='divider'></div>
+            
+                                    <div class='support-section'>
+                                        <strong>Have questions?</strong><br/>
+                                        Our support team is here for you and ready to help anytime! 💬
+                                    </div>
+                                </div>
+        
+                                <div class='footer'>
+                                    <div class='signature'>Enjoy your journey!</div>
+                                    <div class='team-name'>The CreativePeak Team</div>
+                                </div>
+                            </div>
+                        </body>
+                        </html>"
+                    };
+
+                    mailMessage.To.Add(email);
 
                     await client.SendMailAsync(mailMessage);
                 }
