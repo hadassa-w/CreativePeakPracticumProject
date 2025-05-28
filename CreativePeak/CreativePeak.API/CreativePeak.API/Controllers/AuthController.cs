@@ -22,12 +22,12 @@ namespace CreativePeak.API.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAuthRepository _authRepository;
         private readonly DataContext _context;
-        private PasswordService passwordService = new PasswordService();
+        private PasswordService _passwordService;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
 
-        public AuthController(IConfiguration configuration, IAuthRepository authRepository, IUserService userService, ITokenService tokenService, IMapper mapper, DataContext dataContext)
+        public AuthController(IConfiguration configuration, IAuthRepository authRepository, IUserService userService, ITokenService tokenService,PasswordService passwordService, IMapper mapper, DataContext dataContext)
         {
             _configuration = configuration;
             _authRepository = authRepository;
@@ -35,6 +35,7 @@ namespace CreativePeak.API.Controllers
             _tokenService = tokenService;
             _mapper = mapper;
             _context = dataContext;
+            _passwordService = passwordService;
         }
 
         [HttpPost("Login")]
@@ -47,7 +48,7 @@ namespace CreativePeak.API.Controllers
                 return Unauthorized("The user not found.");
             }
 
-            bool isPasswordValid = passwordService.VerifyPassword(user.Password, loginModel.Password);
+            bool isPasswordValid = _passwordService.VerifyPassword(user.Password, loginModel.Password);
 
             if (!isPasswordValid)
             {
@@ -92,7 +93,7 @@ namespace CreativePeak.API.Controllers
                 return Unauthorized("The user not found.");
             }
 
-            bool isPasswordValid = passwordService.VerifyPassword(user.Password, loginModel.Password);
+            bool isPasswordValid = _passwordService.VerifyPassword(user.Password, loginModel.Password);
 
             if (!isPasswordValid)
             {

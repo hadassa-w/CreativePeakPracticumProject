@@ -7,7 +7,6 @@ using CreativePeak.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace CreativePeak.API.Controllers
 {

@@ -139,7 +139,6 @@ namespace CreativePeak.API.Controllers
             return NoContent();
         }
 
-
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)

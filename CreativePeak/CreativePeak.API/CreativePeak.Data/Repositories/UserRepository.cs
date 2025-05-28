@@ -61,9 +61,6 @@ namespace CreativePeak.Data.Repositories
                 .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         }
 
-        // הסרת המתודה לחיפוש לפי טוקן - לא נדרש יותר
-        // GetByPasswordResetTokenAsync - מוסר
-
         public async Task UpdateAsync(User user)
         {
             _context.Users.Update(user);

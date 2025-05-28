@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CreativePeak.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250528092919_updateDB_password")]
-    partial class updateDB_password
+    [Migration("20250528162556_CreateWebDB")]
+    partial class CreateWebDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

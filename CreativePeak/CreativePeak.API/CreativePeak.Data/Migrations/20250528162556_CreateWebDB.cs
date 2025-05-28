@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CreativePeak.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Create_WebDB : Migration
+    public partial class CreateWebDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,9 +36,9 @@ namespace CreativePeak.Data.Migrations
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    RefreshToken = table.Column<string>(type: "longtext", nullable: true)
+                    TempPassword = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    RefreshTokenExpiry = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    TempPasswordExpiry = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {

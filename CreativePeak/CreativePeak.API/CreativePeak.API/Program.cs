@@ -13,7 +13,6 @@ using System.Text;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Amazon.S3;
-using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 
@@ -38,7 +37,7 @@ builder.Configuration["Gmail:GmailKey"] = Environment.GetEnvironmentVariable("Gm
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 // חיבור ל DB
 builder.Services.AddDbContext<DataContext>(options =>
@@ -53,6 +52,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles; // �� ReferenceHandler.Preserve
     });
+builder.Services.AddMvc();
 
 builder.Services.AddCors(options =>
 {
@@ -137,13 +137,15 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddSingleton<PasswordService>();
 
-
-
 //app.UseCors("MyPolicy");
 //builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
 //{
 //    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 //}));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -164,10 +166,6 @@ builder.Services.AddAuthentication(options =>
             RoleClaimType = ClaimTypes.Role
         };
     });
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<DataContext>()
-    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 

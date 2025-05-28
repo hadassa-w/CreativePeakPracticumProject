@@ -27,11 +27,11 @@ namespace CreativePeak.Data.Repositories
         }
         public async Task<User> CreateUserAsync(User user)
         {
-            // אתחול שדות חובה
             user.Password = PasswordService.HashPassword(user.Password);
+            user.IsActive = true;
             user.CreatedAt = DateTime.UtcNow;
             user.UpdatedAt = DateTime.UtcNow;
-            user.Role = "Graphic designer"; // או כל ערך ברירת מחדל אחר שתרצה
+            user.Role = "Graphic designer";
 
             await _context.Users.AddAsync(user);
 
