@@ -176,6 +176,7 @@ export default function ForgotPassword() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+    const [generalError, setGeneralError] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const { toLogin } = useAuth();
 
@@ -200,15 +201,14 @@ export default function ForgotPassword() {
             await axios.post("https://creativepeak-api.onrender.com/api/Auth/forgot-password", {
                 email
             });
-            setMessage("Reset link sent! Check your email for the temporary password.");
+            setMessage("Temporary password sent! Check your email for the temporary password.");
             setStep('tempPassword');
         } catch (err: any) {
             console.error("Full error:", err);
             if (err.response) {
-                console.log("Server response:", err.response.data);
-                setError(err.response.data?.message || "Something went wrong. Please try again.");
+                setGeneralError("The email address does not exist in the system.");
             } else {
-                setError("Something went wrong. Please try again.");
+                setGeneralError("An error occurred. Please try again.");
             }
         } finally {
             setLoading(false);
@@ -230,7 +230,7 @@ export default function ForgotPassword() {
                 email,
                 "password": tempPassword
             });
-            
+
             const token = response.data.accessToken;
             const user = response.data.user;
 
@@ -340,6 +340,21 @@ export default function ForgotPassword() {
                                 sx={{ mb: 3 }}
                             />
                         </Box>
+
+                        {generalError && (
+                            <Box sx={{
+                                p: 2,
+                                mb: 3,
+                                backgroundColor: "rgba(244, 67, 54, 0.05)",
+                                borderRadius: "8px",
+                                border: "1px solid rgba(244, 67, 54, 0.2)"
+                            }}>
+                                <Typography color="error" variant="body2" sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1 }}>
+                                    <Box component="span" sx={{ fontSize: "20px" }}>⚠️</Box>
+                                    {generalError}
+                                </Typography>
+                            </Box>
+                        )}
 
                         <StyledButton
                             variant="contained"
