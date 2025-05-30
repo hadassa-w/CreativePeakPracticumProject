@@ -77,15 +77,12 @@ namespace CreativePeak.Service
                 var user = await _userRepository.GetByEmailAsync(email);
                 if (user == null)
                 {
-                    // החזרת true גם אם המשתמש לא קיים (מסיבות אבטחה)
                     return true;
                 }
 
                 // יצירת סיסמה זמנית
                 var temporaryPassword = GenerateTemporaryPassword();
                 Console.WriteLine(temporaryPassword);
-                // עדכון המשתמש עם הסיסמה הזמנית (מוצפנת)
-                // השארת הסיסמה הישנה כגיבוי עד שהמשתמש יחליף אותה
                 user.TempPassword = _passwordService.HashPassword(temporaryPassword);
                 user.TempPasswordExpiry = DateTime.UtcNow.AddHours(24); // תוקף של 24 שעות
                 user.UpdatedAt = DateTime.UtcNow;
@@ -105,7 +102,6 @@ namespace CreativePeak.Service
             }
         }
 
-        // פונקציה חדשה להתחברות עם סיסמה זמנית או רגילה
         public async Task<User?> AuthenticateAsync(string email, string password)
         {
             try

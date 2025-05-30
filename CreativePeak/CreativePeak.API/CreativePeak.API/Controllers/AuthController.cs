@@ -187,6 +187,12 @@ namespace CreativePeak.API.Controllers
                 return BadRequest(new { message = "Email is required" });
             }
 
+            var user = await _userService.GetUserByEmailAsync(request.Email);
+            if (user == null)
+            {
+                return BadRequest(new { message = "Invalid email or password" });
+            }
+
             var result = await _userService.ForgotPasswordAsync(request.Email);
             if (result)
             {
