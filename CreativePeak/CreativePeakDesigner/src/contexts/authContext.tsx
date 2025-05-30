@@ -63,6 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken(storedToken);
         setUserName(storedUserName);
         setUserId(storedUserId);
+        setIsLoggedIn(true);
       }
     }
 

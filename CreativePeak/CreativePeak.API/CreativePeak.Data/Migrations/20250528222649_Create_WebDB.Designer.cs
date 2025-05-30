@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CreativePeak.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250528201428_Create_WebDB")]
+    [Migration("20250528222649_Create_WebDB")]
     partial class Create_WebDB
     {
         /// <inheritdoc />

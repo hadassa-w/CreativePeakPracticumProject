@@ -318,7 +318,7 @@ export default function ForgotPassword() {
                 {step === 'email' ? (
                     <>
                         <Typography variant="body1" sx={{ color: "#555", mb: 4, fontSize: "16px" }}>
-                            Enter the email address registered in the system and we will send you a link to reset your password.
+                            Enter the email address registered in the system and we will send you a new temporary password.
                         </Typography>
 
                         <Box onKeyPress={handleKeyPress}>
@@ -362,7 +362,7 @@ export default function ForgotPassword() {
                                     Sending...
                                 </>
                             ) : (
-                                "Send Reset Link"
+                                "Send temporary password"
                             )}
                         </StyledButton>
                     </>

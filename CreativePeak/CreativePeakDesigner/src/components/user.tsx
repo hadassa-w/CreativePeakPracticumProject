@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Container, Typography, Box, Button, TextField, CircularProgress, Avatar, Divider, Card, Switch, FormControlLabel } from "@mui/material";
-import { EditOutlined, SaveOutlined, PersonOutline, EmailOutlined, PhoneOutlined, HomeOutlined, ArrowBackOutlined, ToggleOnOutlined } from "@mui/icons-material";
+import { Container, Typography, Box, Button, TextField, CircularProgress, Avatar, Divider, Card } from "@mui/material";
+import { EditOutlined, SaveOutlined, PersonOutline, EmailOutlined, PhoneOutlined, HomeOutlined, ArrowBackOutlined } from "@mui/icons-material";
 import axios from "axios";
 import User from "../models/user";
 import { useAuth } from "../contexts/authContext";
@@ -196,7 +196,7 @@ export default function Profile() {
                         sx={{
                             height: 150,
                             p: 3,
-                            pb: 5,
+                            // pb: 5,
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
@@ -315,46 +315,6 @@ export default function Profile() {
                                             }
                                         }}
                                     />
-
-                                    {/* IsActive Switch */}
-                                    <Box sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        p: 2,
-                                        borderRadius: 2,
-                                        border: "1px solid #e0e0e0",
-                                        "&:hover": { borderColor: "#9c27b0" }
-                                    }}>
-                                        <ToggleOnOutlined sx={{ mr: 2, color: "#673AB7" }} />
-                                        <FormControlLabel
-                                            control={
-                                                <Switch
-                                                    checked={formData.isActive}
-                                                    onChange={handleInputChange}
-                                                    name="isActive"
-                                                    sx={{
-                                                        '& .MuiSwitch-switchBase.Mui-checked': {
-                                                            color: '#673AB7',
-                                                        },
-                                                        '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                                                            backgroundColor: '#673AB7',
-                                                        },
-                                                    }}
-                                                />
-                                            }
-                                            label={
-                                                <Box>
-                                                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                                                        Account Status
-                                                    </Typography>
-                                                    <Typography variant="body2" sx={{ color: "#666" }}>
-                                                        {formData.isActive ? "Active - Account is enabled" : "Inactive - Account is disabled"}
-                                                    </Typography>
-                                                </Box>
-                                            }
-                                            sx={{ margin: 0, width: "100%" }}
-                                        />
-                                    </Box>
 
                                     {/* Action buttons */}
                                     <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
@@ -498,34 +458,6 @@ export default function Profile() {
                                         </Box>
                                     </>
                                 )}
-
-                                {/* Account Status */}
-                                <Divider sx={{ my: 2 }} />
-                                <Box sx={{ display: "flex", mb: 1, alignItems: "center" }}>
-                                    <Box sx={{
-                                        bgcolor: user?.isActive ? "rgba(76, 175, 80, 0.1)" : "rgba(244, 67, 54, 0.1)",
-                                        borderRadius: "50%",
-                                        p: 1.5,
-                                        display: "flex",
-                                        mr: 2
-                                    }}>
-                                        <ToggleOnOutlined sx={{ color: user?.isActive ? "#4CAF50" : "#F44336" }} />
-                                    </Box>
-                                    <Box sx={{ textAlign: "left" }}>
-                                        <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
-                                            Account Status
-                                        </Typography>
-                                        <Typography
-                                            variant="h6"
-                                            sx={{
-                                                fontWeight: 600,
-                                                color: user?.isActive ? "#4CAF50" : "#F44336"
-                                            }}
-                                        >
-                                            {user?.isActive ? "Active" : "Inactive"}
-                                        </Typography>
-                                    </Box>
-                                </Box>
 
                                 {/* Edit button */}
                                 <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
