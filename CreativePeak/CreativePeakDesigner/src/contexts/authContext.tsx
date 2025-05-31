@@ -92,10 +92,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("userName", user.fullName);
     localStorage.setItem("userEmail", user.email);
     localStorage.setItem("userId", user.id.toString());
+
     setToken(token);
-    setUserName(userName);
-    setUserEmail(userEmail);
-    setUserId(userId);
+    setUserName(user.fullName);
+    setUserEmail(user.email);
+    setUserId(user.id);
     setIsLoggedIn(true);
   };
 
@@ -104,6 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("userName");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userId");
+    
     setToken(null);
     setUserName(null);
     setUserEmail(null);
