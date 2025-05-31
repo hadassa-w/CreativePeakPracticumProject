@@ -59,7 +59,7 @@ const UploadProfolio = () => {
             })
             .catch((error) => {
                 console.error("Error while retrieving data:", error)
-                setSnackbarMessage("❌ Error loading projects. Please try again later.")
+                setSnackbarMessage("❌ Error loading projects and categories. Please try again later.")
                 setSnackbarSeverity("error")
                 setSnackbarOpen(true)
             })
@@ -69,6 +69,36 @@ const UploadProfolio = () => {
         setIsGeneratingPortfolio(true)
 
         try {
+            Promise.all([
+                axios.get(`https://creativepeak-api.onrender.com/api/Image`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                ),
+                axios.get(`https://creativepeak-api.onrender.com/api/Category`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                ),
+            ])
+                .then(([imagesResponse, categoriesResponse]) => {
+                    const filteredImages = imagesResponse.data.filter((image: Image) => image.user.id == userId)
+                    const filteredCategories = categoriesResponse.data.filter((category: Category) => category.userId == userId)
+
+                    setImages(filteredImages)
+                    setCategories(filteredCategories)
+                })
+                .catch((error) => {
+                    console.error("Error while retrieving data:", error)
+                    setSnackbarMessage("❌ Error loading. Please try again later.")
+                    setSnackbarSeverity("error")
+                    setSnackbarOpen(true)
+                })
+
             // Get user information
             const userResponse = await axios.get(`https://creativepeak-api.onrender.com/api/DesignerDetails`,
                 {
