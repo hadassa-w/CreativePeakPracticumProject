@@ -121,7 +121,7 @@ export class ReportsComponent implements OnInit {
   }
   
   getTotalUsers(): number {
-    return this.reportData.reduce((sum, data) => sum + data.newUsers, 0);
+    return this.reportData.reduce((sum, data) => sum + data.newUsers-1, 0);
   }
   
   getTotalPortfolios(): number {

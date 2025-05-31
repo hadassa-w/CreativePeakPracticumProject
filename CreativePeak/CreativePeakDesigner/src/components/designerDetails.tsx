@@ -26,7 +26,7 @@ function DesignerDetailsForm() {
   const [isEditing, setIsEditing] = useState(false);
   const [isFirstVisit, setIsFirstVisit] = useState(false); // Track if it's first visit
   const { userId, token } = useAuth();
-  const navigate = useNavigate(); // Add navigate hook
+  const navigate = useNavigate();
 
   // AI Description Dialog states
   const [aiDescriptionOpen, setAiDescriptionOpen] = useState(false);
@@ -180,8 +180,8 @@ function DesignerDetailsForm() {
       // Navigate to HOME if it's first visit, otherwise stay on current page
       if (isFirstVisit) {
         setTimeout(() => {
-          navigate('/'); // Navigate to HOME page after first time setup
-        }, 1500); // Small delay to let user see the success message
+          navigate('/welcome');
+        }, 2000);
       }
 
     } catch (error) {
