@@ -27,7 +27,7 @@ namespace CreativePeak.API.Controllers
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
 
-        public AuthController(IConfiguration configuration, IAuthRepository authRepository, IUserService userService, ITokenService tokenService,PasswordService passwordService, IMapper mapper, DataContext dataContext)
+        public AuthController(IConfiguration configuration, IAuthRepository authRepository, IUserService userService, ITokenService tokenService, PasswordService passwordService, IMapper mapper, DataContext dataContext)
         {
             _configuration = configuration;
             _authRepository = authRepository;
@@ -41,7 +41,7 @@ namespace CreativePeak.API.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginModel.UserName);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginModel.UserName && u.Role != "Main admin");
 
             if (user == null)
             {
@@ -69,16 +69,12 @@ namespace CreativePeak.API.Controllers
 
             var userNew = _mapper.Map<UserDTO>(user);
 
-            var accessToken = _tokenService.CreateAccessToken(user);
-            //var refreshToken = _tokenService.CreateRefreshToken();
-            //user.RefreshToken = refreshToken;
-            //user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            var token = _tokenService.CreateAccessToken(user);
             await _userService.UpdateAsync(user.Id, user);
 
             return Ok(new
             {
-                AccessToken = accessToken,
-                //RefreshToken = refreshToken,
+                Token = token,
                 User = userNew
             });
         }
@@ -115,16 +111,12 @@ namespace CreativePeak.API.Controllers
 
             var userNew = _mapper.Map<UserDTO>(user);
 
-            var accessToken = _tokenService.CreateAccessToken(user);
-            //var refreshToken = _tokenService.CreateRefreshToken();
-            //user.RefreshToken = refreshToken;
-            //user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            var token = _tokenService.CreateAccessToken(user);
             await _userService.UpdateAsync(user.Id, user);
 
             return Ok(new
             {
-                AccessToken = accessToken,
-                //RefreshToken = refreshToken,
+                Token = token,
                 User = userNew
             });
         }
@@ -226,21 +218,16 @@ namespace CreativePeak.API.Controllers
 
             var userNew = _mapper.Map<UserDTO>(user);
 
-            var accessToken = _tokenService.CreateAccessToken(user);
-            //var refreshToken = _tokenService.CreateRefreshToken();
-            //user.RefreshToken = refreshToken;
-            //user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            var token = _tokenService.CreateAccessToken(user);
             await _userService.UpdateAsync(user.Id, user);
 
             return Ok(new
             {
-                AccessToken = accessToken,
-                //RefreshToken = refreshToken,
+                Token = token,
                 User = userNew
             });
         }
 
-        // 2. אנדפוינט לשינוי סיסמה (מבטל את הסיסמה הזמנית)
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
@@ -249,7 +236,6 @@ namespace CreativePeak.API.Controllers
                 return BadRequest(new { message = "Email and new password are required" });
             }
 
-            // בדיקת תקינות הסיסמה החדשה (לפי הדרישות שלך)
             if (request.NewPassword.Length < 6)
             {
                 return BadRequest(new { message = "Password must be at least 6 characters long" });

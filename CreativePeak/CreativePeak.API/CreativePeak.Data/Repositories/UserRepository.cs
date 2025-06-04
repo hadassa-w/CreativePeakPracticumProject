@@ -58,7 +58,7 @@ namespace CreativePeak.Data.Repositories
                 return null;
 
             return await _context.Users
-                .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && u.Role != "Main admin");
         }
 
         public async Task UpdateAsync(User user)
@@ -67,7 +67,7 @@ namespace CreativePeak.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        // מתודה חדשה לניקוי סיסמאות זמניות שפג תוקפן
+        // מתודה לניקוי סיסמאות זמניות שפג תוקפן
         public async Task CleanExpiredTemporaryPasswordsAsync()
         {
             var expiredUsers = await _context.Users
