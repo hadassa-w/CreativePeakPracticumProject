@@ -231,7 +231,7 @@ export default function ForgotPassword() {
                 "password": tempPassword
             });
 
-            const token = response.data.accessToken;
+            const token = response.data.token;
             const user = response.data.user;
 
             toLogin(token, user);

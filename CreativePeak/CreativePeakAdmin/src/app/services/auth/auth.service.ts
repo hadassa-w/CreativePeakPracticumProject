@@ -25,11 +25,11 @@ export class AuthService {
     return this._userName.value;
   }
 
-  login(username: string, accessToken: string): boolean {
+  login(username: string, token: string): boolean {
     this._isLoggedIn.next(true);
     this._userName.next(username);
     localStorage.setItem('userName', username);
-    localStorage.setItem('token', accessToken);
+    localStorage.setItem('token', token);
     return true;
   }
 

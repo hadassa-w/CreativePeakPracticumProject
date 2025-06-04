@@ -202,7 +202,7 @@ function LogIn() {
         Password: password,
       });
 
-      const token = response.data.accessToken;
+      const token = response.data.token;
       const user = response.data.user;
 
       login(token, user);

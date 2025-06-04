@@ -67,10 +67,10 @@ loginForm: FormGroup;
         Password: password
       }).toPromise();
 
-      const accessToken = response.accessToken;
+      const token = response.token;
       const fullName = response.user.fullName;
 
-      this.authService.login(fullName,accessToken);
+      this.authService.login(fullName,token);
       
       this.fieldErrors = {};
       this.generalError = '';

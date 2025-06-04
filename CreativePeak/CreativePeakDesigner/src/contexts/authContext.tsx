@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return Date.now() >= expiry * 1000;
     } catch (error) {
       console.error("Failed to decode token:", error);
-      return true; // אם יש שגיאה, עדיף להניח שהטוקן לא תקף
+      return true;
     }
   };
 
