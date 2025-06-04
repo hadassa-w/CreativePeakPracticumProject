@@ -55,19 +55,19 @@ export class ReportsComponent implements OnInit {
       }
     }
   };
-  
+
   isLoading: boolean = false;
   reportData: ReportData[] = [];
-  
+
   constructor(
     private reportService: ReportsService,
     private snackBar: MatSnackBar
   ) { }
-  
+
   ngOnInit() {
     this.loadReports();
   }
-  
+
   loadReports(): void {
     this.isLoading = true;
     this.reportService.getMonthlyReport().subscribe({
@@ -83,12 +83,12 @@ export class ReportsComponent implements OnInit {
       }
     });
   }
-  
+
   setupChart(data: ReportData[]): void {
     const labels = data.map(d => d.month);
     const userData = data.map(d => d.newUsers);
     const portfolioData = data.map(d => d.newPortfolios);
-    
+
     this.chartData = {
       labels,
       datasets: [
@@ -111,19 +111,19 @@ export class ReportsComponent implements OnInit {
       ]
     };
   }
-  
+
   refreshReports(): void {
     this.loadReports();
   }
-  
+
   changeChartType(type: ChartType): void {
     this.chartType = type;
   }
-  
+
   getTotalUsers(): number {
-    return this.reportData.reduce((sum, data) => sum + data.newUsers-1, 0);
+    return this.reportData.reduce((sum, data) => sum + data.newUsers, 0);
   }
-  
+
   getTotalPortfolios(): number {
     return this.reportData.reduce((sum, data) => sum + data.newPortfolios, 0);
   }
