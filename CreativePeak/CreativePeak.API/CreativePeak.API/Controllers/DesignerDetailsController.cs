@@ -31,6 +31,11 @@ namespace CreativePeak.API.Controllers
         public async Task<ActionResult> Get()
         {
             var list = await _designerDetailsService.GetAllAsync();
+            foreach (var dto in list)
+            {
+                var newDTO = _mapper.Map<DesignerDetails>(dto);
+                _designerDetailsRepository.UpdateYearsExperience(newDTO);
+            }
             var listDTO = _mapper.Map<IEnumerable<NewDesignerDetailsDTO>>(list);
             return Ok(listDTO);
         }
@@ -40,7 +45,9 @@ namespace CreativePeak.API.Controllers
         public async Task<ActionResult> Get(int id)
         {
             var designerDetails = await _designerDetailsService.GetByIdAsync(id);
-            var designerDetailsDTO = _mapper.Map<DesignerDetailsDTO>(designerDetails);
+            var newDesignerDetails = _designerDetailsRepository.UpdateYearsExperience(designerDetails);
+            var designerDetailsDTO = _mapper.Map<DesignerDetailsDTO>(newDesignerDetails);
+
             return Ok(designerDetailsDTO);
         }
 
@@ -63,7 +70,6 @@ namespace CreativePeak.API.Controllers
                 UserId = designerDetails.UserId
             };
 
-            // ודא שהמשתמש קיים לפני הוספת הפרטים
             var userExists = await _designerDetailsRepository.UserExists(designerDetails.UserId);
             if (!userExists)
             {
@@ -95,7 +101,10 @@ namespace CreativePeak.API.Controllers
             existingDesignerDetails.Description = designerDetails.Description;
             existingDesignerDetails.UpdatedAt = DateTime.UtcNow;
 
-            await _designerDetailsService.UpdateAsync(id, existingDesignerDetails);
+            var newDesignerDetails = _designerDetailsRepository.UpdateYearsExperience(existingDesignerDetails);
+            
+            await _designerDetailsService.UpdateAsync(id, newDesignerDetails);
+
             return NoContent();
         }
 

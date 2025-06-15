@@ -16,5 +16,7 @@ namespace CreativePeak.Core.IRepositories
         DesignerDetails Update(DesignerDetails designerDetails);
         void Delete(DesignerDetails designerDetails);
 
+        DesignerDetails UpdateYearsExperience(DesignerDetails designerDetails);
+
     }
 }

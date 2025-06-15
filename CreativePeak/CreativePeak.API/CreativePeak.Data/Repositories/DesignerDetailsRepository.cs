@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CreativePeak.Core.DTOs;
 
 namespace CreativePeak.Data.Repositories
 {
@@ -54,5 +55,23 @@ namespace CreativePeak.Data.Repositories
             return designerDetails;
         }
 
+        public DesignerDetails UpdateYearsExperience(DesignerDetails designerDetails)
+        {
+            var now = DateTime.Now;
+            int yearsPassed = now.Year - designerDetails.UpdatedAt.Year;
+
+            if (now.Month < designerDetails.UpdatedAt.Month ||
+            (now.Month == designerDetails.UpdatedAt.Month && now.Day < designerDetails.UpdatedAt.Day))
+            {
+                yearsPassed--;
+            }
+
+            designerDetails.YearsExperience += yearsPassed;
+            designerDetails.UpdatedAt = now;
+
+            _dbSet.Update(designerDetails);
+            _context.SaveChanges();
+            return designerDetails;
+        }
     }
 }
