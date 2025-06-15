@@ -13,8 +13,10 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import StarIcon from "@mui/icons-material/Star";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import "../css/home.css";
+import { useAuth } from "../contexts/authContext";
+import { useEffect, useState } from "react";
 
 // עיצוב
 const HomeWrapper = styled(Container)({
@@ -84,7 +86,6 @@ const InfoCard = styled(Paper)({
     }
 });
 
-// כרטיס פיצ'ר חדש
 const FeatureCard = styled(Box)({
     display: "flex",
     alignItems: "flex-start",
@@ -275,6 +276,17 @@ const PopularBadge = styled(Box)({
 
 function Home() {
     const navigate = useNavigate();
+    const { isLoggedIn, isLoading } = useAuth();
+    const [shouldRedirect, setShouldRedirect] = useState(false);
+
+    useEffect(() => {
+        if (!isLoading && isLoggedIn) {
+            setShouldRedirect(true);
+        }
+    }, [isLoading, isLoggedIn]);
+
+    if (isLoading) return null;
+    if (shouldRedirect) return <Navigate to="/welcome" replace />;
 
     return (
         <HomeWrapper>
@@ -352,7 +364,7 @@ function Home() {
                                         </Box>
                                     </FeatureCard>
                                 </Grid>
-                                
+
                                 <Grid item xs={12} md={6}>
                                     <FeatureCard>
                                         <CreateIcon sx={{ color: "#7E57C2", fontSize: 28 }} />
@@ -366,7 +378,7 @@ function Home() {
                                         </Box>
                                     </FeatureCard>
                                 </Grid>
-                                
+
                                 <Grid item xs={12} md={6}>
                                     <FeatureCard>
                                         <BusinessIcon sx={{ color: "#7E57C2", fontSize: 28 }} />
@@ -380,7 +392,7 @@ function Home() {
                                         </Box>
                                     </FeatureCard>
                                 </Grid>
-                                
+
                                 <Grid item xs={12} md={6}>
                                     <FeatureCard>
                                         <MonetizationOnIcon sx={{ color: "#7E57C2", fontSize: 28 }} />
@@ -401,18 +413,18 @@ function Home() {
 
                 {/* סטטיסטיקות */}
                 <Box sx={{ mt: 4 }}>
-                    <Typography 
-                        variant="h4" 
-                        sx={{ 
-                            textAlign: "center", 
-                            mb: 5, 
-                            fontWeight: "bold", 
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            textAlign: "center",
+                            mb: 5,
+                            fontWeight: "bold",
                             color: "#512da8"
                         }}
                     >
                         Join Our Growing Community
                     </Typography>
-                    
+
                     <Grid container spacing={4}>
                         <Grid item xs={12} sm={4}>
                             <StatCard>
@@ -425,7 +437,7 @@ function Home() {
                                 </Typography>
                             </StatCard>
                         </Grid>
-                        
+
                         <Grid item xs={12} sm={4}>
                             <StatCard>
                                 <BusinessIcon sx={{ fontSize: 50, color: "#7E57C2", mb: 2 }} />
@@ -437,7 +449,7 @@ function Home() {
                                 </Typography>
                             </StatCard>
                         </Grid>
-                        
+
                         <Grid item xs={12} sm={4}>
                             <StatCard>
                                 <WorkIcon sx={{ fontSize: 50, color: "#7E57C2", mb: 2 }} />
@@ -454,19 +466,19 @@ function Home() {
 
                 {/* איך זה עובד */}
                 <Box sx={{ mt: 5 }}>
-                    <Typography 
-                        variant="h4" 
-                        sx={{ 
-                            textAlign: "center", 
-                            mb: 5, 
-                            fontWeight: "bold", 
-                            color: "#512da8" 
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            textAlign: "center",
+                            mb: 5,
+                            fontWeight: "bold",
+                            color: "#512da8"
                         }}
                     >
                         <HelpOutlineIcon sx={{ mr: 1, verticalAlign: "middle" }} />
                         How It Works
                     </Typography>
-                    
+
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={4}>
                             <HowItWorksCard>
@@ -481,7 +493,7 @@ function Home() {
                                 </Box>
                             </HowItWorksCard>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={4}>
                             <HowItWorksCard>
                                 <StepNumber>2</StepNumber>
@@ -495,7 +507,7 @@ function Home() {
                                 </Box>
                             </HowItWorksCard>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={4}>
                             <HowItWorksCard>
                                 <StepNumber>3</StepNumber>
@@ -514,19 +526,19 @@ function Home() {
 
                 {/* מחירון */}
                 <Box sx={{ mt: 5 }}>
-                    <Typography 
-                        variant="h4" 
-                        sx={{ 
-                            textAlign: "center", 
-                            mb: 5, 
-                            fontWeight: "bold", 
-                            color: "#512da8" 
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            textAlign: "center",
+                            mb: 5,
+                            fontWeight: "bold",
+                            color: "#512da8"
                         }}
                     >
                         <MonetizationOnIcon sx={{ mr: 1, verticalAlign: "middle" }} />
                         Pricing Plans
                     </Typography>
-                    
+
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={4}>
                             <PricingCard>
@@ -551,11 +563,11 @@ function Home() {
                                         <Typography variant="body2">Basic analytics</Typography>
                                     </Box>
                                 </Box>
-                                <Button 
-                                    variant="contained" 
-                                    sx={{ 
-                                        mt: 3, 
-                                        backgroundColor: "#4CAF50", 
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        mt: 3,
+                                        backgroundColor: "#4CAF50",
                                         "&:hover": { backgroundColor: "#43A047" }
                                     }}
                                     fullWidth
@@ -565,7 +577,7 @@ function Home() {
                                 </Button>
                             </PricingCard>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={4}>
                             <PricingCard sx={{ position: "relative" }}>
                                 <PopularBadge>POPULAR</PopularBadge>
@@ -594,11 +606,11 @@ function Home() {
                                         <Typography variant="body2">Client management tools</Typography>
                                     </Box>
                                 </Box>
-                                <Button 
-                                    variant="contained" 
-                                    sx={{ 
-                                        mt: 3, 
-                                        backgroundColor: "#7E57C2", 
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        mt: 3,
+                                        backgroundColor: "#7E57C2",
                                         "&:hover": { backgroundColor: "#673AB7" }
                                     }}
                                     fullWidth
@@ -607,7 +619,7 @@ function Home() {
                                 </Button>
                             </PricingCard>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={4}>
                             <PricingCard>
                                 <Typography variant="h5" sx={{ fontWeight: "bold", color: "#512da8", mb: 2, textAlign: "center" }}>
@@ -635,11 +647,11 @@ function Home() {
                                         <Typography variant="body2">Priority support</Typography>
                                     </Box>
                                 </Box>
-                                <Button 
-                                    variant="contained" 
-                                    sx={{ 
-                                        mt: 3, 
-                                        backgroundColor: "#512da8", 
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        mt: 3,
+                                        backgroundColor: "#512da8",
                                         "&:hover": { backgroundColor: "#4527A0" }
                                     }}
                                     fullWidth
@@ -653,25 +665,25 @@ function Home() {
 
                 {/* עדויות */}
                 <Box sx={{ mt: 5 }}>
-                    <Typography 
-                        variant="h4" 
-                        sx={{ 
-                            textAlign: "center", 
-                            mb: 5, 
-                            fontWeight: "bold", 
-                            color: "#512da8" 
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            textAlign: "center",
+                            mb: 5,
+                            fontWeight: "bold",
+                            color: "#512da8"
                         }}
                     >
                         <FormatQuoteIcon sx={{ mr: 1, verticalAlign: "middle" }} />
                         What Designers Say About Us
                     </Typography>
-                    
+
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={4}>
                             <TestimonialCard>
-                                <Box sx={{ 
-                                    color: "#FFC107", 
-                                    display: "flex", 
+                                <Box sx={{
+                                    color: "#FFC107",
+                                    display: "flex",
                                     mb: 2,
                                     justifyContent: "center"
                                 }}>
@@ -693,14 +705,14 @@ function Home() {
                                 </Box>
                             </TestimonialCard>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={4}>
                             <TestimonialCard>
-                                <Box sx={{ 
-                                    color: "#FFC107", 
-                                    display: "flex", 
+                                <Box sx={{
+                                    color: "#FFC107",
+                                    display: "flex",
                                     mb: 2,
-                                    justifyContent: "center" 
+                                    justifyContent: "center"
                                 }}>
                                     <StarIcon />
                                     <StarIcon />
@@ -720,14 +732,14 @@ function Home() {
                                 </Box>
                             </TestimonialCard>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={4}>
                             <TestimonialCard>
-                                <Box sx={{ 
-                                    color: "#FFC107", 
-                                    display: "flex", 
+                                <Box sx={{
+                                    color: "#FFC107",
+                                    display: "flex",
                                     mb: 2,
-                                    justifyContent: "center" 
+                                    justifyContent: "center"
                                 }}>
                                     <StarIcon />
                                     <StarIcon />
@@ -751,14 +763,14 @@ function Home() {
                 </Box>
 
                 {/* קריאה לפעולה */}
-                <Box 
-                    sx={{ 
-                        mt: 5, 
-                        backgroundColor: "rgba(126, 87, 194, 0.05)", 
-                        p: 5, 
+                <Box
+                    sx={{
+                        mt: 5,
+                        backgroundColor: "rgba(126, 87, 194, 0.05)",
+                        p: 5,
                         borderRadius: "16px",
                         border: "1px solid rgba(126, 87, 194, 0.1)",
-                        textAlign: "center" 
+                        textAlign: "center"
                     }}
                 >
                     <Typography variant="h4" sx={{ mb: 2, fontWeight: "bold", color: "#512da8" }}>
@@ -767,70 +779,70 @@ function Home() {
                     <Typography variant="h6" sx={{ mb: 4, color: "#666" }}>
                         Join thousands of designers who've already elevated their online presence
                     </Typography>
-                <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3, mb: 5 }}>
-                    <FreeButton startIcon={<LoginIcon />} onClick={() => navigate("/logIn")}>
-                        Start Free
-                    </FreeButton>
-                    <StyledButton startIcon={<PersonAddIcon />} onClick={() => navigate("/register")}>
-                        Register
-                    </StyledButton>
-                </Box>
+                    <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3, mb: 5 }}>
+                        <FreeButton startIcon={<LoginIcon />} onClick={() => navigate("/logIn")}>
+                            Start Free
+                        </FreeButton>
+                        <StyledButton startIcon={<PersonAddIcon />} onClick={() => navigate("/register")}>
+                            Register
+                        </StyledButton>
+                    </Box>
                 </Box>
 
                 {/* יתרונות המערכת */}
                 <Box sx={{ mt: 5 }}>
-                    <Typography 
-                        variant="h4" 
-                        sx={{ 
-                            textAlign: "center", 
-                            mb: 5, 
-                            fontWeight: "bold", 
-                            color: "#512da8" 
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            textAlign: "center",
+                            mb: 5,
+                            fontWeight: "bold",
+                            color: "#512da8"
                         }}
                     >
                         Why Choose CreativePeak?
                     </Typography>
-                    
+
                     <Grid container spacing={4}>
                         <Grid item xs={12} md={6}>
                             <InfoCard>
                                 <Typography variant="h5" sx={{ fontWeight: "bold", color: "#512da8", mb: 3 }}>
                                     For Designers
                                 </Typography>
-                                
+
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                            <Chip 
-                                                label="Portfolio" 
-                                                color="primary" 
-                                                variant="outlined" 
+                                            <Chip
+                                                label="Portfolio"
+                                                color="primary"
+                                                variant="outlined"
                                             />
                                             <Typography variant="body1">
                                                 Create stunning visual portfolios
                                             </Typography>
                                         </Box>
                                     </Grid>
-                                    
+
                                     <Grid item xs={12}>
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                            <Chip 
-                                                label="Visibility" 
-                                                color="primary" 
-                                                variant="outlined" 
+                                            <Chip
+                                                label="Visibility"
+                                                color="primary"
+                                                variant="outlined"
                                             />
                                             <Typography variant="body1">
                                                 Increase your online presence
                                             </Typography>
                                         </Box>
                                     </Grid>
-                                    
+
                                     <Grid item xs={12}>
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                            <Chip 
-                                                label="Analytics" 
-                                                color="primary" 
-                                                variant="outlined" 
+                                            <Chip
+                                                label="Analytics"
+                                                color="primary"
+                                                variant="outlined"
                                             />
                                             <Typography variant="body1">
                                                 Track portfolio performance
@@ -840,46 +852,46 @@ function Home() {
                                 </Grid>
                             </InfoCard>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={6}>
                             <InfoCard>
                                 <Typography variant="h5" sx={{ fontWeight: "bold", color: "#512da8", mb: 3 }}>
                                     For Businesses
                                 </Typography>
-                                
+
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                            <Chip 
-                                                label="Talent" 
-                                                color="primary" 
-                                                variant="outlined" 
+                                            <Chip
+                                                label="Talent"
+                                                color="primary"
+                                                variant="outlined"
                                             />
                                             <Typography variant="body1">
                                                 Discover talented designers
                                             </Typography>
                                         </Box>
                                     </Grid>
-                                    
+
                                     <Grid item xs={12}>
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                            <Chip 
-                                                label="Collaboration" 
-                                                color="primary" 
-                                                variant="outlined" 
+                                            <Chip
+                                                label="Collaboration"
+                                                color="primary"
+                                                variant="outlined"
                                             />
                                             <Typography variant="body1">
                                                 Streamlined project management
                                             </Typography>
                                         </Box>
                                     </Grid>
-                                    
+
                                     <Grid item xs={12}>
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                                            <Chip 
-                                                label="Results" 
-                                                color="primary" 
-                                                variant="outlined" 
+                                            <Chip
+                                                label="Results"
+                                                color="primary"
+                                                variant="outlined"
                                             />
                                             <Typography variant="body1">
                                                 Quality creative deliverables
@@ -894,18 +906,18 @@ function Home() {
 
                 {/* שאלות נפוצות */}
                 <Box sx={{ mt: 5 }}>
-                    <Typography 
-                        variant="h4" 
-                        sx={{ 
-                            textAlign: "center", 
-                            mb: 5, 
-                            fontWeight: "bold", 
-                            color: "#512da8" 
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            textAlign: "center",
+                            mb: 5,
+                            fontWeight: "bold",
+                            color: "#512da8"
                         }}
                     >
                         Frequently Asked Questions
                     </Typography>
-                    
+
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={6}>
                             <Box sx={{ mb: 3 }}>
@@ -917,7 +929,7 @@ function Home() {
                                 </Typography>
                             </Box>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={6}>
                             <Box sx={{ mb: 3 }}>
                                 <Typography variant="h6" sx={{ fontWeight: "bold", color: "#512da8", mb: 1 }}>
@@ -928,7 +940,7 @@ function Home() {
                                 </Typography>
                             </Box>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={6}>
                             <Box sx={{ mb: 3 }}>
                                 <Typography variant="h6" sx={{ fontWeight: "bold", color: "#512da8", mb: 1 }}>
@@ -939,7 +951,7 @@ function Home() {
                                 </Typography>
                             </Box>
                         </Grid>
-                        
+
                         <Grid item xs={12} md={6}>
                             <Box sx={{ mb: 3 }}>
                                 <Typography variant="h6" sx={{ fontWeight: "bold", color: "#512da8", mb: 1 }}>
@@ -954,7 +966,7 @@ function Home() {
                 </Box>
             </Content>
             <Typography variant="body2" sx={{ color: "#666", mt: 5, textAlign: "center", fontSize: "14px" }}>
-              © CreativePeak Designer System {new Date().getFullYear()} | All rights reserved.
+                © CreativePeak Designer System {new Date().getFullYear()} | All rights reserved.
             </Typography>
         </HomeWrapper>
     );
