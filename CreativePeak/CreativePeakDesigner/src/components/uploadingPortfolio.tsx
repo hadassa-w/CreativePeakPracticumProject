@@ -99,7 +99,6 @@ const UploadProfolio = () => {
                     setSnackbarOpen(true)
                 })
 
-            // Get user information
             const userResponse = await axios.get(`https://creativepeak-api.onrender.com/api/DesignerDetails`,
                 {
                     headers: {
@@ -111,7 +110,6 @@ const UploadProfolio = () => {
 
             let htmlContent = ``
             if (userInfo) {
-                // Create the HTML content with enhanced modal functionality
                 htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
@@ -195,17 +193,23 @@ const UploadProfolio = () => {
             .profile-title {
                 font-size: 1.8em;
                 color: #666;
-                margin-bottom: 30px;
+                margin-bottom: 20px;
                 font-style: italic;
                 font-weight: 300;
+            }
+
+            .contact {
+                font-size: 20px;
+                color: #666;
+                font-weight: bold;
             }
 
             .profile-description {
                 font-size: 1.2em;
                 color: #777;
                 max-width: 800px;
-                margin: 0 auto 30px;
-                line-height: 1.8;
+                margin: 0 auto 15px;
+                line-height: 1.5;
             }
 
             .contact-info {
@@ -288,7 +292,7 @@ const UploadProfolio = () => {
             .contact-label {
                 font-size: 0.9em;
                 color: #999;
-                text-transform: uppercase;
+                text-transform: none;
                 letter-spacing: 1px;
                 margin-bottom: 5px;
                 font-weight: 500;
@@ -394,7 +398,7 @@ const UploadProfolio = () => {
                 color: #666;
                 margin-top: 15px;
                 font-weight: 700;
-                text-transform: uppercase;
+                text-transform: none;
                 letter-spacing: 2px;
                 font-size: 1em;
                 position: relative;
@@ -557,7 +561,6 @@ const UploadProfolio = () => {
                 padding: 5px 12px;
                 border-radius: 15px;
                 color: #9C27B0;
-                font-weight: 500;
             }
 
             .footer {
@@ -592,7 +595,7 @@ const UploadProfolio = () => {
                 border-radius: 50%;
                 width: 60px;
                 height: 60px;
-                font-size: 24px;
+                font-size: 15px;
                 cursor: pointer;
                 box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
                 transition: all 0.3s ease;
@@ -620,9 +623,9 @@ const UploadProfolio = () => {
                 top: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0, 0, 0, 0.95);
+                background-color: rgba(255, 255, 255, 0.7);
                 cursor: pointer;
-                backdrop-filter: blur(5px);
+                backdrop-filter: blur(2px);
                 animation: fadeIn 0.3s ease-in-out;
             }
 
@@ -649,16 +652,14 @@ const UploadProfolio = () => {
             }
 
             .modal-content {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                max-width: 95%;
-                max-height: 85%;
+                max-width: 95vw;
+                max-height: 85vh;
+                width: auto;
+                height: auto;
                 object-fit: contain;
                 border-radius: 15px;
                 box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
-                animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                animation: fadeIn 0.3s ease-in-out;
                 cursor: default;
             }
 
@@ -683,7 +684,7 @@ const UploadProfolio = () => {
             }
 
             .close-modal:hover {
-                background: rgba(255, 255, 255, 0.1);
+                background: rgba(104, 104, 104, 0.68);
                 transform: rotate(90deg);
             }
 
@@ -694,7 +695,7 @@ const UploadProfolio = () => {
                 background: rgba(0, 0, 0, 0.7);
                 color: white;
                 border: none;
-                font-size: 30px;
+                font-size: 20px;
                 padding: 20px 15px;
                 cursor: pointer;
                 transition: all 0.3s ease;
@@ -725,14 +726,13 @@ const UploadProfolio = () => {
                 bottom: 30px;
                 left: 50%;
                 transform: translateX(-50%);
-                color: white;
                 text-align: center;
-                background: rgba(0, 0, 0, 0.8);
-                padding: 20px 30px;
+                background: rgba(255, 178, 245, 0.21);
+                padding: 10px 20px;
                 border-radius: 15px;
-                backdrop-filter: blur(15px);
-                max-width: 80%;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                max-width: 60%;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                transition: max-width 0.3s ease;
             }
 
             .modal-info h3 {
@@ -868,6 +868,22 @@ const UploadProfolio = () => {
                     font-size: 1.2em;
                 }
             }
+                
+            #toggleDescBtn {
+                margin-top: 10px;
+                background: rgba(154, 154, 154, 0.2);
+                border: none;
+                padding: 8px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: 0.3s;
+                }
+
+            #toggleDescBtn:hover {
+                background: rgba(198, 198, 198, 0.4);
+            }
+
         </style>
     </head>
     <body>
@@ -881,9 +897,11 @@ const UploadProfolio = () => {
                     <h1 class="profile-name">${userInfo.fullName || 'Professional Graphic Designer'}</h1>
                     <p class="profile-title">Creative Designer & Visual Artist</p>
                     <p class="profile-description">
-                        ${userInfo.description || 'Passionate about creating stunning visuals that tell a story and captivate audiences. With over 5 years of experience in graphic design, I specialize in branding, digital art, and visual communication.'}
+                        ${userInfo.description}
                     </p>
                     
+                    <p class="contact">Contact Info:</p>
+
                     <div class="contact-info">
                         ${userInfo.email ? `
                             <a href="mailto:${userInfo.email}" class="contact-item">
@@ -931,13 +949,13 @@ const UploadProfolio = () => {
                 <div class="stats">
                     <div class="stat-item">
                         <div class="stat-number">${userInfo.yearsExperience || 0}</div>
-                        <div class="stat-label" style="text-transform: none;">Years Experience</div>
+                        <div class="stat-label">Years experience</div>
                     </div>
                 </div>
             </div>
 
             <!-- Portfolio Content -->
-            ${categories.map(category => {
+        ${categories.map(category => {
                     const categoryImages = images
                         .filter(img => img.category.id === category.id)
                         .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
@@ -945,47 +963,28 @@ const UploadProfolio = () => {
                     if (categoryImages.length === 0) return '';
 
                     return `
-                <div class="category-section" id="category-${category.id}">
-                    <h2 class="category-title">${category.categoryName}</h2>
-                    ${category.description ? `<p class="category-description">${category.description}</p>` : ''}
-                    
-                    <div class="projects-grid">
-                        ${categoryImages.map((image, index) => `
-                            <div class="project-card">
-                                <div style="position: relative; overflow: hidden;">
-                                    <img 
-                                        src="${image.linkURL}" 
-                                        alt="${image.fileName}"
-                                        class="project-image"
-                                        onclick="openModal(${JSON.stringify(categoryImages).replace(/"/g, '&quot;')}, ${index})"
-                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                    />
-                                    <div class="image-overlay"></div>
-                                    <div style="display: none; height: 280px; background: #f5f5f5; align-items: center; justify-content: center; color: #999;">
-                                        Image not available
-                                    </div>
-                                </div>
-                                <div class="project-content">
-                                    <h3 class="project-title">${image.fileName}</h3>
-                                    ${image.description ? `<p class="project-description">${image.description}</p>` : ''}
-                                    <div class="project-meta">
-                                        <span class="project-date">Created: ${new Date(image.createdAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    })}</span>
-                                        <span class="project-date">Updated: ${new Date(image.updatedAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    })}</span>
-                                    </div>
-                                </div>
+            <div class="category-section" id="category-${category.id}">
+                <h2 class="category-title">${category.categoryName}</h2>
+                <div class="projects-grid">
+                    ${categoryImages.map((image, index) => `
+                        <div class="project-card">
+                            <div class="project-image-wrapper">
+                                <img src="${image.linkURL}" alt="${image.fileName}" class="project-image" loading="lazy"
+                                     onclick="openModal(${JSON.stringify(categoryImages).replace(/"/g, '&quot;')}, ${index})">
                             </div>
-                        `).join('')}
-                    </div>
+                            <div class="project-content">
+                                <h3 class="project-title">${image.fileName}</h3>
+                                ${image.description ? `<p class="project-description">${image.description}</p>` : ''}
+                                    <div class="project-meta">
+                                        <span class="project-date"><span style="font-weight: 600;">Created:</span> ${new Date(image.createdAt).toLocaleDateString('he-IL')}</span>
+                                        <span class="project-date"><span style="font-weight: 600;">Updated:</span> ${new Date(image.updatedAt).toLocaleDateString('he-IL')}</span>
+                                    </div>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
-                `;
+            </div>
+            `;
                 }).join('')}
 
             <!-- Footer -->
@@ -1008,241 +1007,192 @@ const UploadProfolio = () => {
         </div>
 
         <!-- Back to Top Button -->
-        <button class="back-to-top" onclick="scrollToTop()" id="backToTop">↑</button>
+        <button class="back-to-top" onclick="scrollToTop()" id="backToTop">↑</br>Contact</button>
 
         <!-- Enhanced Image Modal -->
         <div id="imageModal" class="image-modal">
-            <div class="modal-counter" id="modalCounter"></div>
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <button class="modal-navigation modal-nav-prev" onclick="previousImage()">‹</button>
-            <button class="modal-navigation modal-nav-next" onclick="nextImage()">›</button>
-            <img class="modal-content" id="modalImage">
-            <div class="modal-info" id="modalInfo">
-                <h3 id="modalTitle"></h3>
-                <p id="modalDescription"></p>
+            <div class="modal-content-wrapper">
+                <button class="close-modal" onclick="closeModal()" aria-label="Cancel">&times;</button>
+                <button class="modal-navigation modal-nav-next" onclick="previousImage()" aria-label="Prev project">›</button>
+                <img class="modal-content" id="modalImage" alt="">
+                <button class="modal-navigation modal-nav-prev" onclick="nextImage()" aria-label="Next project">‹</button>
+                <div class="modal-info" id="modalInfo">
+                    <h3 id="modalTitle"></h3>
+                    <button onclick="toggleDescription()" id="toggleDescBtn">Show Description</button>
+                    <p id="modalDescription" style="display: none;"></p>
+                </div>
             </div>
         </div>
 
         <script>
-            let currentImages = [];
-            let currentImageIndex = 0;
+        let currentImages = [];
+        let currentImageIndex = 0;
+        let zoomLevel = 1;
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let translateX = 0, translateY = 0;
+        const modalImg = document.getElementById('modalImage');
 
-            function openModal(images, index) {
-                currentImages = images;
-                currentImageIndex = index;
-                showModalImage();
-                
-                const modal = document.getElementById('imageModal');
-                modal.classList.add('active');
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
+        function openModal(images, index) {
+            currentImages = images;
+            currentImageIndex = index;
+            resetZoomAndPosition();
+            showModalImage();
+            
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            preloadAdjacentImages();
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+function toggleDescription() {
+  const desc = document.getElementById('modalDescription');
+  const btn = document.getElementById('toggleDescBtn');
+  const modalInfo = document.getElementById('modalInfo');
+
+  if (desc.style.display === 'none') {
+    desc.style.display = 'block';
+    btn.textContent = 'Hide Description';
+    modalInfo.style.maxWidth = '80%';
+  } else {
+    desc.style.display = 'none';
+    btn.textContent = 'Show Description';
+    modalInfo.style.maxWidth = '40%';
+  }
+}
+
+        window.addEventListener('scroll', function() {
+            const backToTop = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        function showModalImage() {
+            if (currentImages.length === 0) return;
+
+            const image = currentImages[currentImageIndex];
+            
+            modalImg.src = image.linkURL;
+            modalImg.alt = image.fileName;
+            document.getElementById('modalTitle').textContent = image.fileName;
+            document.getElementById('modalDescription').textContent = image.description || '';
+
+            const prevBtn = document.querySelector('.modal-nav-prev');
+            const nextBtn = document.querySelector('.modal-nav-next');
+
+            if (currentImageIndex === 0) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'flex';
             }
 
-            function showModalImage() {
-                if (currentImages.length === 0) return;
-                
-                const image = currentImages[currentImageIndex];
-                const modal = document.getElementById('imageModal');
-                const modalImg = document.getElementById('modalImage');
-                const modalTitle = document.getElementById('modalTitle');
-                const modalDescription = document.getElementById('modalDescription');
-                const modalCounter = document.getElementById('modalCounter');
-                
-                modalImg.src = image.linkURL;
-                modalImg.alt = image.fileName;
-                modalTitle.textContent = image.fileName;
-                modalDescription.textContent = image.description || 'No description available';
-                modalCounter.textContent = \`\${currentImageIndex + 1} / \${currentImages.length}\`;
-                
-                // Hide/show navigation buttons
-                const prevBtn = modal.querySelector('.modal-nav-prev');
-                const nextBtn = modal.querySelector('.modal-nav-next');
-                
-                if (currentImages.length <= 1) {
-                    prevBtn.style.display = 'none';
-                    nextBtn.style.display = 'none';
-                } else {
-                    prevBtn.style.display = 'flex';
-                    nextBtn.style.display = 'flex';
-                    prevBtn.style.opacity = currentImageIndex === 0 ? '0.5' : '1';
-                    nextBtn.style.opacity = currentImageIndex === currentImages.length - 1 ? '0.5' : '1';
-                }
+            if (currentImageIndex === currentImages.length - 1) {
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'flex';
             }
+        }
 
-            function closeModal() {
-                const modal = document.getElementById('imageModal');
-                modal.classList.remove('active');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                }, 300);
-                document.body.style.overflow = 'auto';
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function previousImage() {
+            currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : currentImages.length - 1;
+            resetZoomAndPosition();
+            showModalImage();
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex < currentImages.length - 1) ? currentImageIndex + 1 : 0;
+            resetZoomAndPosition();
+            showModalImage();
+        }
+
+        function resetZoomAndPosition() {
+            zoomLevel = 1;
+            translateX = 0;
+            translateY = 0;
+            updateImageTransform();
+        }
+
+        function updateImageTransform() {
+            modalImg.style.transform = \`translate(\${translateX}px, \${translateY}px) scale(\${zoomLevel})\`;
+            modalImg.style.cursor = zoomLevel > 1 ? 'grab' : 'zoom-in';
+        }
+
+        function preloadAdjacentImages() {
+            const nextIndex = (currentImageIndex + 1) % currentImages.length;
+            const prevIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+            if (nextIndex !== currentImageIndex) new Image().src = currentImages[nextIndex].linkURL;
+            if (prevIndex !== currentImageIndex) new Image().src = currentImages[prevIndex].linkURL;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('imageModal').classList.contains('active')) {
+                if (e.key === 'Escape') closeModal();
+                if (e.key === 'ArrowRight' && currentImageIndex < currentImages.length - 1) nextImage(); 
+                if (e.key === 'ArrowLeft' && currentImageIndex > 0) previousImage(); 
             }
+        });
 
-            function previousImage() {
-                if (currentImageIndex > 0) {
-                    currentImageIndex--;
-                    showModalImage();
-                }
+        modalImg.addEventListener('wheel', e => {
+            e.preventDefault();
+            const scaleAmount = e.deltaY > 0 ? -0.1 : 0.1;
+            zoomLevel = Math.max(1, Math.min(3, zoomLevel + scaleAmount));
+            updateImageTransform();
+        });
+
+        modalImg.addEventListener('mousedown', e => {
+            if (zoomLevel > 1) {
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                modalImg.style.cursor = 'grabbing';
             }
+        });
 
-            function nextImage() {
-                if (currentImageIndex < currentImages.length - 1) {
-                    currentImageIndex++;
-                    showModalImage();
-                }
+        window.addEventListener('mousemove', e => {
+            if (isDragging) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateImageTransform();
             }
+        });
 
-            function scrollToTop() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            }
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            if(zoomLevel > 1) modalImg.style.cursor = 'grab';
+        });
 
-            // Event Listeners
+        modalImg.addEventListener('dblclick', () => {
+            zoomLevel = zoomLevel > 1 ? 1 : 2;
+            if (zoomLevel === 1) { translateX = 0; translateY = 0; }
+            updateImageTransform();
+        });
+
             document.addEventListener('DOMContentLoaded', function() {
                 const modal = document.getElementById('imageModal');
                 
-                // Close modal when clicking outside the image
                 modal.addEventListener('click', function(event) {
                     if (event.target === modal) {
                         closeModal();
                     }
                 });
-                
-                // Prevent modal from closing when clicking on the image or info
-                document.getElementById('modalImage').addEventListener('click', function(event) {
-                    event.stopPropagation();
-                });
-                
-                document.getElementById('modalInfo').addEventListener('click', function(event) {
-                    event.stopPropagation();
-                });
-
-                // Keyboard navigation
-                document.addEventListener('keydown', function(event) {
-                    if (modal.classList.contains('active')) {
-                        switch(event.key) {
-                            case 'Escape':
-                                closeModal();
-                                break;
-                            case 'ArrowLeft':
-                                previousImage();
-                                break;
-                            case 'ArrowRight':
-                                nextImage();
-                                break;
-                        }
-                    }
-                });
-
-                // Back to top button functionality
-                window.addEventListener('scroll', function() {
-                    const backToTop = document.getElementById('backToTop');
-                    if (window.pageYOffset > 300) {
-                        backToTop.classList.add('visible');
-                    } else {
-                        backToTop.classList.remove('visible');
-                    }
-                });
-
-                // Smooth scroll for internal links
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const target = document.querySelector(this.getAttribute('href'));
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth'
-                            });
-                        }
-                    });
-                });
-
-                // Add loading state for images
-                const images = document.querySelectorAll('.project-image');
-                images.forEach(img => {
-                    img.addEventListener('load', function() {
-                        this.style.opacity = '1';
-                    });
-                    
-                    img.addEventListener('error', function() {
-                        console.error('Failed to load image:', this.src);
-                    });
-                });
-
-                // Add touch support for mobile devices
-                let touchStartX = 0;
-                let touchEndX = 0;
-
-                modal.addEventListener('touchstart', function(event) {
-                    touchStartX = event.changedTouches[0].screenX;
-                });
-
-                modal.addEventListener('touchend', function(event) {
-                    touchEndX = event.changedTouches[0].screenX;
-                    handleSwipe();
-                });
-
-                function handleSwipe() {
-                    const swipeThreshold = 50;
-                    const difference = touchStartX - touchEndX;
-                    
-                    if (Math.abs(difference) > swipeThreshold) {
-                        if (difference > 0) {
-                            // Swipe left - next image
-                            nextImage();
-                        } else {
-                            // Swipe right - previous image
-                            previousImage();
-                        }
-                    }
-                }
-
-                // Preload images for better performance
-                function preloadImages() {
-                    currentImages.forEach((image, index) => {
-                        if (index !== currentImageIndex) {
-                            const img = new Image();
-                            img.src = image.linkURL;
-                        }
-                    });
-                }
-
-                // Call preload when modal opens
-                const originalOpenModal = window.openModal;
-                window.openModal = function(images, index) {
-                    originalOpenModal(images, index);
-                    setTimeout(preloadImages, 100);
-                };
             });
 
-            // Add zoom functionality
-            let isZoomed = false;
-            let zoomLevel = 1;
-
-            function toggleZoom() {
-                const modalImg = document.getElementById('modalImage');
-                
-                if (!isZoomed) {
-                    zoomLevel = 2;
-                    modalImg.style.transform = 'translate(-50%, -50%) scale(' + zoomLevel + ')';
-                    modalImg.style.cursor = 'zoom-out';
-                    isZoomed = true;
-                } else {
-                    zoomLevel = 1;
-                    modalImg.style.transform = 'translate(-50%, -50%) scale(' + zoomLevel + ')';
-                    modalImg.style.cursor = 'zoom-in';
-                    isZoomed = false;
-                }
-            }
-
-            // Add double-click zoom
-            document.addEventListener('DOMContentLoaded', function() {
-                const modalImg = document.getElementById('modalImage');
-                modalImg.addEventListener('dblclick', toggleZoom);
-                modalImg.style.cursor = 'zoom-in';
-            });
         </script>
     </body>
     </html>import React, { useState } from 'react';
@@ -1250,7 +1200,6 @@ const UploadProfolio = () => {
             }
 
             if (htmlContent) {
-                // Create and trigger download
                 const blob = new Blob([htmlContent], { type: 'text/html' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
@@ -1261,7 +1210,6 @@ const UploadProfolio = () => {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
 
-                // Show success message
                 setSnackbarMessage("🎉 Portfolio generated and downloaded successfully!");
                 setSnackbarSeverity("success");
                 setSnackbarOpen(true);
@@ -1281,7 +1229,6 @@ const UploadProfolio = () => {
         }
     };
 
-    // Updated Portfolio Button with loading state
     const PortfolioButton = styled(StyledButton)({
         background: "linear-gradient(45deg, #FF6B6B 30%, #FF8E53 90%)",
         color: "white",
@@ -1303,11 +1250,11 @@ const UploadProfolio = () => {
             {isGeneratingPortfolio ? (
                 <>
                     <CircularProgress size={20} sx={{ color: "white", marginRight: "8px" }} />
-                    Generating Portfolio...
+                    📥 Generating Portfolio...
                 </>
             ) : (
                 <>
-                    📁 Download Portfolio
+                    🗂️ Download Portfolio
                 </>
             )}
         </PortfolioButton>

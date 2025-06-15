@@ -28,10 +28,10 @@ import { Link } from "react-router-dom"
 import { Add, Edit, Delete, FilterAlt, Search, Image as ImageIcon, Category as CategoryIcon } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 import CloseIcon from "@mui/icons-material/Close"
-import type Image from "../models/image"
-import type Category from "../models/category"
 import AutoSnackbar from "./snackbar"
 import { useAuth } from "../contexts/authContext"
+import Image from "../models/image"
+import Category from "../models/category"
 
 // Styled Components
 const StyledButton = styled(Button)({
@@ -179,13 +179,28 @@ const EmptyStateContainer = styled(Box)({
   textAlign: "center",
 })
 
+const DescriptionButton =  styled(StyledButton)({
+  marginTop:"8px",
+  textTransform: 'none',
+  fontWeight: 'bold',
+  alignSelf: 'flex-start',
+  color: '#9C27B0',
+  padding: '4px 8px',
+  border: '1px solid #9C27B0',
+  '&:hover': {
+    border: '1px solid rgb(115, 9, 134)',
+    backgroundColor: 'rgba(156, 39, 176, 0.08)',
+}
+
+})
+
 function ImageGallery() {
   const [images, setImages] = useState<Image[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState<Image | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
@@ -193,6 +208,13 @@ function ImageGallery() {
   const [imageId1, setImageId1] = useState<number | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [imageToDelete, setImageToDelete] = useState<Image | null>(null)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [zoomLevel, setZoomLevel] = useState(1)
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 })
+  const [filteredCategoryImages, setFilteredCategoryImages] = useState<Image[]>([])
+  const [expandedDescriptionId, setExpandedDescriptionId] = useState(null)
 
   const { userId, token } = useAuth()
   const navigate = useNavigate()
@@ -232,7 +254,11 @@ function ImageGallery() {
       .finally(() => {
         setLoading(false)
       })
-  }, [userId])
+  }, [userId, token])
+
+  const handleToggleDescription = (imageId: any) => {
+    setExpandedDescriptionId(prevId => (prevId === imageId ? null : imageId))
+  }
 
   const handleEdit = (image: Image) => {
     navigate("/addProject", { state: { image } })
@@ -278,11 +304,119 @@ function ImageGallery() {
   }
 
   const handleImageClick = (image: Image) => {
+    const categoryImages = filteredImages
+      .filter(img => img.category.id === image.category.id)
+      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+
+    setFilteredCategoryImages(categoryImages)
+    setCurrentImageIndex(categoryImages.findIndex(img => img.id === image.id))
     setSelectedImage(image)
+    setZoomLevel(1)
+    setImagePosition({ x: 0, y: 0 })
   }
 
   const handleCloseDialog = () => {
     setSelectedImage(null)
+    setZoomLevel(1)
+    setImagePosition({ x: 0, y: 0 })
+  }
+
+  const handlePreviousImage = () => {
+    if (currentImageIndex > 0) {
+      const newIndex = currentImageIndex - 1
+      setCurrentImageIndex(newIndex)
+      setSelectedImage(filteredCategoryImages[newIndex])
+      setZoomLevel(1)
+      setImagePosition({ x: 0, y: 0 })
+    }
+  }
+
+  const handleNextImage = () => {
+    if (currentImageIndex < filteredCategoryImages.length - 1) {
+      const newIndex = currentImageIndex + 1
+      setCurrentImageIndex(newIndex)
+      setSelectedImage(filteredCategoryImages[newIndex])
+      setZoomLevel(1)
+      setImagePosition({ x: 0, y: 0 })
+    }
+  }
+
+  const handleZoomIn = () => {
+    setZoomLevel(prev => Math.min(prev + 0.25, 3))
+  }
+
+  const handleZoomOut = () => {
+    setZoomLevel(prev => Math.max(prev - 0.25, 0.5))
+  }
+
+  const handleResetZoom = () => {
+    setZoomLevel(1)
+    setImagePosition({ x: 0, y: 0 })
+  }
+
+  const handleMouseDown = (e: any) => {
+    if (zoomLevel > 1) {
+      setIsDragging(true)
+      setDragStart({
+        x: e.clientX - imagePosition.x,
+        y: e.clientY - imagePosition.y
+      })
+    }
+  }
+
+  const handleMouseMove = (e: any) => {
+    if (isDragging && zoomLevel > 1) {
+      setImagePosition({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y
+      })
+    }
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  const handleWheel = (e: any) => {
+    e.preventDefault()
+    if (e.deltaY < 0) {
+      handleZoomIn()
+    } else {
+      handleZoomOut()
+    }
+  }
+
+  const handleKeyDown = (e: any) => {
+    switch (e.key) {
+      case 'Escape':
+        handleCloseDialog()
+        break
+      case 'ArrowLeft':
+        handlePreviousImage()
+        break
+      case 'ArrowRight':
+        handleNextImage()
+        break
+      case '+':
+      case '=':
+        handleZoomIn()
+        break
+      case '-':
+        handleZoomOut()
+        break
+      case '0':
+        handleResetZoom()
+        break
+    }
+  }
+
+  const handleDoubleClick = () => {
+    if (zoomLevel === 1) {
+      setZoomLevel(2)
+    } else {
+      setZoomLevel(1)
+      setImagePosition({ x: 0, y: 0 })
+    }
   }
 
   const filteredImages = images.filter((image) => {
@@ -393,13 +527,12 @@ function ImageGallery() {
           <Box sx={{ display: "flex", gap: 1, flexDirection: { xs: "column", sm: "row" } }}>
             <Link to="/addProject" style={{ textDecoration: "none" }}>
               <AddButton variant="contained">
-                <Add /> Add project
+                <Add /> Add Project
               </AddButton>
             </Link>
           </Box>
         </Box>
 
-        {/* Search and Filter Section */}
         {showSearchBox && (
           <Fade in={true} timeout={800}>
             <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
@@ -434,7 +567,7 @@ function ImageGallery() {
                     disabled={!searchTerm && selectedCategoryId === null}
                     sx={{ textTransform: "none" }}
                   >
-                    Clear filters
+                    Clear Filters
                   </Button>
                 </Box>
 
@@ -489,7 +622,6 @@ function ImageGallery() {
                   </TextField>
                 </Box>
 
-                {/* Filter stats */}
                 <Box
                   sx={{
                     mt: 2,
@@ -533,14 +665,13 @@ function ImageGallery() {
           </Fade>
         )}
 
-        {/* Main Content */}
         {loading ? (
           <Box
             sx={{
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "center",
-              margin: "-10px", // Counteract the margin of the cards
+              margin: "-10px",
             }}
           >
             {renderSkeletons()}
@@ -581,8 +712,9 @@ function ImageGallery() {
                       sx={{
                         display: "flex",
                         flexWrap: "wrap",
-                        margin: "-10px", // Counteract the margin of the cards
+                        margin: "-10px",
                         justifyContent: { xs: "center", sm: "flex-start" },
+                        alignItems: "flex-start",
                       }}
                     >
                       {categoryImages.map((image) => (
@@ -596,9 +728,13 @@ function ImageGallery() {
                                 lg: "calc(33.333% - 20px)",
                               },
                               padding: "10px",
+                              alignSelf: "flex-start",
                             }}
                           >
-                            <ProjectCard sx={{ height: "100%" }}>
+                            <ProjectCard sx={{
+                              height: "auto",
+                              minHeight: "fit-content"
+                            }}>
                               <ImageContainer onClick={() => handleImageClick(image)}>
                                 <CardMedia
                                   component="img"
@@ -615,7 +751,12 @@ function ImageGallery() {
                                   }}
                                 />
                               </ImageContainer>
-                              <CardContent sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+                              <CardContent sx={{
+                                flexGrow: 1,
+                                display: "flex",
+                                flexDirection: "column",
+                                height: "auto"
+                              }}>
                                 <Typography
                                   variant="h6"
                                   sx={{
@@ -633,24 +774,35 @@ function ImageGallery() {
                                 </Typography>
 
                                 {image.description && (
-                                  <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                    sx={{
-                                      mb: 2,
-                                      overflow: "hidden",
-                                      textOverflow: "ellipsis",
-                                      display: "-webkit-box",
-                                      WebkitLineClamp: 2,
-                                      WebkitBoxOrient: "vertical",
-                                      minHeight: "40px",
-                                    }}
-                                  >
-                                    {image.description}
-                                  </Typography>
+                                  <Box sx={{ mb: 2 }}>
+                                    <Typography
+                                      variant="body2"
+                                      color="text.secondary"
+                                      sx={{
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        display: "-webkit-box",
+                                        WebkitLineClamp: expandedDescriptionId === image.id ? 'unset' : 2,
+                                        WebkitBoxOrient: "vertical",
+                                        transition: "all 0.3s ease",
+                                      }}
+                                    >
+                                      {image.description}
+                                    </Typography>
+                                    {image.description.length > 100 && (
+                                      <DescriptionButton
+                                        variant="outlined"
+                                        size="small"
+                                        fullWidth
+                                        onClick={() => handleToggleDescription(image.id)}
+                                      >
+                                        {expandedDescriptionId === image.id ? "Show Less" : "Show More"}
+                                      </DescriptionButton>
+                                    )}
+                                  </Box>
                                 )}
 
-                                <Box sx={{ mt: "auto" }}>
+                                <Box sx={{ mt: "auto", pt: 1 }}>
                                   <Typography
                                     variant="caption"
                                     sx={{
@@ -714,97 +866,267 @@ function ImageGallery() {
         )}
       </ContentBox>
 
-      {/* Image Preview Dialog */}
       <Dialog
         open={!!selectedImage}
         onClose={handleCloseDialog}
-        maxWidth="lg"
+        maxWidth={false}
         fullWidth
         sx={{
           "& .MuiDialog-paper": {
             position: "relative",
-            borderRadius: 3,
+            borderRadius: 0,
             overflow: "hidden",
+            maxWidth: "100vw",
+            maxHeight: "100vh",
+            width: "100vw",
+            height: "100vh",
+            margin: 0,
+            background: "rgba(255, 255, 255, 0.54)",
+            backdropFilter: "blur(5px)",
           },
         }}
+        onKeyDown={handleKeyDown}
+        tabIndex={-1}
       >
         <IconButton
           aria-label="close"
           onClick={handleCloseDialog}
           sx={{
-            position: "absolute",
-            right: 16,
-            top: 16,
+            position: "fixed",
+            right: 25,
+            top: 25,
             color: "white",
-            bgcolor: "rgba(0,0,0,0.3)",
-            zIndex: 10,
+            bgcolor: "rgba(0,0,0,0.6)",
+            zIndex: 2001,
+            width: 60,
+            height: 60,
+            fontSize: "50px",
             "&:hover": {
-              bgcolor: "rgba(0,0,0,0.5)",
+              bgcolor: "rgba(104, 104, 104, 0.68)",
+              transform: "rotate(90deg)",
             },
+            transition: "all 0.3s ease",
+            backdropFilter: "blur(10px)",
           }}
         >
-          <CloseIcon />
+          <CloseIcon fontSize="large" />
         </IconButton>
+
+        {filteredCategoryImages.length > 1 && (
+          <>
+            <IconButton
+              onClick={handlePreviousImage}
+              disabled={currentImageIndex === 0}
+              sx={{
+                position: "fixed",
+                left: 30,
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "white",
+                bgcolor: "rgba(0,0,0,0.7)",
+                zIndex: 2000,
+                width: 60,
+                height: 60,
+                fontSize: "20px",
+                "&:hover": {
+                  bgcolor: "rgba(156, 39, 176, 0.8)",
+                  transform: "translateY(-50%) scale(1.1)",
+                },
+                "&:disabled": {
+                  color: "rgba(255,255,255,0.3)",
+                  bgcolor: "rgba(0,0,0,0.3)",
+                },
+                transition: "all 0.3s ease",
+                backdropFilter: "blur(10px)",
+                borderRadius: "50%",
+              }}
+            >
+              ‹
+            </IconButton>
+
+            <IconButton
+              onClick={handleNextImage}
+              disabled={currentImageIndex === filteredCategoryImages.length - 1}
+              sx={{
+                position: "fixed",
+                right: 30,
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "white",
+                bgcolor: "rgba(0,0,0,0.7)",
+                zIndex: 2000,
+                width: 60,
+                height: 60,
+                fontSize: "20px",
+                "&:hover": {
+                  bgcolor: "rgba(156, 39, 176, 0.8)",
+                  transform: "translateY(-50%) scale(1.1)",
+                },
+                "&:disabled": {
+                  color: "rgba(255,255,255,0.3)",
+                  bgcolor: "rgba(0,0,0,0.3)",
+                },
+                transition: "all 0.3s ease",
+                backdropFilter: "blur(10px)",
+                borderRadius: "50%",
+              }}
+            >
+              ›
+            </IconButton>
+          </>
+        )}
+
+        {filteredCategoryImages.length > 1 && (
+          <Box
+            sx={{
+              position: "fixed",
+              top: 25,
+              left: 35,
+              color: "white",
+              bgcolor: "rgba(0,0,0,0.6)",
+              px: 3,
+              py: 1.5,
+              borderRadius: 2.5,
+              zIndex: 2000,
+              fontWeight: 600,
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+            }}
+          >
+            <Typography variant="body2">
+              {currentImageIndex + 1} / {filteredCategoryImages.length}
+            </Typography>
+          </Box>
+        )}
 
         <Box
           sx={{
-            p: { xs: 1, sm: 2 },
+            position: "relative",
+            width: "100%",
+            height: "100vh",
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
             alignItems: "center",
-            height: { xs: "auto", sm: "90vh" },
-            maxHeight: "90vh",
-            overflow: "auto",
+            justifyContent: "center",
+            overflow: "hidden",
+            cursor: "default",
+          }}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onWheel={handleWheel}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleCloseDialog()
+            }
           }}
         >
-          <img
-            src={selectedImage?.linkURL ?? ""}
-            alt={selectedImage?.fileName ?? "Project image"}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "70vh",
-              objectFit: "contain",
-              borderRadius: "4px",
-            }}
-          />
-
           {selectedImage && (
-            <Box
+            <img
+              src={selectedImage.linkURL}
+              alt={selectedImage.fileName}
+              style={{
+                maxWidth: zoomLevel === 1 ? "95%" : "none",
+                maxHeight: zoomLevel === 1 ? "85%" : "none",
+                width: "auto",
+                height: "auto",
+                objectFit: "contain",
+                transform: `translate(${imagePosition.x / zoomLevel}px, ${imagePosition.y / zoomLevel}px) scale(${zoomLevel})`,
+                transformOrigin: "center center",
+                transition: isDragging ? "none" : "transform 0.2s ease",
+                userSelect: "none",
+                pointerEvents: "auto",
+                borderRadius: "15px",
+                boxShadow: "0 25px 50px rgba(0, 0, 0, 0.7)",
+                cursor: zoomLevel > 1 ? (isDragging ? 'grabbing' : 'grab') : 'zoom-in',
+              }}
+              draggable={false}
+              onClick={(e) => {
+                e.stopPropagation()
+                if (zoomLevel === 1) {
+                  handleZoomIn()
+                }
+              }}
+              onDoubleClick={(e) => {
+                e.stopPropagation()
+                handleDoubleClick()
+              }}
+              onMouseDown={(e) => {
+                e.stopPropagation()
+                if (zoomLevel > 1) {
+                  setIsDragging(true)
+                  setDragStart({
+                    x: e.clientX - imagePosition.x,
+                    y: e.clientY - imagePosition.y
+                  })
+                }
+              }}
+            />
+          )}
+        </Box>
+
+        {selectedImage && (
+          <Box
+            sx={{
+              position: "fixed",
+              bottom: 30,
+              left: "50%",
+              transform: "translateX(-50%)",
+              textAlign: "center",
+              bgcolor: "rgba(0,0,0,0.6)",
+              p: 1.5,
+              borderRadius: 2,
+              zIndex: 2000,
+              maxWidth: "60%",
+              color: 'white'
+            }}
+          >
+            <Typography
+              variant="h6"
               sx={{
-                mt: 2,
-                textAlign: "center",
-                maxWidth: "100%",
-                px: 2,
+                fontWeight: 700,
+                fontSize: { xs: "1.2rem", sm: "1.4rem" },
+                wordBreak: "break-word",
+                mb: 1,
               }}
             >
+              {selectedImage.fileName}
+            </Typography>
+
+            {selectedImage.description && (
               <Typography
-                variant="h6"
+                variant="body2"
                 sx={{
-                  fontWeight: "bold",
-                  fontSize: { xs: "1rem", sm: "1.25rem" },
                   wordBreak: "break-word",
+                  opacity: 0.9,
+                  lineHeight: 1.5,
                 }}
               >
-                {selectedImage.fileName}
+                {selectedImage.description}
               </Typography>
-              {selectedImage.description && (
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mt: 1,
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {selectedImage.description}
-                </Typography>
-              )}
-            </Box>
-          )}
+            )}
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            position: "fixed",
+            top: 70,
+            left: 20,
+            color: "rgba(255,255,255,0.7)",
+            zIndex: 2000,
+            fontSize: "0.8rem",
+          }}
+        >
+          <Typography variant="caption" display="block" style={{color:"black"}}>
+            Click to zoom • Drag to pan • Scroll to zoom
+          </Typography>
+          <Typography variant="caption" display="block" style={{color:"black"}}>
+            ← → Arrow keys to navigate • ESC to close
+          </Typography>
         </Box>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)} fullWidth maxWidth="xs">
         <DialogTitle sx={{ fontWeight: "bold", color: "#F06292" }}>Delete Project?</DialogTitle>
         <DialogContent>

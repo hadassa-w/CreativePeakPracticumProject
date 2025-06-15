@@ -709,7 +709,7 @@ function DesignerDetailsForm() {
                                 textTransform: "none",
                                 fontSize: "0.875rem",
                                 fontWeight: 500,
-                                p: 0,
+                                p: 1,
                                 minWidth: "auto",
                                 "&:hover": {
                                   bgcolor: "transparent",

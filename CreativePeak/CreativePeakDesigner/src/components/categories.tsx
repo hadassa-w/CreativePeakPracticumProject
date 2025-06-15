@@ -8,7 +8,6 @@ import {
     List,
     ListItem,
     Paper,
-    Divider,
     Fade,
     Chip,
     Card,
@@ -23,7 +22,6 @@ import {
     DialogActions,
     TextField,
     InputAdornment,
-    Collapse,
     useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
@@ -36,9 +34,6 @@ import {
     Search as SearchIcon,
     Sort as SortIcon,
     FilterList as FilterIcon,
-    ExpandMore,
-    ExpandLess,
-    Info as InfoIcon,
 } from "@mui/icons-material"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
@@ -172,7 +167,6 @@ const CategoriesList = () => {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
     const [categoryStats, setCategoryStats] = useState<Record<number, number>>({})
-    const [expandedCategory, setExpandedCategory] = useState<number | null>(null)
     const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState("")
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
@@ -211,7 +205,7 @@ const CategoriesList = () => {
                 const userImages = imagesResponse.data.filter((image: Image) => image.user.id === userId)
 
                 // Count images per category
-                const stats: Record<number, number> = {}
+                const stats: Record<number, number> = {};
                 userImages.forEach((image: Image) => {
                     const categoryId = image.category.id
                     stats[categoryId] = (stats[categoryId] || 0) + 1
@@ -321,10 +315,6 @@ const CategoriesList = () => {
         })
 
         setFilteredCategories(sorted)
-    }
-
-    const toggleCategoryExpand = (categoryId: number) => {
-        setExpandedCategory(expandedCategory === categoryId ? null : categoryId)
     }
 
     const getCategoryInitial = (name: string) => {
@@ -542,6 +532,7 @@ const CategoriesList = () => {
                                                     </Box>
                                                 )}
 
+
                                                 <Typography
                                                     variant="body2"
                                                     color="text.secondary"
@@ -549,23 +540,20 @@ const CategoriesList = () => {
                                                         overflow: "hidden",
                                                         textOverflow: "ellipsis",
                                                         display: "-webkit-box",
-                                                        WebkitLineClamp: expandedCategory === category.id ? "unset" : 2,
                                                         WebkitBoxOrient: "vertical",
                                                     }}
                                                 >
                                                     {category.description}
                                                 </Typography>
 
-                                                {category.description && category.description.length > 100 && (
-                                                    <Button
-                                                        size="small"
-                                                        onClick={() => toggleCategoryExpand(category.id)}
-                                                        endIcon={expandedCategory === category.id ? <ExpandLess /> : <ExpandMore />}
-                                                        sx={{ textTransform: "none", p: 0, mt: 0.5, color: "#9C27B0" }}
-                                                    >
-                                                        {expandedCategory === category.id ? "Show less" : "Show more"}
-                                                    </Button>
-                                                )}
+                                                <Typography
+                                                    variant="caption"
+                                                    color="text.secondary"
+                                                    sx={{ display: 'block', mb: 1, fontSize: "0.75rem", fontWeight: "medium", mt: 2 }}
+                                                >
+                                                    <span style={{ fontWeight: "bold" }}>Created:</span> {new Date(category.createdAt).toLocaleDateString("en-GB")}
+                                                </Typography>
+
                                             </Box>
 
                                             <Box sx={{
@@ -591,18 +579,6 @@ const CategoriesList = () => {
                                                 </Tooltip>
                                             </Box>
                                         </ListItem>
-
-                                        <Collapse in={expandedCategory === category.id}>
-                                            <Box sx={{ p: 2, pt: 0, bgcolor: "rgba(0,0,0,0.02)" }}>
-                                                <Divider sx={{ mb: 2 }} />
-                                                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                                                    <InfoIcon fontSize="small" color="action" />
-                                                    <Typography variant="body2" color="text.secondary">
-                                                        Created on {new Date(category.createdAt || Date.now()).toLocaleDateString()}
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                        </Collapse>
                                     </CardContent>
                                 </CategoryCard>
                             </Fade>
