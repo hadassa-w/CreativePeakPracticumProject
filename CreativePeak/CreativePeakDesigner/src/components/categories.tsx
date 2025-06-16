@@ -24,6 +24,7 @@ import {
     InputAdornment,
     useMediaQuery,
 } from "@mui/material"
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useTheme } from "@mui/material/styles"
 import { styled } from "@mui/system"
 import {
@@ -546,14 +547,16 @@ const CategoriesList = () => {
                                                     {category.description}
                                                 </Typography>
 
-                                                <Typography
-                                                    variant="caption"
-                                                    color="text.secondary"
-                                                    sx={{ display: 'block', mb: 1, fontSize: "0.75rem", fontWeight: "medium", mt: 2 }}
-                                                >
-                                                    <span style={{ fontWeight: "bold" }}>Created:</span> {new Date(category.createdAt).toLocaleDateString("en-GB")}
-                                                </Typography>
-
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mt: 2, mb: 1 }}>
+                                                    <AccessTimeIcon sx={{ fontSize: 14, mr: 0.5, color: 'text.secondary' }} />
+                                                    <Typography
+                                                        variant="caption"
+                                                        color="text.secondary"
+                                                        sx={{ fontSize: "0.75rem", fontWeight: "medium" }}
+                                                    >
+                                                        <span style={{ fontWeight: "bold" }}>Created:</span> {new Date(category.createdAt).toLocaleDateString("en-GB")}
+                                                    </Typography>
+                                                </Box>
                                             </Box>
 
                                             <Box sx={{
