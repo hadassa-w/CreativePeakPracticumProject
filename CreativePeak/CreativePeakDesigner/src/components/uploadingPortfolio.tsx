@@ -989,20 +989,16 @@ const UploadProfolio = () => {
 
             <!-- Footer -->
             <div class="footer">
-                <p class="footer-text">Professional Portfolio - ${userInfo.fullName || 'Graphic Designer'}</p>
-                <p style="color: #9C27B0; font-weight: 600; margin: 10px 0;">
-                    Creating Visual Excellence Through Design
-                </p>
-                            <p>Creating with 
-                <a href="https://creativepeak-designer.onrender.com" target="_blank" style="color: #9C27B0; text-decoration: none; font-weight: 600;">
-                CreativePeak Designer</a>
-                </p>
                 <p class="generated-date">Generated on: ${new Date().toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
                 })}</p>
+                <p>Creating with 
+                <a href="https://creativepeak-designer.onrender.com" target="_blank" style="color: #9C27B0; text-decoration: none; font-weight: 600;">
+                CreativePeak Designer</a>
+                </p>
             </div>
         </div>
 
@@ -1195,8 +1191,7 @@ function toggleDescription() {
 
         </script>
     </body>
-    </html>import React, { useState } from 'react';
-`;
+    </html>`;
             }
 
             if (htmlContent) {
