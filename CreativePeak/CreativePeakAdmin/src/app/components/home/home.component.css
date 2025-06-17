@@ -1,10 +1,11 @@
-.background{
+.background {
     background-color: rgba(255, 255, 255, 0.973);
     margin-top: 70px;
     min-height: calc(100vh - 70px);
+    border-radius: 30px;
 }
 
-.admin-login-wrapper {
+.admin-landing-wrapper {
     border-radius: 1%;
     padding: 40px;
     margin-top: -50px;
@@ -17,7 +18,7 @@
     box-sizing: border-box;
 }
 
-.login-container {
+.welcome-container {
     width: 100%;
     max-width: 600px;
 }
@@ -31,14 +32,14 @@
 }
 
 .logo-section {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .title {
     font-size: 36px;
     font-weight: bold;
     color: #673AB7;
-    margin: 0 0 8px;
+    margin: 1px 1px 8px;
     position: relative;
     display: inline-block;
 }
@@ -58,8 +59,8 @@
     color: #4200b3;
     font-size: 18px;
     font-weight: 500;
-    padding-bottom: 15px;
     padding-top: 15px;
+    padding-bottom: 5px;
     margin: 0;
 }
 
@@ -72,70 +73,8 @@
     padding-bottom: 8px;
 }
 
-.section-title-small {
-    color: #673AB7;
-    font-size: 16px;
-    font-weight: 600;
-    margin: 20px 0 12px 0;
-    text-align: center;
-}
-
-/* Stats Section */
-.stats-section {
-    margin-bottom: 30px;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.stat-card {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    border-radius: 12px;
-    background-color: rgba(199, 170, 251, 0.15);
-    border: 1px solid rgba(103, 58, 183, 0.1);
-    transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-    background-color: rgba(66, 0, 179, 0.1);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(103, 58, 183, 0.15);
-}
-
-.stat-card mat-icon {
-    color: #4200b3;
-    font-size: 28px;
-    margin-right: 12px;
-}
-
-.stat-content {
-    display: flex;
-    flex-direction: column;
-}
-
-.stat-number {
-    font-size: 24px;
-    font-weight: bold;
-    color: #673AB7;
-    line-height: 1;
-}
-
-.stat-label {
-    font-size: 12px;
-    color: #4200b3;
-    margin-top: 4px;
-}
-
-/* Features Section */
 .features-section {
     border-top: 1px solid rgba(103, 58, 183, 0.1);
-    padding-top: 20px;
 }
 
 .feature-card {
@@ -173,134 +112,60 @@
     font-size: 15px;
 }
 
-/* Action Section */
-.action-section {
+.access-section {
     flex: 1 1 400px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 30px;
-    margin-top: 150px;
+    gap: 25px;
+    padding: 40px;
+    margin-top: 100px;
     border-radius: 3px 3px 0 0;
     background-color: rgba(126, 87, 194, 0.03);
     border: 1px solid rgba(126, 87, 194, 0.1);
 }
 
-/* System Status */
-.status-section {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(103, 58, 183, 0.1);
-}
-
-.status-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.status-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: rgba(103, 58, 183, 0.05);
-}
-
-.status-item mat-icon {
-    font-size: 20px;
-}
-
-.status-label {
-    font-weight: 500;
-    color: #673AB7;
-    flex: 1;
-}
-
-.status-value {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-/* Activity Section */
-.activity-section {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(103, 58, 183, 0.1);
-}
-
-.activity-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.activity-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 8px;
-    background-color: rgba(103, 58, 183, 0.05);
-    transition: all 0.3s ease;
-}
-
-.activity-item:hover {
-    background-color: rgba(103, 58, 183, 0.1);
-    transform: translateX(3px);
-}
-
-.activity-item mat-icon {
-    color: #4200b3;
-    font-size: 20px;
-    margin-top: 2px;
-}
-
-.activity-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-.activity-text {
-    color: #673AB7;
-    font-weight: 500;
-    font-size: 14px;
-    margin-bottom: 4px;
-}
-
-.activity-time {
-    color: #4200b3;
-    font-size: 12px;
-}
-
-/* Login Section */
 .login-section {
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 25px;
+    padding: 30px;
     border-radius: 12px;
     border: 1px solid rgba(103, 58, 183, 0.15);
     text-align: center;
 }
 
-.login-info {
+.access-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 20px;
+}
+
+.access-header i {
+    color: #4200b3;
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.access-title {
+    color: #673AB7;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.login-info {
+    margin-bottom: 25px;
 }
 
 .login-info p {
     color: #673AB7;
     font-size: 14px;
-    margin: 0;
+    margin: 8px 0;
 }
 
-.action-button {
+.access-button {
     width: 100%;
-    max-width: 250px;
-    padding: 12px 20px;
+    max-width: 280px;
+    padding: 14px 24px;
     border-radius: 100px;
     background-color: white;
     color: #673AB7;
@@ -309,42 +174,63 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     transition: all 0.3s ease;
-    font-weight: 500;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     text-transform: none;
     cursor: pointer;
 }
 
-.action-button.secondary {
-    background-color: rgba(103, 58, 183, 0.1);
-    border: 2px solid rgba(103, 58, 183, 0.3);
-    color: #4200b3;
-}
-
-.action-button mat-icon {
+.access-button mat-icon {
     transition: transform 0.3s ease;
 }
 
-.action-button:hover {
+.access-button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(81, 45, 168, 0.15);
+    box-shadow: 0 8px 20px rgba(81, 45, 168, 0.2);
     background-color: #673AB7;
     color: white;
 }
 
-.action-button.secondary:hover {
-    background-color: rgba(103, 58, 183, 0.2);
-    color: #4200b3;
-    border-color: rgba(103, 58, 183, 0.5);
-}
-
-.action-button:hover mat-icon {
+.access-button:hover mat-icon {
     transform: scale(1.2);
 }
 
-/* Footer */
+.security-notice {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(103, 58, 183, 0.1);
+    border-left: 4px solid #4200b3;
+}
+
+.notice-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.notice-header i {
+    color: #4200b3;
+    font-size: 20px;
+}
+
+.notice-header span {
+    color: #673AB7;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.security-notice p {
+    color: #673AB7;
+    font-size: 13px;
+    margin: 0;
+    line-height: 1.4;
+}
+
 .footer {
     text-align: center;
     padding: 30px 20px;
@@ -383,43 +269,33 @@
     margin: 0;
 }
 
-/* Responsive adjustments */
 @media (max-width: 1024px) {
-    .admin-login-wrapper {
+    .admin-landing-wrapper {
         flex-direction: column;
         gap: 30px;
         padding: 30px;
     }
 
-    .login-container {
+    .welcome-container {
         max-width: 100%;
     }
 
-    .action-section {
+    .access-section {
         margin-top: 0;
         width: 100%;
         flex: 0;
-    }
-
-    .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-@media (max-width: 900px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+        padding: 30px;
     }
 }
 
 @media (max-width: 768px) {
-    .admin-login-wrapper {
+    .admin-landing-wrapper {
         flex-direction: column;
         align-items: center;
         padding: 20px;
     }
 
-    .action-section {
+    .access-section {
         margin-top: 0;
         width: 100%;
         padding: 20px;
@@ -445,19 +321,6 @@
         font-size: 14px;
     }
 
-    .stats-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .stat-card {
-        padding: 12px;
-    }
-
-    .stat-number {
-        font-size: 20px;
-    }
-
     .footer-links {
         flex-direction: column;
         gap: 15px;
@@ -469,19 +332,20 @@
         font-size: 24px;
     }
 
-    .action-button {
-        max-width: 200px;
+    .access-button {
+        max-width: 240px;
+        font-size: 14px;
     }
 
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .admin-login-wrapper {
+    .admin-landing-wrapper {
         padding: 15px;
     }
 
     .login-section {
         padding: 20px;
+    }
+
+    .access-header i {
+        font-size: 40px;
     }
 }

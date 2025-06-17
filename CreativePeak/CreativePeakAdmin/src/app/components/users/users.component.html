@@ -11,7 +11,6 @@
   </div>
 
   <div class="users-list-container">
-    <!-- Loading indicator -->
     @if(isLoading) {
     <div class="loading-container">
       <div class="loading-spinner">
@@ -21,7 +20,6 @@
     </div>
     }
 
-    <!-- No users message -->
     @if(!isLoading && users.length === 0) {
     <div class="no-users-container">
       <mat-icon class="no-users-icon">group_off</mat-icon>
@@ -30,7 +28,6 @@
     </div>
     }
 
-    <!-- Users grid -->
     <div class="users-grid">
       @for(user of users; track user.id) {
       <div class="user-card">

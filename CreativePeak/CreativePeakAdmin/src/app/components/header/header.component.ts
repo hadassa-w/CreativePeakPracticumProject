@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth.service';
@@ -115,5 +115,18 @@ export class HeaderComponent implements OnInit {
 
   getCurrentYear(): number {
     return new Date().getFullYear();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const clickedElement = event.target as HTMLElement;
+
+    if (
+      this.popoverOpen &&
+      this.popoverAnchor &&
+      !this.popoverAnchor.contains(clickedElement)
+    ) {
+      this.handleClose();
+    }
   }
 }

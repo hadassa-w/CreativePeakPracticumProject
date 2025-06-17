@@ -36,13 +36,12 @@ export class AddEditUserComponent implements OnInit {
     private usersService: UsersService,
     private snackBar: MatSnackBar
   ) {
-    // Initialize form without password field - will add it later if needed
     this.userForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9\s\-\(\)]{8,15}$/)]],
       address: [''],
-      isActive: [true], // Default active
+      isActive: [true]
     });
   }
 
@@ -53,13 +52,11 @@ export class AddEditUserComponent implements OnInit {
         this.userId = +params['id'];
         this.loadUserData(this.userId);
       } else {
-        // Add password field only when creating a new user
         this.userForm.addControl('password', this.fb.control('', [
           Validators.required,
           Validators.minLength(6)
         ]));
         
-        // Listen to password changes for strength indicator
         this.userForm.get('password')?.valueChanges.subscribe(value => {
           this.checkPasswordStrength(value);
         });
@@ -137,7 +134,6 @@ export class AddEditUserComponent implements OnInit {
     this.submitAttempted = true;
 
     if (this.userForm.invalid) {
-      // Trigger validation on all fields
       Object.keys(this.userForm.controls).forEach(key => {
         const control = this.userForm.get(key);
         control?.markAsTouched();
@@ -149,7 +145,6 @@ export class AddEditUserComponent implements OnInit {
 
     try {
       if (this.isEditMode && this.userId) {
-        // For edit mode - use User object (without password)
         const userData: User = {
           id: this.userId,
           fullName: this.userForm.value.fullName,
@@ -157,14 +152,13 @@ export class AddEditUserComponent implements OnInit {
           phone: this.userForm.value.phone,
           address: this.userForm.value.address,
           isActive: this.userForm.value.isActive,
-          createdAt: new Date(), // This should be preserved from the original user
+          createdAt: new Date(),
           updatedAt: new Date()
         };
 
         await this.usersService.updateUser_Main(this.userId, userData);
         this.snackBar.open('User updated successfully', 'Close', { duration: 3000 });
       } else {
-        // For create mode - use CreateUser object (with password)
         const createUserData = {
           id: 0,
           fullName: this.userForm.value.fullName,
@@ -216,7 +210,6 @@ export class AddEditUserComponent implements OnInit {
   }
 
   formatFieldName(fieldName: string): string {
-    // Convert camelCase to Title Case with spaces
     return fieldName
       .replace(/([A-Z])/g, ' $1')
       .replace(/^./, str => str.toUpperCase());

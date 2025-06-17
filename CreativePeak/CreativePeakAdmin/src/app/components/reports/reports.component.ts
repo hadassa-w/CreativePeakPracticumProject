@@ -55,10 +55,9 @@ export class ReportsComponent implements OnInit {
       }
     }
   };
-
   isLoading: boolean = false;
   reportData: ReportData[] = [];
-
+  
   constructor(
     private reportService: ReportsService,
     private snackBar: MatSnackBar
@@ -88,7 +87,7 @@ export class ReportsComponent implements OnInit {
     const labels = data.map(d => d.month);
     const userData = data.map(d => d.newUsers);
     const portfolioData = data.map(d => d.newPortfolios);
-
+    
     this.chartData = {
       labels,
       datasets: [
@@ -126,5 +125,55 @@ export class ReportsComponent implements OnInit {
 
   getTotalPortfolios(): number {
     return this.reportData.reduce((sum, data) => sum + data.newPortfolios, 0);
+  }
+
+  getUsersMonthlyChange(): { value: number; percentage: number; isPositive: boolean; hasData: boolean } {
+    if (this.reportData.length < 2) {
+      return { value: 0, percentage: 0, isPositive: false, hasData: false };
+    }
+    
+    const currentMonth = this.reportData[this.reportData.length - 1];
+    const previousMonth = this.reportData[this.reportData.length - 2];
+    
+    const change = currentMonth.newUsers - previousMonth.newUsers;
+    const percentage = previousMonth.newUsers === 0 ? 0 : 
+      Math.round((change / previousMonth.newUsers) * 100);
+    
+    return {
+      value: Math.abs(change),
+      percentage: Math.abs(percentage),
+      isPositive: change >= 0,
+      hasData: true
+    };
+  }
+
+  getPortfoliosMonthlyChange(): { value: number; percentage: number; isPositive: boolean; hasData: boolean } {
+    if (this.reportData.length < 2) {
+      return { value: 0, percentage: 0, isPositive: false, hasData: false };
+    }
+    
+    const currentMonth = this.reportData[this.reportData.length - 1];
+    const previousMonth = this.reportData[this.reportData.length - 2];
+    
+    const change = currentMonth.newPortfolios - previousMonth.newPortfolios;
+    const percentage = previousMonth.newPortfolios === 0 ? 0 : 
+      Math.round((change / previousMonth.newPortfolios) * 100);
+    
+    return {
+      value: Math.abs(change),
+      percentage: Math.abs(percentage),
+      isPositive: change >= 0,
+      hasData: true
+    };
+  }
+
+  getCurrentMonthUsers(): number {
+    return this.reportData.length > 0 ? 
+      this.reportData[this.reportData.length - 1].newUsers : 0;
+  }
+
+  getCurrentMonthPortfolios(): number {
+    return this.reportData.length > 0 ? 
+      this.reportData[this.reportData.length - 1].newPortfolios : 0;
   }
 }

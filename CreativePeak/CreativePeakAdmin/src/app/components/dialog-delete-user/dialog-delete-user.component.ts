@@ -12,10 +12,10 @@ export class DialogDeleteUserComponent {
   constructor(
     public dialogRef: MatDialogRef<DialogDeleteUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { userId: number, userName: string, onResult?: (result: boolean) => void }
-  ) {}
+  ) { }
 
   close(result: boolean): void {
-    this.dialogRef.close(result); // תחזיר את התוצאה
+    this.dialogRef.close(result);
     if (this.data.onResult) {
       this.data.onResult(result);
     }

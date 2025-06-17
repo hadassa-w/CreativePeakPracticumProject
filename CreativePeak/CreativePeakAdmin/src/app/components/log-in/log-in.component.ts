@@ -44,10 +44,6 @@ loginForm: FormGroup;
     });
   }
 
-  ngOnInit(): void {
-    // Any initialization logic can go here
-  }
-
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
@@ -83,7 +79,6 @@ loginForm: FormGroup;
     }
   }
 
-  // Helper method to mark all form controls as touched to trigger validation
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);

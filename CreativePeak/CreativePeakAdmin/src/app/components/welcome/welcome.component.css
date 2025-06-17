@@ -29,8 +29,6 @@
     gap: 30px;
 
     @media (max-width: 600px) {
-      /* display: flex; */
-      /* align-items: flex-start; */
       flex-direction: column;
     }
   }

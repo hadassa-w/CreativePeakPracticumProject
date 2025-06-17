@@ -1,14 +1,12 @@
 <div class="background">
-    <div class="admin-login-wrapper">
-        <!-- Left Section -->
-        <div class="login-container">
+    <div class="admin-landing-wrapper">
+        <div class="welcome-container">
             <div class="header-decoration"></div>
             <div class="logo-section">
-                <h1 class="title">CreativePeak Admin</h1>
-                <p class="subtitle">Management System</p>
+                <h1 class="title">Admin Portal</h1>
+                <p class="subtitle">System Management Access</p>
             </div>
-            
-            <!-- Features Section -->
+
             <div class="features-section">
                 <h3 class="section-title">Management Features</h3>
                 <div class="feature-card">
@@ -33,13 +31,6 @@
                     </div>
                 </div>
                 <div class="feature-card">
-                    <i class="material-icons">security</i>
-                    <div class="feature-text">
-                        <span class="feature-title">Security Center</span>
-                        <span class="feature-description">Monitor system security</span>
-                    </div>
-                </div>
-                <div class="feature-card">
                     <i class="material-icons">settings</i>
                     <div class="feature-text">
                         <span class="feature-title">System Settings</span>
@@ -49,26 +40,31 @@
             </div>
         </div>
 
-        <!-- Right Section -->
-        <div class="action-section">
-            <!-- Login Section -->
+        <div class="access-section">
             <div class="login-section">
-                <div class="login-info">
-                    <p>Access the admin dashboard to manage your platform</p>
+                <div class="access-header">
+                    <i class="material-icons">verified_user</i>
+                    <h3 class="access-title">Authorized Access Only</h3>
                 </div>
-                <button mat-raised-button class="action-button" (click)="navigate('/logIn')">
+                <div class="login-info">
+                    <p>This portal is restricted to authorized administrators</p>
+                </div>
+                <button mat-raised-button class="access-button" (click)="navigate('/logIn')">
                     <mat-icon>login</mat-icon>
-                    Admin Login
+                    Enter Admin Panel
                 </button>
-                <button mat-raised-button class="action-button secondary" (click)="navigate('/support')">
-                    <mat-icon>help</mat-icon>
-                    Support
-                </button>
+            </div>
+
+            <div class="security-notice">
+                <div class="notice-header">
+                    <i class="material-icons">info</i>
+                    <span>Security Notice</span>
+                </div>
+                <p>All access attempts are monitored and logged for security purposes</p>
             </div>
         </div>
     </div>
-    
-    <!-- Footer -->
+
     <div class="footer">
         <div class="footer-content">
             <p>CreativePeak Admin System © {{ currentYear }} | All rights reserved</p>

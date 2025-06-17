@@ -62,7 +62,6 @@
   margin: 0;
 }
 
-/* Form styles */
 .user-form {
   background-color: rgba(199, 170, 251, 0.1);
   border-radius: 8px;
@@ -120,7 +119,6 @@
   margin-top: 4px;
 }
 
-/* Password field styles */
 .password-input-container {
   position: relative;
   display: flex;
@@ -152,7 +150,6 @@
   font-size: 20px;
 }
 
-/* Password strength indicator */
 .password-strength {
   margin-top: 8px;
 }
@@ -200,7 +197,6 @@
   color: #4CAF50;
 }
 
-/* Status toggle styles */
 .status-toggle {
   display: flex;
   flex-direction: column;
@@ -335,7 +331,6 @@ input:checked + .slider:before {
   font-size: 18px;
 }
 
-/* Right sidebar styles */
 .action-section {
   flex: 1 1 250px;
   display: flex;
@@ -412,7 +407,6 @@ input:checked + .slider:before {
   font-size: 14px;
 }
 
-/* Loading styles */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -456,7 +450,6 @@ input:checked + .slider:before {
   animation: rotate 1.5s linear infinite;
 }
 
-/* Responsive adjustments */
 @media (max-width: 900px) {
   .admin-login-wrapper {
     flex-direction: column;

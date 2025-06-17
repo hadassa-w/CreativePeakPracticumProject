@@ -12,7 +12,6 @@
     </div>
   </div>
 
-  <!-- Summary Cards -->
   <div class="summary-cards">
     <div class="summary-card">
       <div class="summary-card-header">
@@ -37,9 +36,7 @@
     </div>
   </div>
 
-  <!-- Chart Section -->
   <div class="chart-section">
-    <!-- Loading indicator -->
     @if(isLoading) {
       <div class="loading-container">
         <div class="loading-spinner">
@@ -49,7 +46,6 @@
       </div>
     }
     
-    <!-- No data message -->
     @if(!isLoading && reportData.length === 0) {
       <div class="no-data-container">
         <mat-icon class="no-data-icon">analytics</mat-icon>
@@ -61,7 +57,6 @@
       </div>
     }
     
-    <!-- Chart Display -->
     @if(!isLoading && reportData.length > 0) {
       <div class="chart-container">
         <div class="chart-header">
@@ -96,20 +91,23 @@
     }
   </div>
 
-  <!-- Data Table -->
   @if(!isLoading && reportData.length > 0) {
     <div class="data-table-section">
       <div class="table-header">
         <h3 class="table-title">Detailed Monthly Data</h3>
       </div>
-      <div class="data-table-container">
+      
+      <!-- Desktop Table View -->
+      <div class="data-table-container desktop-table">
         <table class="data-table">
           <thead>
             <tr>
               <th>Month</th>
               <th>New Users</th>
+              <th>Users Growth</th>
               <th>New Portfolios</th>
-              <th>Growth Rate</th>
+              <th>Portfolios Growth</th>
+              <th>Total Growth</th>
             </tr>
           </thead>
           <tbody>
@@ -122,19 +120,61 @@
                     {{ data.newUsers }}
                   </div>
                 </td>
+                <td class="users-growth-cell">
+                  @if(i > 0) {
+                    <span class="growth-indicator" 
+                          [class.positive]="data.newUsers > reportData[i-1].newUsers"
+                          [class.negative]="data.newUsers < reportData[i-1].newUsers"
+                          [class.neutral]="data.newUsers === reportData[i-1].newUsers">
+                      <mat-icon>
+                        {{ data.newUsers > reportData[i-1].newUsers ? 'trending_up' : 
+                           data.newUsers < reportData[i-1].newUsers ? 'trending_down' : 'remove' }}
+                      </mat-icon>
+                      {{ data.newUsers > reportData[i-1].newUsers ? '+' : '' }}
+                      {{ data.newUsers - reportData[i-1].newUsers }}
+                    </span>
+                  } @else {
+                    <span class="growth-indicator neutral">
+                      <mat-icon>remove</mat-icon>
+                      N/A
+                    </span>
+                  }
+                </td>
                 <td class="portfolios-cell">
                   <div class="cell-content">
                     <mat-icon class="cell-icon">folder</mat-icon>
                     {{ data.newPortfolios }}
                   </div>
                 </td>
+                <td class="portfolios-growth-cell">
+                  @if(i > 0) {
+                    <span class="growth-indicator" 
+                          [class.positive]="data.newPortfolios > reportData[i-1].newPortfolios"
+                          [class.negative]="data.newPortfolios < reportData[i-1].newPortfolios"
+                          [class.neutral]="data.newPortfolios === reportData[i-1].newPortfolios">
+                      <mat-icon>
+                        {{ data.newPortfolios > reportData[i-1].newPortfolios ? 'trending_up' : 
+                           data.newPortfolios < reportData[i-1].newPortfolios ? 'trending_down' : 'remove' }}
+                      </mat-icon>
+                      {{ data.newPortfolios > reportData[i-1].newPortfolios ? '+' : '' }}
+                      {{ data.newPortfolios - reportData[i-1].newPortfolios }}
+                    </span>
+                  } @else {
+                    <span class="growth-indicator neutral">
+                      <mat-icon>remove</mat-icon>
+                      N/A
+                    </span>
+                  }
+                </td>
                 <td class="growth-cell">
                   @if(i > 0) {
                     <span class="growth-indicator" 
                           [class.positive]="(data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios)"
-                          [class.negative]="(data.newUsers + data.newPortfolios) < (reportData[i-1].newUsers + reportData[i-1].newPortfolios)">
+                          [class.negative]="(data.newUsers + data.newPortfolios) < (reportData[i-1].newUsers + reportData[i-1].newPortfolios)"
+                          [class.neutral]="(data.newUsers + data.newPortfolios) === (reportData[i-1].newUsers + reportData[i-1].newPortfolios)">
                       <mat-icon>
-                        {{ (data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios) ? 'trending_up' : 'trending_down' }}
+                        {{ (data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios) ? 'trending_up' : 
+                           (data.newUsers + data.newPortfolios) < (reportData[i-1].newUsers + reportData[i-1].newPortfolios) ? 'trending_down' : 'remove' }}
                       </mat-icon>
                       {{ (data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios) ? '+' : '' }}
                       {{ ((data.newUsers + data.newPortfolios) - (reportData[i-1].newUsers + reportData[i-1].newPortfolios)) }}
@@ -150,6 +190,92 @@
             }
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Card View -->
+      <div class="mobile-cards">
+        @for(data of reportData; track data.month; let i = $index) {
+          <div class="mobile-card">
+            <div class="mobile-card-header">
+              <h4 class="mobile-month">{{ data.month }}</h4>
+            </div>
+            <div class="mobile-card-content">
+              <div class="mobile-stat">
+                <div class="mobile-stat-label">
+                  <mat-icon>people</mat-icon>
+                  New Users
+                </div>
+                <div class="mobile-stat-value">{{ data.newUsers }}</div>
+                <div class="mobile-stat-growth">
+                  @if(i > 0) {
+                    <span class="growth-indicator" 
+                          [class.positive]="data.newUsers > reportData[i-1].newUsers"
+                          [class.negative]="data.newUsers < reportData[i-1].newUsers"
+                          [class.neutral]="data.newUsers === reportData[i-1].newUsers">
+                      <mat-icon>
+                        {{ data.newUsers > reportData[i-1].newUsers ? 'trending_up' : 
+                           data.newUsers < reportData[i-1].newUsers ? 'trending_down' : 'remove' }}
+                      </mat-icon>
+                      {{ data.newUsers > reportData[i-1].newUsers ? '+' : '' }}
+                      {{ data.newUsers - reportData[i-1].newUsers }}
+                    </span>
+                  } @else {
+                    <span class="growth-indicator neutral">N/A</span>
+                  }
+                </div>
+              </div>
+              
+              <div class="mobile-stat">
+                <div class="mobile-stat-label">
+                  <mat-icon>folder</mat-icon>
+                  New Portfolios
+                </div>
+                <div class="mobile-stat-value">{{ data.newPortfolios }}</div>
+                <div class="mobile-stat-growth">
+                  @if(i > 0) {
+                    <span class="growth-indicator" 
+                          [class.positive]="data.newPortfolios > reportData[i-1].newPortfolios"
+                          [class.negative]="data.newPortfolios < reportData[i-1].newPortfolios"
+                          [class.neutral]="data.newPortfolios === reportData[i-1].newPortfolios">
+                      <mat-icon>
+                        {{ data.newPortfolios > reportData[i-1].newPortfolios ? 'trending_up' : 
+                           data.newPortfolios < reportData[i-1].newPortfolios ? 'trending_down' : 'remove' }}
+                      </mat-icon>
+                      {{ data.newPortfolios > reportData[i-1].newPortfolios ? '+' : '' }}
+                      {{ data.newPortfolios - reportData[i-1].newPortfolios }}
+                    </span>
+                  } @else {
+                    <span class="growth-indicator neutral">N/A</span>
+                  }
+                </div>
+              </div>
+              
+              <div class="mobile-stat total-growth">
+                <div class="mobile-stat-label">
+                  <mat-icon>trending_up</mat-icon>
+                  Total Growth
+                </div>
+                <div class="mobile-stat-growth">
+                  @if(i > 0) {
+                    <span class="growth-indicator" 
+                          [class.positive]="(data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios)"
+                          [class.negative]="(data.newUsers + data.newPortfolios) < (reportData[i-1].newUsers + reportData[i-1].newPortfolios)"
+                          [class.neutral]="(data.newUsers + data.newPortfolios) === (reportData[i-1].newUsers + reportData[i-1].newPortfolios)">
+                      <mat-icon>
+                        {{ (data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios) ? 'trending_up' : 
+                           (data.newUsers + data.newPortfolios) < (reportData[i-1].newUsers + reportData[i-1].newPortfolios) ? 'trending_down' : 'remove' }}
+                      </mat-icon>
+                      {{ (data.newUsers + data.newPortfolios) > (reportData[i-1].newUsers + reportData[i-1].newPortfolios) ? '+' : '' }}
+                      {{ ((data.newUsers + data.newPortfolios) - (reportData[i-1].newUsers + reportData[i-1].newPortfolios)) }}
+                    </span>
+                  } @else {
+                    <span class="growth-indicator neutral">N/A</span>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
       </div>
     </div>
   }

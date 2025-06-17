@@ -1,5 +1,4 @@
 <div class="app-header">
-    <!-- Main App Bar -->
     <mat-toolbar color="primary" class="mat-elevation-z0"
         style="background-color: rgba(255, 255, 255, 0.95); border-bottom: 1px solid rgba(0,0,0,0.08);">
         <div class="app-container toolbar">
@@ -38,7 +37,6 @@
         </div>
     </mat-toolbar>
 
-    <!-- Mobile Drawer -->
     <div class="backdrop" [class.open]="mobileOpen" (click)="closeDrawer()"></div>
     <div class="side-drawer" [class.open]="mobileOpen">
         <div class="drawer-header">
@@ -76,7 +74,6 @@
         </div>
     </div>
 
-    <!-- Account Popover -->
     <div class="popover" *ngIf="popoverOpen">
         <div *ngIf="isLoggedIn; else loggedOutPopover">
             <div class="popover-header">
@@ -114,5 +111,4 @@
     </div>
 </div>
 
-<!-- Spacer to push content below the fixed header -->
 <div class="toolbar-spacer"></div>

@@ -8,11 +8,11 @@
 }
 
 .user-status.active {
-  color: #4CAF50; /* ירוק */
+  color: #4CAF50;
 }
 
 .user-status.inactive {
-  color: #F44336; /* אדום */
+  color: #F44336;
 }
 
 .status-icon {
@@ -53,7 +53,7 @@
   position: absolute;
   bottom: -8px;
   left: 0;
-  width: 40%;
+  width: 95%;
   height: 4px;
   background: linear-gradient(90deg, #4200b3, #673AB7);
   border-radius: 2px;
@@ -85,7 +85,6 @@
   box-shadow: 0 5px 15px rgba(103, 58, 183, 0.3);
 }
 
-/* User grid styles */
 .users-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -265,7 +264,6 @@
   background-color: rgba(244, 67, 54, 0.15);
 }
 
-/* Loading and empty states */
 .loading-container, .no-users-container {
   display: flex;
   flex-direction: column;
@@ -329,7 +327,6 @@
   animation: rotate 1.5s linear infinite;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .header-section {
     flex-direction: column;
