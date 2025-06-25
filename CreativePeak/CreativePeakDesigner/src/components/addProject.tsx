@@ -255,15 +255,14 @@ const AddImageForm = () => {
   const fetchCategories = async () => {
     try {
       setLoading(false);
-      const response = await axios.get(`https://creativepeak-api.onrender.com/api/Category`,
+      const response = await axios.get(`https://creativepeak-api.onrender.com/api/Category/userId=${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       )
-      const filterCategory = response.data.filter((category: Category) => category.userId == userId)
-      setCategories(filterCategory)
+      setCategories(response.data)
     } catch (err) {
       console.error("Error loading categories", err)
       setSnackbarMsg("❌ Failed to load categories. Please try again.")
