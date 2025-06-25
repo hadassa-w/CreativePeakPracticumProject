@@ -182,14 +182,15 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
   useEffect(() => {
     const fetchUserCategories = async () => {
       try {
-        const response = await axios.get(`https://creativepeak-api.onrender.com/api/Category/userId=${userId}`,
+        const response = await axios.get(`https://creativepeak-api.onrender.com/api/Category`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         )
-        setUserCategories(response.data);
+        const filterCategories=response.data.filter((cat: Category) => cat.userId === userId);
+        setUserCategories(filterCategories);
       } catch (error) {
         console.error("Failed to load categories", error)
         setSnackbarMsg("❌ Failed to load existing categories")
