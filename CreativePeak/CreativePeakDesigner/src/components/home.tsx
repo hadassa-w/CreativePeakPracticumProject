@@ -18,7 +18,6 @@ import "../css/home.css";
 import { useAuth } from "../contexts/authContext";
 import { useEffect, useState } from "react";
 
-// עיצוב
 const HomeWrapper = styled(Container)({
     backgroundColor: "#fcfaff",
     borderRadius: "16px",
@@ -38,7 +37,6 @@ const HomeWrapper = styled(Container)({
     }
 });
 
-// חלוקת תוכן פנימית
 const Content = styled(Box)({
     display: "flex",
     flexDirection: "column",
@@ -46,7 +44,6 @@ const Content = styled(Box)({
     marginTop: "30px",
 });
 
-// אזור מידע
 const InfoSection = styled(Box)({
     display: "flex",
     flexWrap: "wrap",
@@ -55,7 +52,6 @@ const InfoSection = styled(Box)({
     gap: "30px",
 });
 
-// כרטיס מידע
 const InfoCard = styled(Paper)({
     padding: "30px",
     borderRadius: "16px",
@@ -100,7 +96,6 @@ const FeatureCard = styled(Box)({
     }
 });
 
-// כפתור מעוצב
 const StyledButton = styled(Button)({
     textTransform: "none",
     fontSize: "17px",
@@ -133,7 +128,6 @@ const StyledButton = styled(Button)({
     }
 });
 
-// כפתור חינמי
 const FreeButton = styled(Button)({
     textTransform: "none",
     fontSize: "17px",
@@ -163,7 +157,6 @@ const FreeButton = styled(Button)({
     }
 });
 
-// כותרת עם אפקט מודגש
 const GradientTitle = styled(Typography)({
     position: "relative",
     display: "inline-block",
@@ -179,7 +172,6 @@ const GradientTitle = styled(Typography)({
     }
 });
 
-// כרטיס סטטיסטיקה
 const StatCard = styled(Paper)({
     padding: "25px",
     borderRadius: "16px",
@@ -198,7 +190,6 @@ const StatCard = styled(Paper)({
     },
 });
 
-// כרטיס מחירים
 const PricingCard = styled(Paper)({
     padding: "30px",
     borderRadius: "16px",
@@ -214,7 +205,6 @@ const PricingCard = styled(Paper)({
     },
 });
 
-// כרטיס עדויות
 const TestimonialCard = styled(Paper)({
     padding: "25px",
     borderRadius: "16px",
@@ -229,7 +219,6 @@ const TestimonialCard = styled(Paper)({
     },
 });
 
-// כרטיס "איך זה עובד"
 const HowItWorksCard = styled(Box)({
     display: "flex",
     alignItems: "flex-start",
@@ -246,7 +235,6 @@ const HowItWorksCard = styled(Box)({
     },
 });
 
-// תג מספר לשלבים
 const StepNumber = styled(Box)({
     width: "40px",
     height: "40px",
@@ -260,7 +248,6 @@ const StepNumber = styled(Box)({
     fontWeight: "bold",
 });
 
-// חבילה פופולרית
 const PopularBadge = styled(Box)({
     position: "absolute",
     top: "-12px",
@@ -338,7 +325,6 @@ function Home() {
             </Box>
 
             <Content>
-                {/* בסיסי מידע */}
                 <InfoSection>
                     <InfoCard>
                         <GradientTitle variant="h4" sx={{ fontWeight: "bold", color: "#512da8", mb: 3 }}>
@@ -411,7 +397,6 @@ function Home() {
                     </InfoCard>
                 </InfoSection>
 
-                {/* סטטיסטיקות */}
                 <Box sx={{ mt: 4 }}>
                     <Typography
                         variant="h4"
@@ -464,7 +449,6 @@ function Home() {
                     </Grid>
                 </Box>
 
-                {/* איך זה עובד */}
                 <Box sx={{ mt: 5 }}>
                     <Typography
                         variant="h4"
@@ -524,7 +508,6 @@ function Home() {
                     </Grid>
                 </Box>
 
-                {/* מחירון */}
                 <Box sx={{ mt: 5 }}>
                     <Typography
                         variant="h4"
@@ -663,7 +646,6 @@ function Home() {
                     </Grid>
                 </Box>
 
-                {/* עדויות */}
                 <Box sx={{ mt: 5 }}>
                     <Typography
                         variant="h4"
@@ -762,7 +744,6 @@ function Home() {
                     </Grid>
                 </Box>
 
-                {/* קריאה לפעולה */}
                 <Box
                     sx={{
                         mt: 5,
@@ -789,7 +770,6 @@ function Home() {
                     </Box>
                 </Box>
 
-                {/* יתרונות המערכת */}
                 <Box sx={{ mt: 5 }}>
                     <Typography
                         variant="h4"
@@ -904,7 +884,6 @@ function Home() {
                     </Grid>
                 </Box>
 
-                {/* שאלות נפוצות */}
                 <Box sx={{ mt: 5 }}>
                     <Typography
                         variant="h4"

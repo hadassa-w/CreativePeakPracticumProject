@@ -65,7 +65,6 @@ export default function Header() {
   const open = Boolean(anchorEl);
   const id = open ? "profile-popover" : undefined;
 
-  // Check if current path matches item path
   const isActive = (path: string) => location.pathname === path;
 
   const drawer = (
@@ -337,7 +336,7 @@ export default function Header() {
         </nav>
 
         <Box component="main" sx={{ width: '100%' }}>
-          <Toolbar /> {/* Spacer */}
+          <Toolbar />
         </Box>
       </Box>
 

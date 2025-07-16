@@ -228,7 +228,6 @@ export default function ChangePassword() {
             setSuccess(true);
             setMessage("Password changed successfully! Redirecting to login...");
 
-            // מחכה 2 שניות ואז מנתק ומעביר לדף התחברות
             setTimeout(() => {
                 navigate("/welcome");
             }, 5000);
@@ -298,7 +297,6 @@ export default function ChangePassword() {
 
     return (
         <OuterContainer>
-            {/* Background decorative elements */}
             <Box sx={{
                 position: "absolute",
                 top: "10%",

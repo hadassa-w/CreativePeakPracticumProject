@@ -186,7 +186,6 @@ export default function ForgotPassword() {
             return;
         }
 
-        // Basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setError("Please enter a valid email address");
@@ -225,7 +224,6 @@ export default function ForgotPassword() {
         setError("");
 
         try {
-            // שלח את הסיסמה הזמנית לשרת לאימות
             const response = await axios.post("https://creativepeak-api.onrender.com/api/Auth/authenticate", {
                 email,
                 "password": tempPassword
@@ -270,7 +268,6 @@ export default function ForgotPassword() {
 
     return (
         <OuterContainer>
-            {/* Background decorative elements */}
             <Box sx={{
                 position: "absolute",
                 top: "10%",

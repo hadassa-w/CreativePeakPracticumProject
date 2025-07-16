@@ -169,7 +169,6 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
   const [nameExists, setNameExists] = useState(false)
   const [showExistingCategories, setShowExistingCategories] = useState(false)
 
-  // AI description states
   const [aiDescriptionOpen, setAiDescriptionOpen] = useState(false)
   const [aiDescriptionLoading, setAiDescriptionLoading] = useState(false)
   const [aiDescription, setAiDescription] = useState("")
@@ -178,7 +177,6 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
 
   const watchCategoryName = watch("categoryName")
 
-  // Load user categories
   useEffect(() => {
     const fetchUserCategories = async () => {
       try {
@@ -204,7 +202,6 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
     }
   }, [userId])
 
-  // Check if category name already exists
   useEffect(() => {
     if (!watchCategoryName || !userCategories.length) return
 
@@ -218,7 +215,6 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
     setNameExists(exists)
   }, [watchCategoryName, userCategories, finalCategoryToEdit])
 
-  // Fill form with existing data if editing
   useEffect(() => {
     if (finalCategoryToEdit) {
       reset({
@@ -258,11 +254,9 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
       setSnackbarSeverity("success")
       setSnackbarOpen(true)
 
-      // Call the success callback if provided
       if (onSuccess) {
         onSuccess(dataToSubmit as Category);
       } else {
-        // Navigate after a short delay if no callback
         setTimeout(() => navigate("/categories"), 1500)
       }
     } catch (error) {
@@ -286,7 +280,6 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
     setShowExistingCategories(!showExistingCategories)
   }
 
-  // New function to handle AI description suggestion
   const handleGetAiDescription = async () => {
     if (!watchCategoryName || watchCategoryName.trim() === "") {
       setSnackbarMsg("❌ Please enter a category name first");
@@ -300,7 +293,6 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
     setAiDescriptionOpen(true);
 
     try {
-      // Making the actual API call to the AI service
       const response = await axios.post(
         "https://creativepeak-api.onrender.com/api/Ai/AI-description",
         `Suggest a short and clear description for a category called: ${watchCategoryName}`,
@@ -326,7 +318,6 @@ const AddCategoryForm = ({ categoryToEdit = null, onClose, onSuccess }: AddCateg
     }
   };
 
-  // Function to apply the AI suggestion to the description field
   const applyAiDescription = async () => {
     setValue("description", aiDescription);
     await trigger("description");

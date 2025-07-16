@@ -64,10 +64,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       const selectedFile = e.target.files[0];
       setFileName(selectedFile.name);
 
-      // Pass the file to parent component
       onFileChange(selectedFile);
 
-      // Create and set preview
       const preview = URL.createObjectURL(selectedFile);
       setImagePreview(preview);
       onPreviewChange(preview);
@@ -75,7 +73,6 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   };
 
   const handleButtonClick = () => {
-    // Programmatically click the hidden input when button is clicked
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }

@@ -30,12 +30,10 @@ export default function Profile() {
     });
     const { userId } = useAuth();
 
-    // Function to show snackbar message
     const showSnackbar = (message: string, severity: "success" | "error") => {
         setSnackbar({ open: true, message, severity });
     };
 
-    // Load user data when component mounts
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -71,20 +69,17 @@ export default function Profile() {
         fetchUserData();
     }, [userId]);
 
-    // Handle form input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
         const fieldValue = type === 'checkbox' ? checked : value;
 
         setFormData(prev => ({ ...prev, [name]: fieldValue }));
 
-        // Basic validation (only for text fields)
         if (type !== 'checkbox') {
             validateField(name, value);
         }
     };
 
-    // Field validation function
     const validateField = (name: string, value: string) => {
         let errorMessage = "";
 
@@ -108,17 +103,14 @@ export default function Profile() {
         return !errorMessage;
     };
 
-    // Check if the entire form is valid
     const isFormValid = () => {
         return !errors.fullName && !errors.email && !errors.phone &&
             formData.fullName && formData.email && formData.phone;
     };
 
-    // Save user data
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validate all fields before submission
         if (!validateField("fullName", formData.fullName) ||
             !validateField("email", formData.email) ||
             !validateField("phone", formData.phone)) {
@@ -179,7 +171,6 @@ export default function Profile() {
                 alignItems: "center",
                 minHeight: "80vh"
             }}>
-                {/* Profile card */}
                 <Card
                     elevation={5}
                     sx={{
@@ -191,12 +182,10 @@ export default function Profile() {
                         position: "relative"
                     }}
                 >
-                    {/* Card header */}
                     <Box
                         sx={{
                             height: 150,
                             p: 3,
-                            // pb: 5,
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
@@ -224,13 +213,10 @@ export default function Profile() {
                         </Typography>
                     </Box>
 
-                    {/* Card content */}
                     <Box sx={{ p: 4, pt: 3 }}>
                         {isEditing ? (
-                            // Edit mode - form
                             <form onSubmit={handleSubmit}>
                                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                                    {/* Full name */}
                                     <TextField
                                         label="Full Name"
                                         name="fullName"
@@ -252,7 +238,6 @@ export default function Profile() {
                                         }}
                                     />
 
-                                    {/* Email */}
                                     <TextField
                                         label="Email"
                                         name="email"
@@ -275,7 +260,6 @@ export default function Profile() {
                                         }}
                                     />
 
-                                    {/* Phone */}
                                     <TextField
                                         label="Phone"
                                         name="phone"
@@ -297,7 +281,6 @@ export default function Profile() {
                                         }}
                                     />
 
-                                    {/* Address */}
                                     <TextField
                                         label="Address"
                                         name="address"
@@ -316,7 +299,6 @@ export default function Profile() {
                                         }}
                                     />
 
-                                    {/* Action buttons */}
                                     <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                                         <Button
                                             variant="outlined"
@@ -364,9 +346,7 @@ export default function Profile() {
                                 </Box>
                             </form>
                         ) : (
-                            // View mode - user details
                             <Box sx={{ py: 1, width: "350px" }}>
-                                {/* Full name */}
                                 <Box sx={{ display: "flex", alignItems: "center" }}>
                                     <Box sx={{
                                         bgcolor: "rgba(103, 58, 183, 0.1)",
@@ -389,7 +369,6 @@ export default function Profile() {
 
                                 <Divider sx={{ my: 2 }} />
 
-                                {/* Email */}
                                 <Box sx={{ display: "flex", alignItems: "center" }}>
                                     <Box sx={{
                                         bgcolor: "rgba(103, 58, 183, 0.1)",
@@ -412,7 +391,6 @@ export default function Profile() {
 
                                 <Divider sx={{ my: 2 }} />
 
-                                {/* Phone */}
                                 <Box sx={{ display: "flex", mb: 3, alignItems: "center" }}>
                                     <Box sx={{
                                         bgcolor: "rgba(103, 58, 183, 0.1)",
@@ -433,7 +411,6 @@ export default function Profile() {
                                     </Box>
                                 </Box>
 
-                                {/* Address - if exists */}
                                 {user?.address && (
                                     <>
                                         <Divider sx={{ my: 2 }} />
@@ -459,7 +436,6 @@ export default function Profile() {
                                     </>
                                 )}
 
-                                {/* Edit button */}
                                 <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
                                     <Button
                                         variant="contained"
@@ -490,7 +466,6 @@ export default function Profile() {
                 </Card>
             </Box>
 
-            {/* Snackbar notification */}
             <AutoSnackbar
                 open={snackbar.open}
                 message={snackbar.message}

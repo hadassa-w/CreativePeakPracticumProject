@@ -404,6 +404,48 @@ const UploadProfolio = () => {
                 position: relative;
             }
 
+            .stat-label-top {
+                color: #666;
+                margin-top: -20px;
+                font-weight: 600;
+                text-transform: none;
+                letter-spacing: 2px;
+                font-size: 0.75em;
+                position: relative;
+            }
+
+            .stat-label-under {
+                color: #666;
+                margin-top: 15px;
+                font-weight: 700;
+                text-transform: none;
+                letter-spacing: 2px;
+                font-size: 1em;
+                position: relative;
+            }
+
+            .stat-label-button {
+                color: #666;
+                font-weight: 600;
+                text-transform: none;
+                letter-spacing: 2px;
+                font-size: 0.75em;
+                position: relative;
+            }
+
+            .stat-label-button::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 40px;
+                height: 3px;
+                background: linear-gradient(45deg, #9C27B0, #673AB7);
+                border-radius: 2px;
+                transition: width 0.3s ease;
+            }
+
             .stat-label::after {
                 content: '';
                 position: absolute;
@@ -950,6 +992,12 @@ const UploadProfolio = () => {
                     <div class="stat-item">
                         <div class="stat-number">${userInfo.yearsExperience || 0}</div>
                         <div class="stat-label">Years experience</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label-top">About</div>
+                        <div class="stat-number">${userInfo.priceRangeMin}-${userInfo.priceRangeMax}₪</div>
+                        <div class="stat-label-under">Per project</div>
+                        <div class="stat-label-button">* Subject to change</div>
                     </div>
                 </div>
             </div>

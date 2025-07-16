@@ -22,10 +22,7 @@ namespace CreativePeak.API.Controllers
         [HttpGet("monthly-summary")]
         public async Task<IActionResult> GetMonthlySummary()
         {
-            var fromDate = DateTime.UtcNow.AddMonths(-12);
-
             var users = await _context.Users
-                .Where(u => u.CreatedAt >= fromDate)
                 .GroupBy(u => new { u.CreatedAt.Year, u.CreatedAt.Month })
                 .Select(g => new
                 {
@@ -33,10 +30,9 @@ namespace CreativePeak.API.Controllers
                     Month = g.Key.Month,
                     Count = g.Count()
                 })
-            .ToListAsync();
+                .ToListAsync();
 
             var portfolios = await _context.Images
-                .Where(p => p.CreatedAt >= fromDate)
                 .GroupBy(p => new { p.CreatedAt.Year, p.CreatedAt.Month })
                 .Select(g => new
                 {
@@ -46,18 +42,36 @@ namespace CreativePeak.API.Controllers
                 })
                 .ToListAsync();
 
-            var allMonths = users
+            var allExistingMonths = users
                 .Select(u => new { u.Year, u.Month })
                 .Union(portfolios.Select(p => new { p.Year, p.Month }))
                 .Distinct()
-                .OrderBy(x => x.Year).ThenBy(x => x.Month)
                 .ToList();
 
-            var result = allMonths.Select(m => new Reports
+            if (!allExistingMonths.Any())
             {
-                Month = $"{m.Month:D2}/{m.Year}",
-                NewUsers = users.FirstOrDefault(u => u.Month == m.Month && u.Year == m.Year)?.Count ?? 0,
-                NewPortfolios = portfolios.FirstOrDefault(p => p.Month == m.Month && p.Year == m.Year)?.Count ?? 0
+                return Ok(new List<Reports>());
+            }
+
+            var minDate = allExistingMonths
+                .Select(m => new DateTime(m.Year, m.Month, 1))
+                .Min();
+
+            var maxDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+
+            var allMonths = new List<DateTime>();
+            var current = minDate;
+            while (current <= maxDate)
+            {
+                allMonths.Add(current);
+                current = current.AddMonths(1);
+            }
+
+            var result = allMonths.Select(date => new Reports
+            {
+                Month = $"{date.Month:D2}/{date.Year}",
+                NewUsers = users.FirstOrDefault(u => u.Month == date.Month && u.Year == date.Year)?.Count ?? 0,
+                NewPortfolios = portfolios.FirstOrDefault(p => p.Month == date.Month && p.Year == date.Year)?.Count ?? 0
             }).ToList();
 
             return Ok(result);

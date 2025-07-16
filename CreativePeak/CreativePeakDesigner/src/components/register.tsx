@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/system";
 import axios from "axios";
 import { useAuth } from "../contexts/authContext";
-
-// Icons
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -19,7 +17,6 @@ import PaletteIcon from "@mui/icons-material/Palette";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-// עיצוב קונטיינר חיצוני - משופר
 const OuterContainer = styled(Box)({
   display: "flex",
   justifyContent: "center",
@@ -28,7 +25,6 @@ const OuterContainer = styled(Box)({
   position: "relative",
 });
 
-// עיצוב קונטיינר פנימי - משופר
 const ContentBox = styled(Paper)({
   backgroundColor: "#fcfaff",
   borderRadius: "16px",
@@ -50,7 +46,6 @@ const ContentBox = styled(Paper)({
   }
 });
 
-// כפתור מעוצב - משודרג
 const StyledButton = styled(Button)({
   textTransform: "none",
   fontSize: "16px",
@@ -75,7 +70,6 @@ const StyledButton = styled(Button)({
   }
 });
 
-// שדה טקסט מעוצב
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-root": {
     borderRadius: "12px",
@@ -100,7 +94,6 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-// חלק אייקון עליון
 const IconHeader = styled(Box)({
   position: "relative",
   marginBottom: "20px",
@@ -109,7 +102,6 @@ const IconHeader = styled(Box)({
   alignItems: "center",
 });
 
-// מעגל אייקון
 const IconCircle = styled(Box)({
   width: "80px",
   height: "80px",
@@ -141,7 +133,6 @@ const IconCircle = styled(Box)({
   },
 });
 
-// כותרת עם אפקט מודגש
 const GradientTitle = styled(Typography)({
   position: "relative",
   display: "inline-block",
@@ -159,7 +150,6 @@ const GradientTitle = styled(Typography)({
   }
 });
 
-// קומפוננטה לבדיקת חוזק סיסמה
 const PasswordStrengthIndicator = styled(Box)({
   marginTop: "12px",
   padding: "16px",
@@ -181,7 +171,7 @@ function Register() {
   const { login } = useAuth();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [generalError, setGeneralError] = useState<string>(""); // שונה מ-error ל-generalError
+  const [generalError, setGeneralError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const [formData, setFormData] = useState({
@@ -194,7 +184,6 @@ function Register() {
 
   const [fieldErrors, setFieldErrors] = useState<{ fullname?: string; email?: string; password?: string; phone?: string; address?: string }>({});
 
-  // פונקציה לבדיקת חוזק סיסמה
   const checkPasswordStrength = (password: string): PasswordStrength => {
     const hasMinLength = password.length >= 6;
     const hasUppercase = /[A-Z]/.test(password);
@@ -214,12 +203,11 @@ function Register() {
 
   const passwordStrength = checkPasswordStrength(formData.password);
 
-// color
   const getStrengthColor = (score: number) => {
-    if (score <= 1) return "#f44336"; // אדום
-    if (score === 2) return "#ff9800"; // כתום
-    if (score === 3) return "#ffc107"; // צהוב
-    return "#4caf50"; // ירוק
+    if (score <= 1) return "#f44336";
+    if (score === 2) return "#ff9800";
+    if (score === 3) return "#ffc107";
+    return "#4caf50";
   };
 
   const getStrengthText = (score: number) => {
@@ -246,7 +234,7 @@ function Register() {
 
   const handleRegister = async () => {
     setLoading(true);
-    setGeneralError(""); // נקה הודעת שגיאה כללית
+    setGeneralError("");
     setFieldErrors({});
 
     let newFieldErrors: { fullname?: string; email?: string; password?: string; phone?: string } = {};
@@ -296,12 +284,10 @@ function Register() {
     } catch (error: any) {
       if (error.response?.status === 400) {
         console.error("Error:", error.response.data.message);
-        // אם השגיאה קשורה לאימייל קיים, הצג אותה כהודעת שגיאה כללית
         if (error.response.data.message.toLowerCase().includes("email") || 
             error.response.data.message.toLowerCase().includes("exist")) {
           setGeneralError(error.response.data.message);
         } else {
-          // אם זה שגיאה אחרת, הצג בשדה המתאים
           setFieldErrors((prev) => ({ ...prev, email: error.response.data.message }));
         }
       } else {
@@ -322,7 +308,6 @@ function Register() {
     );
   };
 
-  // טיפול בלחיצה על Enter כדי להירשם
   const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && isFormValid()) {
       handleRegister();
@@ -331,7 +316,6 @@ function Register() {
 
   return (
     <OuterContainer>
-      {/* אלמנטים עיצוביים ברקע */}
       <Box sx={{
         position: "absolute",
         top: "10%",
@@ -482,7 +466,6 @@ function Register() {
             sx={{ mb: 1 }}
           />
 
-          {/* אינדיקטור חוזק סיסמה */}
           {formData.password && (
             <PasswordStrengthIndicator>
               <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
@@ -576,7 +559,6 @@ function Register() {
           )}
         </Box>
 
-        {/* הודעת שגיאה כללית - בדומה לקומפוננטת Login */}
         {generalError && (
           <Box sx={{
             p: 2,

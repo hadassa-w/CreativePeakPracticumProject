@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Add this import
+import { useNavigate } from "react-router-dom";
 import {
   Typography, Box, Button, TextField, CircularProgress, Container,
   Card, Avatar, Divider, InputAdornment, Dialog, DialogTitle,
@@ -24,15 +24,13 @@ function DesignerDetailsForm() {
   const [generatingDescription, setGeneratingDescription] = useState(false);
   const [designerDetails, setDesignerDetails] = useState<DesignerDetails | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [isFirstVisit, setIsFirstVisit] = useState(false); // Track if it's first visit
+  const [isFirstVisit, setIsFirstVisit] = useState(false);
   const { userId, token } = useAuth();
   const navigate = useNavigate();
 
-  // AI Description Dialog states
   const [aiDescriptionOpen, setAiDescriptionOpen] = useState(false);
   const [aiDescription, setAiDescription] = useState("");
 
-  // Description expansion state
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const [snackbar, setSnackbar] = useState({
@@ -41,26 +39,21 @@ function DesignerDetailsForm() {
     severity: "success" as "success" | "error"
   });
 
-  // Watch form values for AI description generation
   const watchedValues = watch();
 
-  // Function to show snackbar message
   const showSnackbar = (message: string, severity: "success" | "error") => {
     setSnackbar({ open: true, message, severity });
   };
 
-  // Function to check if description needs truncation (more than 2 lines approximately)
   const shouldTruncateDescription = (text: string) => {
-    return text && text.length > 100; // Approximate 2 lines of text
+    return text && text.length > 100;
   };
 
-  // Function to truncate description to approximately 2 lines
   const getTruncatedDescription = (text: string) => {
     if (!text) return "";
     return text.length > 100 ? text.substring(0, 100) + "..." : text;
   };
 
-  // Function to generate AI description
   const generateAIDescription = async () => {
     const { fullName, yearsExperience } = watchedValues;
 
@@ -88,7 +81,6 @@ function DesignerDetailsForm() {
         }
       );
 
-      // Assuming the API returns the description in response.data.description or response.data
       const aiDescriptionResult = response.data.description || response.data;
       setAiDescription(aiDescriptionResult);
     } catch (error) {
@@ -100,7 +92,6 @@ function DesignerDetailsForm() {
     }
   };
 
-  // Function to apply the AI suggestion to the description field
   const applyAiDescription = async () => {
     setValue("description", aiDescription);
     await trigger("description");
@@ -123,15 +114,15 @@ function DesignerDetailsForm() {
           Object.keys(filteredData).forEach(key =>
             setValue(key as keyof DesignerDetails, filteredData[key as keyof DesignerDetails])
           );
-          setIsFirstVisit(false); // User has existing data, not first visit
+          setIsFirstVisit(false);
         } else {
-          setIsFirstVisit(true); // No data found, this is first visit
+          setIsFirstVisit(true);
         }
       })
       .catch(error => {
         console.error("Error fetching designer details", error);
         showSnackbar("Error loading designer details", "error");
-        setIsFirstVisit(true); // On error, treat as first visit
+        setIsFirstVisit(true);
       })
       .finally(() => setInitialLoading(false));
   }, [userId, setValue]);
@@ -165,7 +156,6 @@ function DesignerDetailsForm() {
 
       showSnackbar("Designer details saved successfully! 🎉", "success");
 
-      // Refresh data after saving
       const updatedResponse = await axios.get("https://creativepeak-api.onrender.com/api/DesignerDetails",
         {
           headers: {
@@ -177,7 +167,6 @@ function DesignerDetailsForm() {
       setDesignerDetails(updatedData);
       setIsEditing(false);
 
-      // Navigate to HOME if it's first visit, otherwise stay on current page
       if (isFirstVisit) {
         setTimeout(() => {
           navigate('/welcome');
@@ -192,7 +181,6 @@ function DesignerDetailsForm() {
     }
   };
 
-  // Render loading screen
   if (initialLoading) {
     return (
       <Container maxWidth="sm" sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
@@ -213,7 +201,6 @@ function DesignerDetailsForm() {
           alignItems: "center",
           minHeight: "80vh"
         }}>
-          {/* Designer details card */}
           <Card
             elevation={5}
             sx={{
@@ -225,7 +212,6 @@ function DesignerDetailsForm() {
               position: "relative"
             }}
           >
-            {/* Card header */}
             <Box
               sx={{
                 height: 150,
@@ -257,10 +243,8 @@ function DesignerDetailsForm() {
               </Typography>
             </Box>
 
-            {/* Card content */}
             <Box sx={{ p: 4, pt: 3 }}>
               {isEditing || !designerDetails ? (
-                // Edit mode - form
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     {!designerDetails && (
@@ -269,7 +253,6 @@ function DesignerDetailsForm() {
                       </Typography>
                     )}
 
-                    {/* Full name */}
                     <TextField
                       label="Full Name"
                       {...register("fullName", { required: "Full name is required" })}
@@ -289,7 +272,6 @@ function DesignerDetailsForm() {
                       }}
                     />
 
-                    {/* Email */}
                     <TextField
                       label="Email"
                       type="email"
@@ -310,7 +292,6 @@ function DesignerDetailsForm() {
                       }}
                     />
 
-                    {/* Website Address */}
                     <TextField
                       label="Website Address"
                       {...register("addressSite")}
@@ -327,7 +308,6 @@ function DesignerDetailsForm() {
                       }}
                     />
 
-                    {/* Phone */}
                     <TextField
                       label="Phone"
                       type="tel"
@@ -348,7 +328,6 @@ function DesignerDetailsForm() {
                       }}
                     />
 
-                    {/* Years of Experience */}
                     <TextField
                       label="Years of Experience"
                       type="number"
@@ -373,7 +352,6 @@ function DesignerDetailsForm() {
                       }}
                     />
 
-                    {/* Price Range (Min & Max) */}
                     <Box sx={{ display: "flex", gap: 2 }}>
                       <TextField
                         label="Minimum Price (₪)"
@@ -425,7 +403,6 @@ function DesignerDetailsForm() {
                       />
                     </Box>
 
-                    {/* Description with AI generation - NOW REQUIRED */}
                     <Box>
                       <TextField
                         label="Description"
@@ -449,7 +426,6 @@ function DesignerDetailsForm() {
                         }}
                       />
 
-                      {/* AI Generate Button */}
                       <Box sx={{ mt: 1, display: "flex", justifyContent: "flex-end" }}>
                         <Button
                           variant="outlined"
@@ -473,7 +449,6 @@ function DesignerDetailsForm() {
                       </Box>
                     </Box>
 
-                    {/* Action buttons */}
                     <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
                       {designerDetails && (
                         <Button
@@ -521,7 +496,6 @@ function DesignerDetailsForm() {
                       </Button>
                     </Box>
 
-                    {/* Show message for first visit */}
                     {isFirstVisit && (
                       <Typography variant="body2" sx={{ textAlign: "center", color: "#666", mt: 1 }}>
                         After saving your details, you'll be redirected to the home page.
@@ -530,9 +504,7 @@ function DesignerDetailsForm() {
                   </Box>
                 </form>
               ) : (
-                // View mode - designer details
                 <Box sx={{ py: 1, width: "400px" }}>
-                  {/* Full name */}
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Box sx={{
                       bgcolor: "rgba(103, 58, 183, 0.1)",
@@ -555,7 +527,6 @@ function DesignerDetailsForm() {
 
                   <Divider sx={{ my: 2 }} />
 
-                  {/* Email */}
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Box sx={{
                       bgcolor: "rgba(103, 58, 183, 0.1)",
@@ -578,7 +549,6 @@ function DesignerDetailsForm() {
 
                   <Divider sx={{ my: 2 }} />
 
-                  {/* Phone */}
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Box sx={{
                       bgcolor: "rgba(103, 58, 183, 0.1)",
@@ -599,7 +569,6 @@ function DesignerDetailsForm() {
                     </Box>
                   </Box>
 
-                  {/* Website address - if exists */}
                   {designerDetails.addressSite && (
                     <>
                       <Divider sx={{ my: 2 }} />
@@ -627,7 +596,6 @@ function DesignerDetailsForm() {
 
                   <Divider sx={{ my: 2 }} />
 
-                  {/* Years of Experience */}
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Box sx={{
                       bgcolor: "rgba(103, 58, 183, 0.1)",
@@ -650,7 +618,6 @@ function DesignerDetailsForm() {
 
                   <Divider sx={{ my: 2 }} />
 
-                  {/* Price Range */}
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Box sx={{
                       bgcolor: "rgba(103, 58, 183, 0.1)",
@@ -666,12 +633,14 @@ function DesignerDetailsForm() {
                         Price Range
                       </Typography>
                       <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                        {designerDetails.priceRangeMin}₪ - {designerDetails.priceRangeMax}₪ about
+                        About {designerDetails.priceRangeMin}-{designerDetails.priceRangeMax}₪ Per project
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: "#666", mb: 0.5 }}>
+                        * Subject to change
                       </Typography>
                     </Box>
                   </Box>
 
-                  {/* Description - with expandable functionality */}
                   {designerDetails.description && (
                     <>
                       <Divider sx={{ my: 2 }} />
@@ -697,7 +666,6 @@ function DesignerDetailsForm() {
                             }
                           </Typography>
 
-                          {/* Show/Hide More button */}
                           {shouldTruncateDescription(designerDetails.description) && (
                             <Button
                               size="small"
@@ -725,7 +693,6 @@ function DesignerDetailsForm() {
                     </>
                   )}
 
-                  {/* Edit button */}
                   <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
                     <Button
                       variant="contained"
@@ -756,7 +723,6 @@ function DesignerDetailsForm() {
           </Card>
         </Box>
 
-        {/* Snackbar notification */}
         <AutoSnackbar
           open={snackbar.open}
           message={snackbar.message}
@@ -765,7 +731,6 @@ function DesignerDetailsForm() {
         />
       </Container>
 
-      {/* AI Description Dialog */}
       <Dialog
         open={aiDescriptionOpen}
         onClose={() => setAiDescriptionOpen(false)}

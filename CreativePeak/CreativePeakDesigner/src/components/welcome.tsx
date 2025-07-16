@@ -43,7 +43,6 @@ const InfoSection = styled(Box)({
     gap: "25px",
 });
 
-// אזור כפתורים - משופר
 const ActionSection = styled(Box)({
     flex: "1 1 300px",
     display: "flex",
@@ -59,7 +58,6 @@ const ActionSection = styled(Box)({
     overflow: "hidden",
 });
 
-// כרטיס מידע - משודרג
 const InfoCard = styled(Paper)({
     padding: "28px",
     borderRadius: "16px",
@@ -91,7 +89,6 @@ const InfoCard = styled(Paper)({
     }
 });
 
-// עטיפת אייקון - חדש
 const IconWrapper = styled(Box)({
     backgroundColor: "rgba(126, 87, 194, 0.08)",
     borderRadius: "12px",
@@ -108,7 +105,6 @@ const IconWrapper = styled(Box)({
     }
 });
 
-// כפתור מעוצב - משודרג
 const StyledButton = styled(Button)({
     textTransform: "none",
     fontSize: "17px",
@@ -141,7 +137,6 @@ const StyledButton = styled(Button)({
     }
 });
 
-// סרגל תחתון עם טיפ
 const TipBar = styled(Box)({
     marginTop: "40px",
     padding: "20px",
@@ -201,7 +196,6 @@ function Welcome() {
             </Box>
 
             <Content>
-                {/* אזור מידע */}
                 <InfoSection>
                     <InfoCard>
                         <IconWrapper>
@@ -266,7 +260,6 @@ function Welcome() {
                     </InfoCard>
                 </InfoSection>
 
-                {/* אזור פעולות */}
                 <ActionSection>
                     <Typography
                         variant="h5"

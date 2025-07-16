@@ -238,14 +238,11 @@ const AddImageForm = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success")
   const [nameExists, setNameExists] = useState(false)
 
-  // File upload state
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(image?.linkURL || null)
 
-  // Category form overlay state
   const [showCategoryForm, setShowCategoryForm] = useState(false)
 
-  // AI description suggestion states
   const [aiDescriptionOpen, setAiDescriptionOpen] = useState(false)
   const [aiDescriptionLoading, setAiDescriptionLoading] = useState(false)
   const [aiDescription, setAiDescription] = useState("")
@@ -316,7 +313,6 @@ const AddImageForm = () => {
     }
   }, [image, setValue])
 
-  // Check if project name already exists
   useEffect(() => {
     if (!watchFileName || !userImages.length) return
 
@@ -328,17 +324,14 @@ const AddImageForm = () => {
     setNameExists(exists)
   }, [watchFileName, userImages, image])
 
-  // Handle file selection
   const handleFileChange = (file: File | null) => {
     setSelectedFile(file);
   }
 
-  // Handle preview change
   const handlePreviewChange = (preview: string | null) => {
     setImagePreview(preview);
   }
 
-  // Upload file to AWS S3
   const uploadFileToS3 = async (file: File): Promise<string> => {
     setIsUploading(true);
     setUploadProgress(0);
@@ -383,7 +376,6 @@ const AddImageForm = () => {
     try {
       let linkURL = image?.linkURL;
 
-      // If there's a new file selected, upload it first
       if (selectedFile) {
         try {
           linkURL = await uploadFileToS3(selectedFile);
@@ -395,7 +387,6 @@ const AddImageForm = () => {
           return;
         }
       } else if (!linkURL) {
-        // No file selected and no existing URL
         setSnackbarMsg("❌ Please select an image");
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
@@ -457,17 +448,14 @@ const AddImageForm = () => {
   }
 
   const handleCategoryFormSuccess = () => {
-    // Refresh the categories list
     fetchCategories();
     setShowCategoryForm(false);
 
-    // Show success message
     setSnackbarMsg("🎉 Category added successfully!");
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
   }
 
-  // New function to handle AI description suggestion
   const handleGetAiDescription = async () => {
     if (!watchFileName || watchFileName.trim() === "") {
       setSnackbarMsg("❌ Please enter a project name first");
@@ -480,11 +468,8 @@ const AddImageForm = () => {
     setAiDescriptionOpen(true);
 
     try {
-      // Simulate API call to AI service
-      // In a real implementation, this would be a call to an AI service API
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulating API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Generate a description based on the project name
       const response = await axios.post("https://creativepeak-api.onrender.com/api/Ai/AI-description",
         `Suggest a short and clear description for a project called: ${watchFileName}`, {
         headers: {
@@ -493,7 +478,6 @@ const AddImageForm = () => {
         }
       })
 
-      // Randomly select one of the suggestions
       const randomDescription = response.data;
       setAiDescription(randomDescription);
     } catch (err) {
@@ -507,7 +491,6 @@ const AddImageForm = () => {
     }
   };
 
-  // Function to apply the AI suggestion to the description field
   const applyAiDescription = async () => {
     setValue("description", aiDescription);
     await trigger("description");
@@ -772,7 +755,6 @@ const AddImageForm = () => {
         </Alert>
       </ContentBox>
 
-      {/* Category Form Overlay */}
       {showCategoryForm && (
         <OverlayContainer>
           <AddCategoryForm onClose={handleCategoryFormClose} onSuccess={handleCategoryFormSuccess} />

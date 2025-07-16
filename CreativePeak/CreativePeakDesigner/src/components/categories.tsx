@@ -178,12 +178,10 @@ const CategoriesList = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
     const isTablet = useMediaQuery(theme.breakpoints.down("md"))
 
-    // Fetch categories and image counts
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
             try {
-                // Fetch categories
                 const categoriesResponse = await axios.get(`https://creativepeak-api.onrender.com/api/Category`,
                     {
                         headers: {
@@ -195,7 +193,6 @@ const CategoriesList = () => {
                 setCategories(userCategories)
                 setFilteredCategories(userCategories)
 
-                // Fetch images to count per category
                 const imagesResponse = await axios.get("https://creativepeak-api.onrender.com/api/Image",
                     {
                         headers: {
@@ -205,7 +202,6 @@ const CategoriesList = () => {
                 )
                 const userImages = imagesResponse.data.filter((image: Image) => image.user.id === userId)
 
-                // Count images per category
                 const stats: Record<number, number> = {};
                 userImages.forEach((image: Image) => {
                     const categoryId = image.category.id
@@ -225,7 +221,6 @@ const CategoriesList = () => {
         fetchData()
     }, [userId])
 
-    // Filter categories based on search term
     useEffect(() => {
         if (!searchTerm.trim()) {
             setFilteredCategories(categories)
@@ -271,7 +266,6 @@ const CategoriesList = () => {
             setSnackbarSeverity("success")
             setSnackbarOpen(true)
 
-            // Delete associated images
             const response = await axios.get("https://creativepeak-api.onrender.com/api/Image",
                 {
                     headers: {
