@@ -12,11 +12,18 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
+import GroupsIcon from "@mui/icons-material/Groups";
+import FlagIcon from "@mui/icons-material/Flag";
+
 import StarIcon from "@mui/icons-material/Star";
 import { Navigate, useNavigate } from "react-router-dom";
 import "../css/home.css";
 import { useAuth } from "../contexts/authContext";
 import { useEffect, useState } from "react";
+import FAQAccordion from "./questions";
 
 const HomeWrapper = styled(Container)({
     backgroundColor: "#fcfaff",
@@ -795,8 +802,17 @@ function Home() {
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                             <Chip
                                                 label="Portfolio"
-                                                color="primary"
-                                                variant="outlined"
+                                                icon={<WorkIcon />}
+                                                sx={{
+                                                    bgcolor: "rgba(81,45,168,0.1)",
+                                                    color: "#512da8",
+                                                    borderRadius: "8px",
+                                                    fontWeight: "600",
+                                                    px: 1.5,
+                                                    "& .MuiChip-icon": {
+                                                        color: "#512da8",
+                                                    },
+                                                }}
                                             />
                                             <Typography variant="body1">
                                                 Create stunning visual portfolios
@@ -808,8 +824,17 @@ function Home() {
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                             <Chip
                                                 label="Visibility"
-                                                color="primary"
-                                                variant="outlined"
+                                                icon={<VisibilityIcon />}
+                                                sx={{
+                                                    bgcolor: "rgba(81,45,168,0.1)",
+                                                    color: "#512da8",
+                                                    borderRadius: "8px",
+                                                    fontWeight: "600",
+                                                    px: 1.5,
+                                                    "& .MuiChip-icon": {
+                                                        color: "#512da8",
+                                                    },
+                                                }}
                                             />
                                             <Typography variant="body1">
                                                 Increase your online presence
@@ -821,8 +846,17 @@ function Home() {
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                             <Chip
                                                 label="Analytics"
-                                                color="primary"
-                                                variant="outlined"
+                                                icon={<BarChartIcon />}
+                                                sx={{
+                                                    bgcolor: "rgba(81,45,168,0.1)",
+                                                    color: "#512da8",
+                                                    borderRadius: "8px",
+                                                    fontWeight: "600",
+                                                    px: 1.5,
+                                                    "& .MuiChip-icon": {
+                                                        color: "#512da8",
+                                                    },
+                                                }}
                                             />
                                             <Typography variant="body1">
                                                 Track portfolio performance
@@ -844,8 +878,17 @@ function Home() {
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                             <Chip
                                                 label="Talent"
-                                                color="primary"
-                                                variant="outlined"
+                                                icon={<EmojiPeopleIcon />}
+                                                sx={{
+                                                    bgcolor: "rgba(81,45,168,0.1)",
+                                                    color: "#512da8",
+                                                    borderRadius: "8px",
+                                                    fontWeight: "600",
+                                                    px: 1.5,
+                                                    "& .MuiChip-icon": {
+                                                        color: "#512da8",
+                                                    },
+                                                }}
                                             />
                                             <Typography variant="body1">
                                                 Discover talented designers
@@ -857,8 +900,17 @@ function Home() {
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                             <Chip
                                                 label="Collaboration"
-                                                color="primary"
-                                                variant="outlined"
+                                                icon={<GroupsIcon />}
+                                                sx={{
+                                                    bgcolor: "rgba(81,45,168,0.1)",
+                                                    color: "#512da8",
+                                                    borderRadius: "8px",
+                                                    fontWeight: "600",
+                                                    px: 1.5,
+                                                    "& .MuiChip-icon": {
+                                                        color: "#512da8",
+                                                    },
+                                                }}
                                             />
                                             <Typography variant="body1">
                                                 Streamlined project management
@@ -870,8 +922,17 @@ function Home() {
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                             <Chip
                                                 label="Results"
-                                                color="primary"
-                                                variant="outlined"
+                                                icon={<FlagIcon />}
+                                                sx={{
+                                                    bgcolor: "rgba(81,45,168,0.1)",
+                                                    color: "#512da8",
+                                                    borderRadius: "8px",
+                                                    fontWeight: "600",
+                                                    px: 1.5,
+                                                    "& .MuiChip-icon": {
+                                                        color: "#512da8",
+                                                    },
+                                                }}
                                             />
                                             <Typography variant="body1">
                                                 Quality creative deliverables
@@ -897,51 +958,7 @@ function Home() {
                         Frequently Asked Questions
                     </Typography>
 
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
-                            <Box sx={{ mb: 3 }}>
-                                <Typography variant="h6" sx={{ fontWeight: "bold", color: "#512da8", mb: 1 }}>
-                                    Is there really a free plan?
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "#666" }}>
-                                    Yes! You can start with our free plan that includes basic portfolio features and up to 5 projects. It's perfect for beginners or those who want to try the platform.
-                                </Typography>
-                            </Box>
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <Box sx={{ mb: 3 }}>
-                                <Typography variant="h6" sx={{ fontWeight: "bold", color: "#512da8", mb: 1 }}>
-                                    Can I upgrade or downgrade my plan?
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "#666" }}>
-                                    Absolutely! You can upgrade or downgrade your subscription at any time. Your billing will be adjusted accordingly for the next payment period.
-                                </Typography>
-                            </Box>
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <Box sx={{ mb: 3 }}>
-                                <Typography variant="h6" sx={{ fontWeight: "bold", color: "#512da8", mb: 1 }}>
-                                    How do clients find me?
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "#666" }}>
-                                    CreativePeak has a designer directory where clients can search for specific design skills. Our Pro and Business plans include SEO optimization to improve your visibility.
-                                </Typography>
-                            </Box>
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <Box sx={{ mb: 3 }}>
-                                <Typography variant="h6" sx={{ fontWeight: "bold", color: "#512da8", mb: 1 }}>
-                                    Is my data secure?
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: "#666" }}>
-                                    We take security seriously. All your portfolio data is encrypted and stored securely. You retain full rights to all content you upload to the platform.
-                                </Typography>
-                            </Box>
-                        </Grid>
-                    </Grid>
+                    <FAQAccordion />
                 </Box>
             </Content>
             <Typography variant="body2" sx={{ color: "#666", mt: 5, textAlign: "center", fontSize: "14px" }}>

@@ -604,12 +604,16 @@ const CategoriesList = () => {
                         Are you sure you want to delete <strong>{categoryToDelete?.categoryName}</strong>?
                         <br />
                         <br />
-                        <Box sx={{ bgcolor: "rgba(244, 67, 54, 0.1)", p: 2, borderRadius: 2 }}>
-                            <Typography variant="body2" color="error" sx={{ fontWeight: "medium" }}>
-                                Warning: This will also delete all projects ({categoryStats[categoryToDelete?.id || 0] || 0}) in this
-                                category. This action cannot be undone.
-                            </Typography>
-                        </Box>
+                        {categoryToDelete &&
+                            categoryStats[categoryToDelete.id] &&
+                            categoryStats[categoryToDelete.id] > 0 && (
+                                <Box sx={{ bgcolor: "rgba(244, 67, 54, 0.1)", p: 2, borderRadius: 2 }}>
+                                    <Typography variant="body2" color="error" sx={{ fontWeight: "medium" }}>
+                                        Warning: This will also delete all projects ({categoryStats[categoryToDelete.id]}) in this
+                                        category. This action cannot be undone.
+                                    </Typography>
+                                </Box>
+                            )}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions sx={{ p: { xs: 2, sm: 3 } }}>
